@@ -1,0 +1,112 @@
+﻿@model IT_Asset_Management_System.Models.Computer
+@{
+    ViewData["Title"] = "Computer Details";
+}
+
+<h1>Computer Details</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h4>@Model.AssetName</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Asset Tag</dt>
+                    <dd class="col-sm-8">@Model.AssetTag</dd>
+
+                    <dt class="col-sm-4">Brand</dt>
+                    <dd class="col-sm-8">@Model.Brand</dd>
+
+                    <dt class="col-sm-4">Model</dt>
+                    <dd class="col-sm-8">@Model.Model</dd>
+
+                    <dt class="col-sm-4">Serial Number</dt>
+                    <dd class="col-sm-8">@Model.SerialNumber</dd>
+
+                    <dt class="col-sm-4">Processor</dt>
+                    <dd class="col-sm-8">@Model.Processor</dd>
+
+                    <dt class="col-sm-4">RAM</dt>
+                    <dd class="col-sm-8">@Model.RAM GB</dd>
+
+                    <dt class="col-sm-4">Storage</dt>
+                    <dd class="col-sm-8">@Model.Storage GB</dd>
+
+                    <dt class="col-sm-4">Operating System</dt>
+                    <dd class="col-sm-8">@Model.OperatingSystem</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Purchase Date</dt>
+                    <dd class="col-sm-8">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Purchase Price</dt>
+                    <dd class="col-sm-8">R @Model.PurchasePrice.ToString("N2")</dd>
+
+                    <dt class="col-sm-4">Vendor</dt>
+                    <dd class="col-sm-8">@Model.Vendor</dd>
+
+                    <dt class="col-sm-4">Warranty Expiry</dt>
+                    <dd class="col-sm-8">@(Model.WarrantyExpiryDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+
+                    <dt class="col-sm-4">Location</dt>
+                    <dd class="col-sm-8">@Model.Location</dd>
+
+                    <dt class="col-sm-4">Assigned To</dt>
+                    <dd class="col-sm-8">@Model.AssignedTo</dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Status == "Available")
+                        {
+                            <span class="badge bg-success">@Model.Status</span>
+                        }
+                        else if (Model.Status == "In Use")
+                        {
+                            <span class="badge bg-primary">@Model.Status</span>
+                        }
+                        else if (Model.Status == "Under Maintenance")
+                        {
+                            <span class="badge bg-warning">@Model.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@Model.Status</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <hr />
+            <h5>Notes</h5>
+            <p>@Model.Notes</p>
+        }
+
+        <hr />
+        <p class="text-muted">
+            Created by @Model.CreatedBy on @Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+            @if (Model.ModifiedDate.HasValue)
+            {
+                <br />
+                //Modified by @Model.ModifiedBy on @Model.ModifiedDate.Value.ToString("yyyy-MM-dd HH:mm")
+
+                <text>Modified by @Model.ModifiedBy on @Model.ModifiedDate.Value.ToString("yyyy-MM-dd HH:mm")</text>
+                        }
+        </p>
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

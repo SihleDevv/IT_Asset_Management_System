@@ -1,0 +1,608 @@
+﻿@model IT_Asset_Management_System.Models.BaseAsset
+
+@{
+    ViewData["Title"] = "Create New Asset";
+}
+
+<div class="page-header">
+    <h1>Create New Asset</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" method="post" id="assetForm">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <!-- Asset Type -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-box"></i> Asset Type</h5>
+                <div class="form-group">
+                    <label asp-for="AssetType"></label>
+                    <select asp-for="AssetType" class="form-select" id="assetTypeSelect" required>
+                        <option value="">-- Select Asset Type --</option>
+                        <option value="Computer">Computer</option>
+                        <option value="Server">Server</option>
+                        <option value="Application">Application</option>
+                    </select>
+                    <span asp-validation-for="AssetType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Basic (shared) fields -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="AssetTag"></label>
+                        <input asp-for="AssetTag" class="form-control" />
+                        <span asp-validation-for="AssetTag" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="AssetName"></label>
+                        <input asp-for="AssetName" class="form-control" />
+                        <span asp-validation-for="AssetName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Brand"></label>
+                        <input asp-for="Brand" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Model"></label>
+                        <input asp-for="Model" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2 serial-number-field">
+                        <label asp-for="SerialNumber"></label>
+                        <input asp-for="SerialNumber" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-2 location-field-default">
+                        <label asp-for="Location"></label>
+                        <select asp-for="Location" class="form-select" id="locationSelect">
+                            <option value="">-- Select Location --</option>
+                            <option value="Sed1">Sed1</option>
+                            <option value="Sed2">Sed2</option>
+                            <option value="Sed3">Sed3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Status"></label>
+                        <select asp-for="Status" class="form-select" id="statusSelect">
+                            <option value="">-- Select Status --</option>
+                            <!-- Status options will be populated by JavaScript based on asset type -->
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Vendor"></label>
+                        <select asp-for="Vendor" class="form-select">
+                            <option value="">-- Select Vendor --</option>
+                            <option value="Dell">Dell</option>
+                            <option value="HP">HP</option>
+                            <option value="Lenovo">Lenovo</option>
+                            <option value="Microsoft">Microsoft</option>
+                            <option value="Oracle">Oracle</option>
+                            <option value="IBM">IBM</option>
+                            <option value="Cisco">Cisco</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row location-field-application">
+                    <div class="col-md-6 mb-2">
+                        <label for="LocationApplication">Location</label>
+                        <select name="Location" class="form-select" id="LocationApplication">
+                            <option value="">-- Select Location --</option>
+                            <option value="Sed1">Sed1</option>
+                            <option value="Sed2">Sed2</option>
+                            <option value="Sed3">Sed3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Information (shared) -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-rand-sign"></i> Purchase Information</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="PurchaseDate"></label>
+                        <input asp-for="PurchaseDate" class="form-control" type="date" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="PurchasePrice"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">R</span>
+                            <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="WarrantyExpiryDate"></label>
+                        <input asp-for="WarrantyExpiryDate" class="form-control" type="date" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Computer fields -->
+            <div class="form-section type-section computer-fields mb-3" data-type="Computer">
+                <h5><i class="fas fa-desktop"></i> Computer Specifications</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label>Processor</label>
+                        <input name="Processor" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>RAM</label>
+                        <input name="RAM" class="form-control" type="number" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>Storage</label>
+                        <input name="Storage" class="form-control" type="number" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label>Operating System</label>
+                        <select name="OperatingSystem" class="form-select">
+                            <option value="">-- Select Operating System --</option>
+                            <option value="Windows 10">Windows 10</option>
+                            <option value="Windows 11">Windows 11</option>
+                            <option value="Windows Server 2019">Windows Server 2019</option>
+                            <option value="Windows Server 2022">Windows Server 2022</option>
+                            <option value="Linux Ubuntu">Linux Ubuntu</option>
+                            <option value="Linux CentOS">Linux CentOS</option>
+                            <option value="macOS">macOS</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label>Assigned To</label>
+                        <select name="AssignedTo" class="form-select">
+                            <option value="">-- Select User --</option>
+                            <option value="John Doe">John Doe</option>
+                            <option value="Jane Smith">Jane Smith</option>
+                            <option value="Mike Johnson">Mike Johnson</option>
+                            <option value="Sarah Williams">Sarah Williams</option>
+                            <option value="David Brown">David Brown</option>
+                            <option value="Unassigned">Unassigned</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Server fields -->
+            <div class="form-section type-section server-fields mb-3" data-type="Server">
+                <h5><i class="fas fa-server"></i> Server Specifications</h5>
+
+                <div class="form-group mb-2">
+                    <label>IP Address</label>
+                    <input name="IPAddress" class="form-control" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label>Processor</label>
+                        <input name="Processor" class="form-control" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>RAM</label>
+                        <input name="RAM" class="form-control" type="number" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>Storage</label>
+                        <input name="Storage" class="form-control" type="number" />
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Operating System</label>
+                    <select name="OperatingSystem" class="form-select">
+                        <option value="">-- Select Operating System --</option>
+                        <option value="Windows Server 2016 Standard">Windows Server 2016 Standard</option>
+                        <option value="Windows Server 2012 R2">Windows Server 2012 R2</option>
+                        <option value="Windows Server 2012 R3">Windows Server 2012 R3</option>
+                        <option value="Windows Server 2012 R4">Windows Server 2012 R4</option>
+                        <option value="Windows Server 2012 R5">Windows Server 2012 R5</option>
+                        <option value="Windows Server 2012 R6">Windows Server 2012 R6</option>
+                        <option value="Windows Server 2016">Windows Server 2016</option>
+                        <option value="WINDOWS Server 2012">WINDOWS Server 2012</option>
+                        <option value="WINDOWS Server 2008">WINDOWS Server 2008</option>
+                        <option value="Server 2008 R2">Server 2008 R2</option>
+                        <option value="Server 2012">Server 2012</option>
+                        <option value="Windows Server 2019">Windows Server 2019</option>
+                        <option value="Windows Server 2008 R2">Windows Server 2008 R2</option>
+                        <option value="Windows Server 2003">Windows Server 2003</option>
+                        <option value="Windows Version 2016">Windows Version 2016</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Server Type</label>
+                    <select name="ServerType" class="form-select">
+                        <option value="">-- Select Server Type --</option>
+                        <option value="Development">Development</option>
+                        <option value="TestDev">TestDev</option>
+                        <option value="Production">Production</option>
+                        <option value="Test application & database">Test application & database</option>
+                        <option value="NGA Production">NGA Production</option>
+                        <option value="CHART Production">CHART Production</option>
+                        <option value="GH Production">GH Production</option>
+                        <option value="NGA DEV">NGA DEV</option>
+                        <option value="CHART GH Test DB">CHART GH Test DB</option>
+                        <option value="NGA/Aquabase Test">NGA/Aquabase Test</option>
+                        <option value="NGA User acceptance">NGA User acceptance</option>
+                        <option value="GH User acceptance">GH User acceptance</option>
+                        <option value="CHART User acceptance test">CHART User acceptance test</option>
+                        <option value="NGA, GH, CHART System Test & Training">NGA, GH, CHART System Test & Training</option>
+                        <option value="Production application">Production application</option>
+                        <option value="Production database">Production database</option>
+                        <option value="Test application & database">Test application & database</option>
+                        <option value="Development application">Development application</option>
+                        <option value="QA/Pre-Prod">QA/Pre-Prod</option>
+                        <option value="Pre-Prod">Pre-Prod</option>
+                        <option value="Development and Design">Development and Design</option>
+                        <option value="Web Development and testing">Web Development and testing</option>
+                        <option value="Storage for all WMS Live Applications">Storage for all WMS Live Applications</option>
+                        <option value="Remote Desktop for OLD WMS application">Remote Desktop for OLD WMS application</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <div class="form-check">
+                        <input name="BackupRequired" class="form-check-input" type="checkbox" id="backupRequired" value="true" />
+                        <label class="form-check-label" for="backupRequired">Backup Required</label>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Backup Comments</label>
+                    <textarea name="BackupComments" class="form-control" rows="2"></textarea>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Project Manager</label>
+                    <select name="ProjectManagerName" class="form-select">
+                        <option value="">-- Select Project Manager --</option>
+                        @{
+                            var serverUsers = ViewBag.Users as List<IT_Asset_Management_System.Models.ApplicationUser> ?? new List<IT_Asset_Management_System.Models.ApplicationUser>();
+                        }
+                        @foreach (var user in serverUsers)
+                        {
+                            <option value="@(user.FullName ?? user.UserName ?? user.Email)">@(user.FullName ?? user.UserName ?? user.Email)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Application fields -->
+            <div class="form-section type-section application-fields mb-3" data-type="Application">
+                <h5><i class="fas fa-cube"></i> Application Details</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label>Version</label>
+                        <input name="Version" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label>Category</label>
+                        <select name="Category" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option value="Database">Database</option>
+                            <option value="Web">Web</option>
+                            <option value="Utility">Utility</option>
+                            <option value="Security">Security</option>
+                            <option value="Office">Office</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label>Business Unit</label>
+                        <select name="BusinessUnit" class="form-select">
+                            <option value="">-- Select Business Unit --</option>
+                            <option value="Hydrology">Hydrology</option>
+                            <option value="Resource Quality Information Services">Resource Quality Information Services</option>
+                            <option value="Spartial Information">Spartial Information</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>Application Owner</label>
+                        <select name="ApplicationOwner" class="form-select">
+                            <option value="">-- Select Application Owner --</option>
+                            @{
+                                var appUsers = ViewBag.Users as List<IT_Asset_Management_System.Models.ApplicationUser> ?? new List<IT_Asset_Management_System.Models.ApplicationUser>();
+                            }
+                            @foreach (var user in appUsers)
+                            {
+                                <option value="@(user.FullName ?? user.UserName ?? user.Email)">@(user.FullName ?? user.UserName ?? user.Email)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label>License Holder</label>
+                        <select name="LicenseHolder" class="form-select">
+                            <option value="">-- Select License Holder --</option>
+                            <option value="DWS">DWS</option>
+                            <option value="EOH">EOH</option>
+                            <option value="SITA">SITA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>Description</label>
+                    <textarea name="Description" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- License fields (only for Application) -->
+            <div class="form-section license-fields mb-3" data-type="Application">
+                <h5><i class="fas fa-key"></i> License Information</h5>
+
+                <div class="form-check mb-2">
+                    <input name="RequiresLicense" class="form-check-input" type="checkbox" id="requiresLicense" />
+                    <label class="form-check-label">This application requires a license</label>
+                </div>
+
+                <div id="licenseDetails" class="license-details">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>License Key</label>
+                            <input name="LicenseKey" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label>License Type</label>
+                            <select name="LicenseType" class="form-select">
+                                <option value="">-- Select --</option>
+                                <option value="Perpetual">Perpetual</option>
+                                <option value="Subscription">Subscription</option>
+                                <option value="Open Source">Open Source</option>
+                                <option value="Trial">Trial</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label>Total Licenses</label>
+                            <input name="TotalLicenses" class="form-control" type="number" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Used Licenses</label>
+                            <input name="UsedLicenses" class="form-control" type="number" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>License Expiry Date</label>
+                            <input name="LicenseExpiryDate" class="form-control" type="date" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-sticky-note"></i> Additional Notes</h5>
+                <div class="form-group">
+                    <label asp-for="Notes"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Create Asset
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var assetTypeSelect = document.getElementById('assetTypeSelect');
+            var statusSelect = document.getElementById('statusSelect');
+            var typeSections = document.querySelectorAll('.type-section');
+            var licenseSection = document.getElementById('licenseDetails');
+            var requiresLicenseCheckbox = document.getElementById('requiresLicense');
+
+            function updateStatusOptions(type) {
+                if (!statusSelect) return;
+                
+                // Clear existing options
+                statusSelect.innerHTML = '<option value="">-- Select Status --</option>';
+                
+                var options = [];
+                if (type === 'Computer') {
+                    options = [
+                        { value: 'Available', text: 'Available' },
+                        { value: 'In Use', text: 'In Use' },
+                        { value: 'Under Maintenance', text: 'Under Maintenance' },
+                        { value: 'Retired', text: 'Retired' },
+                        { value: 'Damaged', text: 'Damaged' }
+                    ];
+                } else if (type === 'Server') {
+                    options = [
+                        { value: 'Online', text: 'Online' },
+                        { value: 'Offline', text: 'Offline' },
+                        { value: 'Maintenance', text: 'Maintenance' },
+                        { value: 'Decommissioned', text: 'Decommissioned' }
+                    ];
+                } else if (type === 'Application') {
+                    options = [
+                        { value: 'Enabled', text: 'Enabled' },
+                        { value: 'Disabled', text: 'Disabled' },
+                        { value: 'Expired', text: 'Expired' },
+                        { value: 'Deprecated', text: 'Deprecated' }
+                    ];
+                }
+                
+                options.forEach(function(opt) {
+                    var option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    statusSelect.appendChild(option);
+                });
+            }
+
+            function setVisibilityForType(type) {
+                // Update status options based on asset type
+                updateStatusOptions(type);
+                // show/hide type sections and enable/disable inputs inside them
+                typeSections.forEach(function (sec) {
+                    var secType = sec.getAttribute('data-type');
+                    var inputs = sec.querySelectorAll('input, select, textarea, button');
+                    if (secType === type) {
+                        sec.style.display = '';
+                        // enable inputs so they bind on post
+                        inputs.forEach(function (i) { i.disabled = false; });
+                    } else {
+                        sec.style.display = 'none';
+                        // disable inputs so they do NOT participate in model binding/validation
+                        inputs.forEach(function (i) { i.disabled = true; });
+                    }
+                });
+
+                // Hide Serial Number field for Application assets
+                var serialNumberField = document.querySelector('.serial-number-field');
+                if (serialNumberField) {
+                    var serialNumberInput = serialNumberField.querySelector('input');
+                    if (type === 'Application') {
+                        serialNumberField.style.display = 'none';
+                        if (serialNumberInput) serialNumberInput.disabled = true;
+                    } else {
+                        serialNumberField.style.display = '';
+                        if (serialNumberInput) serialNumberInput.disabled = false;
+                    }
+                }
+
+                // Handle Location field placement based on asset type
+                var locationFieldDefault = document.querySelector('.location-field-default');
+                var locationFieldApplication = document.querySelector('.location-field-application');
+                if (type === 'Application') {
+                    // For Application: hide location next to SerialNumber, show below Status & Vendor
+                    if (locationFieldDefault) {
+                        locationFieldDefault.style.display = 'none';
+                        var locationInputDefault = locationFieldDefault.querySelector('select');
+                        if (locationInputDefault) locationInputDefault.disabled = true;
+                    }
+                    if (locationFieldApplication) {
+                        locationFieldApplication.style.display = '';
+                        var locationInputApp = locationFieldApplication.querySelector('select');
+                        if (locationInputApp) locationInputApp.disabled = false;
+                    }
+                } else {
+                    // For Computer/Server: show location next to SerialNumber, hide below Status & Vendor
+                    if (locationFieldDefault) {
+                        locationFieldDefault.style.display = '';
+                        var locationInputDefault = locationFieldDefault.querySelector('select');
+                        if (locationInputDefault) locationInputDefault.disabled = false;
+                    }
+                    if (locationFieldApplication) {
+                        locationFieldApplication.style.display = 'none';
+                        var locationInputApp = locationFieldApplication.querySelector('select');
+                        if (locationInputApp) locationInputApp.disabled = true;
+                    }
+                }
+
+                // license controls: only relevant for Application
+                if (type === 'Application') {
+                    if (licenseSection) licenseSection.style.display = (requiresLicenseCheckbox && requiresLicenseCheckbox.checked) ? '' : 'none';
+                } else {
+                    if (licenseSection) licenseSection.style.display = 'none';
+                    // ensure requiresLicense is unchecked if not application
+                    if (requiresLicenseCheckbox) {
+                        requiresLicenseCheckbox.checked = false;
+                        // also disable license inputs
+                        var licenseInputs = (licenseSection ? licenseSection.querySelectorAll('input, select, textarea') : []);
+                        licenseInputs.forEach(function (i) { i.disabled = true; });
+                    }
+                }
+            }
+
+            function toggleLicenseDetails() {
+                if (!licenseSection || !requiresLicenseCheckbox) return;
+                var inputs = licenseSection.querySelectorAll('input, select, textarea');
+                if (requiresLicenseCheckbox.checked) {
+                    licenseSection.style.display = '';
+                    inputs.forEach(function (i) { i.disabled = false; });
+                } else {
+                    licenseSection.style.display = 'none';
+                    inputs.forEach(function (i) { i.disabled = true; });
+                }
+            }
+
+            // initial setup: disable all type-specific inputs and hide sections
+            typeSections.forEach(function (sec) {
+                sec.style.display = 'none';
+                sec.querySelectorAll('input, select, textarea, button').forEach(function (i) { i.disabled = true; });
+            });
+            if (licenseSection) {
+                licenseSection.style.display = 'none';
+                licenseSection.querySelectorAll('input, select, textarea').forEach(function (i) { i.disabled = true; });
+            }
+            // Initial setup for Location fields - hide Application location field by default
+            var locationFieldApplication = document.querySelector('.location-field-application');
+            if (locationFieldApplication) {
+                locationFieldApplication.style.display = 'none';
+                var locationInputApp = locationFieldApplication.querySelector('select');
+                if (locationInputApp) locationInputApp.disabled = true;
+            }
+
+            // wire events
+            if (assetTypeSelect) {
+                assetTypeSelect.addEventListener('change', function (e) {
+                    setVisibilityForType(e.target.value);
+                });
+            }
+            
+            // Initialize status options if asset type is already selected
+            if (assetTypeSelect && assetTypeSelect.value) {
+                updateStatusOptions(assetTypeSelect.value);
+            }
+
+            if (requiresLicenseCheckbox) {
+                requiresLicenseCheckbox.addEventListener('change', toggleLicenseDetails);
+            }
+
+            // initialize visibility using the currently selected value (handles postbacks)
+            var initialType = assetTypeSelect ? assetTypeSelect.value : '';
+            if (initialType) {
+                // Wait a tick so ASP.NET has already rendered server-side values into inputs
+                setTimeout(function () {
+                    setVisibilityForType(initialType);
+                    toggleLicenseDetails();
+                }, 10);
+            }
+        })();
+    </script>
+
+    <style>
+        /* simple helper (you can move to site.css) */
+        .type-section {
+            margin-bottom: 1rem;
+        }
+
+        .license-details {
+            margin-top: .5rem;
+        }
+    </style>
+}

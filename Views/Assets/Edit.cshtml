@@ -1,0 +1,389 @@
+﻿@model IT_Asset_Management_System.Models.BaseAsset
+
+@{
+    var m = Model;
+    ViewData["Title"] = "Edit " + (m?.AssetType ?? "Asset");
+}
+
+<div class="page-header">
+    <h1>Edit @(m?.AssetType ?? "Asset")</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="AssetType" />
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedDate" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="form-section">
+                <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="AssetTag"></label>
+                            <input asp-for="AssetTag" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="AssetName"></label>
+                            <input asp-for="AssetName" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="Brand"></label>
+                            <input asp-for="Brand" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="Model"></label>
+                            <input asp-for="Model" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="SerialNumber"></label>
+                            <input asp-for="SerialNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="Location"></label>
+                            <select asp-for="Location" class="form-select">
+                                <option value="">-- Select Location --</option>
+                                <option value="Sed1">Sed1</option>
+                                <option value="Sed2">Sed2</option>
+                                <option value="Sed3">Sed3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="Status"></label>
+                            <select asp-for="Status" class="form-select">
+                                @if (string.Equals(m?.AssetType, "Computer", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <option value="Available">Available</option>
+                                    <option value="In Use">In Use</option>
+                                    <option value="Under Maintenance">Under Maintenance</option>
+                                    <option value="Retired">Retired</option>
+                                    <option value="Damaged">Damaged</option>
+                                }
+                                else if (string.Equals(m?.AssetType, "Server", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <option value="Online">Online</option>
+                                    <option value="Offline">Offline</option>
+                                    <option value="Maintenance">Maintenance</option>
+                                    <option value="Decommissioned">Decommissioned</option>
+                                }
+                                else if (string.Equals(m?.AssetType, "Application", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <option value="Enabled">Enabled</option>
+                                    <option value="Disabled">Disabled</option>
+                                    <option value="Expired">Expired</option>
+                                    <option value="Deprecated">Deprecated</option>
+                                }
+                                else
+                                {
+                                    <option value="Active">Active</option>
+                                    <option value="Available">Available</option>
+                                    <option value="In Use">In Use</option>
+                                    <option value="Under Maintenance">Under Maintenance</option>
+                                    <option value="Retired">Retired</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="Vendor"></label>
+                            <select asp-for="Vendor" class="form-select">
+                                <option value="">-- Select Vendor --</option>
+                                <option value="Dell">Dell</option>
+                                <option value="HP">HP</option>
+                                <option value="Lenovo">Lenovo</option>
+                                <option value="Microsoft">Microsoft</option>
+                                <option value="Oracle">Oracle</option>
+                                <option value="IBM">IBM</option>
+                                <option value="Cisco">Cisco</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Information -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-rand-sign"></i> Purchase Information</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="PurchaseDate"></label>
+                        <input asp-for="PurchaseDate" class="form-control" type="date" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="PurchasePrice"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">R</span>
+                            <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="WarrantyExpiryDate"></label>
+                        <input asp-for="WarrantyExpiryDate" class="form-control" type="date" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Computer fields -->
+            @if (string.Equals(m?.AssetType, "Computer", StringComparison.OrdinalIgnoreCase))
+            {
+                var computer = m as IT_Asset_Management_System.Models.Computer;
+                <div class="form-section mb-3">
+                    <h5><i class="fas fa-desktop"></i> Computer Specifications</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label>Processor</label>
+                            <input name="Processor" class="form-control" value="@(computer?.Processor ?? "")" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>RAM</label>
+                            <input name="RAM" class="form-control" type="number" value="@(computer?.RAM ?? 0)" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Storage</label>
+                            <input name="Storage" class="form-control" type="number" value="@(computer?.Storage ?? 0)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Operating System</label>
+                            <select name="OperatingSystem" class="form-select">
+                                <option value="">-- Select Operating System --</option>
+                                <option value="Windows 10" selected="@(computer?.OperatingSystem == "Windows 10")">Windows 10</option>
+                                <option value="Windows 11" selected="@(computer?.OperatingSystem == "Windows 11")">Windows 11</option>
+                                <option value="Windows Server 2019" selected="@(computer?.OperatingSystem == "Windows Server 2019")">Windows Server 2019</option>
+                                <option value="Windows Server 2022" selected="@(computer?.OperatingSystem == "Windows Server 2022")">Windows Server 2022</option>
+                                <option value="Linux Ubuntu" selected="@(computer?.OperatingSystem == "Linux Ubuntu")">Linux Ubuntu</option>
+                                <option value="Linux CentOS" selected="@(computer?.OperatingSystem == "Linux CentOS")">Linux CentOS</option>
+                                <option value="macOS" selected="@(computer?.OperatingSystem == "macOS")">macOS</option>
+                                <option value="Other" selected="@(computer?.OperatingSystem == "Other")">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label>Assigned To</label>
+                            <select name="AssignedTo" class="form-select">
+                                <option value="">-- Select User --</option>
+                                <option value="John Doe" selected="@(computer?.AssignedTo == "John Doe")">John Doe</option>
+                                <option value="Jane Smith" selected="@(computer?.AssignedTo == "Jane Smith")">Jane Smith</option>
+                                <option value="Mike Johnson" selected="@(computer?.AssignedTo == "Mike Johnson")">Mike Johnson</option>
+                                <option value="Sarah Williams" selected="@(computer?.AssignedTo == "Sarah Williams")">Sarah Williams</option>
+                                <option value="David Brown" selected="@(computer?.AssignedTo == "David Brown")">David Brown</option>
+                                <option value="Unassigned" selected="@(computer?.AssignedTo == "Unassigned")">Unassigned</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Server fields -->
+            @if (string.Equals(m?.AssetType, "Server", StringComparison.OrdinalIgnoreCase))
+            {
+                var server = m as IT_Asset_Management_System.Models.Server;
+                <div class="form-section mb-3">
+                    <h5><i class="fas fa-server"></i> Server Specifications</h5>
+                    <div class="form-group mb-2">
+                        <label>IP Address</label>
+                        <input name="IPAddress" class="form-control" value="@(server?.IPAddress ?? "")" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label>Processor</label>
+                            <input name="Processor" class="form-control" value="@(server?.Processor ?? "")" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>RAM</label>
+                            <input name="RAM" class="form-control" type="number" value="@(server?.RAM ?? 0)" />
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Storage</label>
+                            <input name="Storage" class="form-control" type="number" value="@(server?.Storage ?? 0)" />
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label>Operating System</label>
+                        <select name="OperatingSystem" class="form-select">
+                            <option value="">-- Select Operating System --</option>
+                            <option value="Windows Server 2016 Standard" selected="@(server?.OperatingSystem == "Windows Server 2016 Standard")">Windows Server 2016 Standard</option>
+                            <option value="Windows Server 2012 R2" selected="@(server?.OperatingSystem == "Windows Server 2012 R2")">Windows Server 2012 R2</option>
+                            <option value="Windows Server 2012 R3" selected="@(server?.OperatingSystem == "Windows Server 2012 R3")">Windows Server 2012 R3</option>
+                            <option value="Windows Server 2012 R4" selected="@(server?.OperatingSystem == "Windows Server 2012 R4")">Windows Server 2012 R4</option>
+                            <option value="Windows Server 2012 R5" selected="@(server?.OperatingSystem == "Windows Server 2012 R5")">Windows Server 2012 R5</option>
+                            <option value="Windows Server 2012 R6" selected="@(server?.OperatingSystem == "Windows Server 2012 R6")">Windows Server 2012 R6</option>
+                            <option value="Windows Server 2016" selected="@(server?.OperatingSystem == "Windows Server 2016")">Windows Server 2016</option>
+                            <option value="WINDOWS Server 2012" selected="@(server?.OperatingSystem == "WINDOWS Server 2012")">WINDOWS Server 2012</option>
+                            <option value="WINDOWS Server 2008" selected="@(server?.OperatingSystem == "WINDOWS Server 2008")">WINDOWS Server 2008</option>
+                            <option value="Server 2008 R2" selected="@(server?.OperatingSystem == "Server 2008 R2")">Server 2008 R2</option>
+                            <option value="Server 2012" selected="@(server?.OperatingSystem == "Server 2012")">Server 2012</option>
+                            <option value="Windows Server 2019" selected="@(server?.OperatingSystem == "Windows Server 2019")">Windows Server 2019</option>
+                            <option value="Windows Server 2008 R2" selected="@(server?.OperatingSystem == "Windows Server 2008 R2")">Windows Server 2008 R2</option>
+                            <option value="Windows Server 2003" selected="@(server?.OperatingSystem == "Windows Server 2003")">Windows Server 2003</option>
+                            <option value="Windows Version 2016" selected="@(server?.OperatingSystem == "Windows Version 2016")">Windows Version 2016</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label>Server Type</label>
+                        <select name="ServerType" class="form-select">
+                            <option value="">-- Select Server Type --</option>
+                            <option value="Development" selected="@(server?.ServerType == "Development")">Development</option>
+                            <option value="TestDev" selected="@(server?.ServerType == "TestDev")">TestDev</option>
+                            <option value="Production" selected="@(server?.ServerType == "Production")">Production</option>
+                            <option value="Test application & database" selected="@(server?.ServerType == "Test application & database")">Test application & database</option>
+                            <option value="NGA Production" selected="@(server?.ServerType == "NGA Production")">NGA Production</option>
+                            <option value="CHART Production" selected="@(server?.ServerType == "CHART Production")">CHART Production</option>
+                            <option value="GH Production" selected="@(server?.ServerType == "GH Production")">GH Production</option>
+                            <option value="NGA DEV" selected="@(server?.ServerType == "NGA DEV")">NGA DEV</option>
+                            <option value="CHART GH Test DB" selected="@(server?.ServerType == "CHART GH Test DB")">CHART GH Test DB</option>
+                            <option value="NGA/Aquabase Test" selected="@(server?.ServerType == "NGA/Aquabase Test")">NGA/Aquabase Test</option>
+                            <option value="NGA User acceptance" selected="@(server?.ServerType == "NGA User acceptance")">NGA User acceptance</option>
+                            <option value="GH User acceptance" selected="@(server?.ServerType == "GH User acceptance")">GH User acceptance</option>
+                            <option value="CHART User acceptance test" selected="@(server?.ServerType == "CHART User acceptance test")">CHART User acceptance test</option>
+                            <option value="NGA, GH, CHART System Test & Training" selected="@(server?.ServerType == "NGA, GH, CHART System Test & Training")">NGA, GH, CHART System Test & Training</option>
+                            <option value="Production application" selected="@(server?.ServerType == "Production application")">Production application</option>
+                            <option value="Production database" selected="@(server?.ServerType == "Production database")">Production database</option>
+                            <option value="Development application" selected="@(server?.ServerType == "Development application")">Development application</option>
+                            <option value="QA/Pre-Prod" selected="@(server?.ServerType == "QA/Pre-Prod")">QA/Pre-Prod</option>
+                            <option value="Pre-Prod" selected="@(server?.ServerType == "Pre-Prod")">Pre-Prod</option>
+                            <option value="Development and Design" selected="@(server?.ServerType == "Development and Design")">Development and Design</option>
+                            <option value="Web Development and testing" selected="@(server?.ServerType == "Web Development and testing")">Web Development and testing</option>
+                            <option value="Storage for all WMS Live Applications" selected="@(server?.ServerType == "Storage for all WMS Live Applications")">Storage for all WMS Live Applications</option>
+                            <option value="Remote Desktop for OLD WMS application" selected="@(server?.ServerType == "Remote Desktop for OLD WMS application")">Remote Desktop for OLD WMS application</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <div class="form-check">
+                            <input name="BackupRequired" class="form-check-input" type="checkbox" id="backupRequired" value="true" checked="@(server?.BackupRequired == true)" />
+                            <label class="form-check-label" for="backupRequired">Backup Required</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label>Backup Comments</label>
+                        <textarea name="BackupComments" class="form-control" rows="2">@(server?.BackupComments ?? "")</textarea>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label>Project Manager Name</label>
+                        <input name="ProjectManagerName" class="form-control" value="@(server?.ProjectManagerName ?? "")" />
+                    </div>
+                </div>
+            }
+
+            <!-- Application fields -->
+            @if (string.Equals(m?.AssetType, "Application", StringComparison.OrdinalIgnoreCase))
+            {
+                var application = m as IT_Asset_Management_System.Models.Application;
+                <div class="form-section mb-3">
+                    <h5><i class="fas fa-cube"></i> Application Details</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Version</label>
+                            <input name="Version" class="form-control" value="@(application?.Version ?? "")" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label>Category</label>
+                            <select name="Category" class="form-select">
+                                <option value="">-- Select --</option>
+                                <option value="Database" selected="@(application?.Category == "Database")">Database</option>
+                                <option value="Web" selected="@(application?.Category == "Web")">Web</option>
+                                <option value="Utility" selected="@(application?.Category == "Utility")">Utility</option>
+                                <option value="Security" selected="@(application?.Category == "Security")">Security</option>
+                                <option value="Office" selected="@(application?.Category == "Office")">Office</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label>Business Unit</label>
+                            <select name="BusinessUnit" class="form-select">
+                                <option value="">-- Select Business Unit --</option>
+                                <option value="Hydrology" selected="@(application?.BusinessUnit == "Hydrology")">Hydrology</option>
+                                <option value="Resource Quality Information Services" selected="@(application?.BusinessUnit == "Resource Quality Information Services")">Resource Quality Information Services</option>
+                                <option value="Spartial Information" selected="@(application?.BusinessUnit == "Spartial Information")">Spartial Information</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>Application Owner</label>
+                            <select name="ApplicationOwner" class="form-select">
+                                <option value="">-- Select Application Owner --</option>
+                                @{
+                                    var editAppUsers = ViewBag.Users as List<IT_Asset_Management_System.Models.ApplicationUser> ?? new List<IT_Asset_Management_System.Models.ApplicationUser>();
+                                    var currentAppOwner = application?.ApplicationOwner;
+                                }
+                                @foreach (var user in editAppUsers)
+                                {
+                                    var userDisplayName = user.FullName ?? user.UserName ?? user.Email;
+                                    <option value="@userDisplayName" selected="@(currentAppOwner == userDisplayName)">@userDisplayName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label>License Holder</label>
+                            <select name="LicenseHolder" class="form-select">
+                                <option value="">-- Select License Holder --</option>
+                                <option value="DWS" selected="@(application?.LicenseHolder == "DWS")">DWS</option>
+                                <option value="EOH" selected="@(application?.LicenseHolder == "EOH")">EOH</option>
+                                <option value="SITA" selected="@(application?.LicenseHolder == "SITA")">SITA</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label>Description</label>
+                        <textarea name="Description" class="form-control" rows="3">@(application?.Description ?? "")</textarea>
+                    </div>
+                </div>
+            }
+
+            <!-- Notes -->
+            <div class="form-section mb-3">
+                <h5><i class="fas fa-sticky-note"></i> Additional Notes</h5>
+                <div class="form-group">
+                    <label asp-for="Notes"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a asp-action="Index" asp-route-assetType="@m?.AssetType" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

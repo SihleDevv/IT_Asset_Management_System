@@ -1,0 +1,173 @@
+﻿@model IT_Asset_Management_System.Models.Server
+@{
+    ViewData["Title"] = "Server Details";
+}
+
+<h1>Server Details</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h4>@Model.AssetName</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Asset Tag</dt>
+                    <dd class="col-sm-8">@Model.AssetTag</dd>
+
+                    <dt class="col-sm-4">IP Address</dt>
+                    <dd class="col-sm-8">@Model.IPAddress</dd>
+
+                    <dt class="col-sm-4">Brand</dt>
+                    <dd class="col-sm-8">@Model.Brand</dd>
+
+                    <dt class="col-sm-4">Model</dt>
+                    <dd class="col-sm-8">@Model.Model</dd>
+
+                    <dt class="col-sm-4">Serial Number</dt>
+                    <dd class="col-sm-8">@Model.SerialNumber</dd>
+
+                    <dt class="col-sm-4">Processor</dt>
+                    <dd class="col-sm-8">@Model.Processor</dd>
+
+                    <dt class="col-sm-4">RAM</dt>
+                    <dd class="col-sm-8">@Model.RAM GB</dd>
+
+                    <dt class="col-sm-4">Storage</dt>
+                    <dd class="col-sm-8">@Model.Storage GB</dd>
+
+                    <dt class="col-sm-4">Operating System</dt>
+                    <dd class="col-sm-8">@Model.OperatingSystem</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Server Type</dt>
+                    <dd class="col-sm-8">@Model.ServerType</dd>
+
+                    <dt class="col-sm-4">Purpose</dt>
+                    <dd class="col-sm-8">@Model.Purpose</dd>
+
+                    <dt class="col-sm-4">Purchase Date</dt>
+                    <dd class="col-sm-8">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Purchase Price</dt>
+                    <dd class="col-sm-8">R @Model.PurchasePrice.ToString("N2")</dd>
+
+                    <dt class="col-sm-4">Vendor</dt>
+                    <dd class="col-sm-8">@Model.Vendor</dd>
+
+                    <dt class="col-sm-4">Warranty Expiry</dt>
+                    <dd class="col-sm-8">@(Model.WarrantyExpiryDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+
+                    <dt class="col-sm-4">Location</dt>
+                    <dd class="col-sm-8">@Model.Location</dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Status == "Active")
+                        {
+                            <span class="badge bg-success">@Model.Status</span>
+                        }
+                        else if (Model.Status == "Inactive")
+                        {
+                            <span class="badge bg-warning">@Model.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@Model.Status</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <hr />
+            <h5>Notes</h5>
+            <p>@Model.Notes</p>
+        }
+
+        <hr />
+        <h5>Installed Applications</h5>
+        @if (Model.ServerApplications.Any())
+        {
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Application Name</th>
+                        <th>Version</th>
+                        <th>Installation Date</th>
+                        <th>Installed By</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sa in Model.ServerApplications)
+                    {
+                        <tr>
+                            <td>@(sa?.Application?.AssetName ?? "—")</td>
+                            <td>@(sa?.InstalledVersion ?? "—")</td>
+                            <td>@(sa != null ? sa.InstallationDate.ToString("yyyy-MM-dd HH:mm") : "—")</td>
+                            <td>
+                                @if (sa != null && !string.IsNullOrEmpty(sa.CreatedBy))
+                                {
+                                    <span class="badge bg-primary">@sa.CreatedBy</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>
+                                @if (sa != null)
+                                {
+                                    @if (sa.Status == "Running")
+                                    {
+                                        <span class="badge bg-success">@sa.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">@sa.Status</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td>@(sa != null && !string.IsNullOrEmpty(sa.Notes) ? sa.Notes : "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">No applications installed</p>
+        }
+
+        <hr />
+        <p class="text-muted">
+            <strong>Created by:</strong> @($"{Model.CreatedBy ?? "N/A"} on {Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")}")
+            @if (Model.ModifiedDate.HasValue)
+            {
+                <br />
+                <strong>Modified by:</strong> @($"{Model.ModifiedBy ?? "N/A"} on {Model.ModifiedDate.Value.ToString("yyyy-MM-dd HH:mm")}")
+            }
+        </p>
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="ManageApplications" asp-route-id="@Model.Id" class="btn btn-success">Install Application</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

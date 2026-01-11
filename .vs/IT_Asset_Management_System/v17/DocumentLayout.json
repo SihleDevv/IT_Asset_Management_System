@@ -1,0 +1,924 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\assetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\assetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174748_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20260111174748_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174418_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20260111174418_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111162752_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20260111162752_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\serverscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\serverscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\reportscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:data\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\servers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\servers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\viewmodels\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\computer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\computer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\viewmodels\\serverapplicationviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\viewmodels\\serverapplicationviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\serverreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\serverreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\baseasset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\baseasset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\applicationreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\applicationreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\computerreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\computerreport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\licensereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\licensereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\assetsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\assetsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\auditlog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\auditlog.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\computerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\computerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\computerreport.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\computerreport.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\assetsummary.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\assetsummary.cshtml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\reports\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\reports\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\manageapplications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\manageapplications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\users\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\assets\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\assets\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\assetserverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\assetserverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\applicationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\applicationscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\viewmodels\\dashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\viewmodels\\dashboardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\viewmodels\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\viewmodels\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\auditlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\auditlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\serverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\serverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\it_asset_management_system.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:it_asset_management_system.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\migrations\\20260111190823_serverandapplicationbasedatafields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:migrations\\20260111190823_serverandapplicationbasedatafields.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\migrations\\20260111175221_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:migrations\\20260111175221_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 9,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1653846603:0:{83107a3e-496a-485e-b455-16ddb978e55e}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "20260111190823_ServerAndApplicationBaseDataFields.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
+              "RelativeToolTip": "Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-11T19:08:24.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "20260111175221_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111175221_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260111175221_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111175221_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20260111175221_InitialCreate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-11T17:52:22.015Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20260111174748_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174748_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260111174748_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174748_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20260111174748_InitialCreate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-11T17:47:48.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "20260111174418_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174418_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260111174418_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174418_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20260111174418_InitialCreate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-11T17:44:18.985Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AssetsController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AssetsController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
+              "RelativeToolTip": "Controllers\\AssetsController.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAArwJAAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T01:44:11.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAArwAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:29:14.419Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Details.cshtml",
+              "RelativeToolTip": "Views\\Assets\\Details.cshtml",
+              "ViewState": "AgIAAOQAAAAAAAAAAAArwPcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-12T23:58:52.217Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAArwA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-19T05:01:48.049Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DbInitializer.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\DbInitializer.cs",
+              "RelativeDocumentMoniker": "Data\\DbInitializer.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\DbInitializer.cs",
+              "RelativeToolTip": "Data\\DbInitializer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:40:21.625Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ApplicationUser.cs",
+              "RelativeToolTip": "Models\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:40:39.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ServersController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ServersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ServersController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ServersController.cs",
+              "RelativeToolTip": "Controllers\\ServersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:41:55.027Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20260111162752_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111162752_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20260111162752_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111162752_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20260111162752_InitialCreate.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-11T16:27:52.642Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAIwBYAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T01:45:21.716Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAAACcAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:39:22.576Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAAACkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:38:27.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ReportsController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ReportsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ReportsController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ReportsController.cs",
+              "RelativeToolTip": "Controllers\\ReportsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:43:49.873Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ServerApplicationViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\ServerApplicationViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ViewModels\\ServerApplicationViewModel.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\ServerApplicationViewModel.cs",
+              "RelativeToolTip": "Models\\ViewModels\\ServerApplicationViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:41:53.973Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Servers\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Servers\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Servers\\Details.cshtml",
+              "RelativeToolTip": "Views\\Servers\\Details.cshtml",
+              "ViewState": "AgIAAJEAAAAAAAAAAAArwJ4AAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:45:32.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "LoginViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\LoginViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ViewModels\\LoginViewModel.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\LoginViewModel.cs",
+              "RelativeToolTip": "Models\\ViewModels\\LoginViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T00:42:43.793Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Server.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Server.cs",
+              "RelativeDocumentMoniker": "Models\\Server.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Server.cs",
+              "RelativeToolTip": "Models\\Server.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:40:44.906Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ServerReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ServerReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\ServerReport.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ServerReport.cshtml",
+              "RelativeToolTip": "Views\\Reports\\ServerReport.cshtml",
+              "ViewState": "AgIAACAAAAAAAAAAAAAkwCkAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T10:14:32.31Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "BaseAsset.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\BaseAsset.cs",
+              "RelativeDocumentMoniker": "Models\\BaseAsset.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\BaseAsset.cs",
+              "RelativeToolTip": "Models\\BaseAsset.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T01:40:14.106Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Computer.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Computer.cs",
+              "RelativeDocumentMoniker": "Models\\Computer.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Computer.cs",
+              "RelativeToolTip": "Models\\Computer.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBEAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:40:42.16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "AuditLog.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AuditLog.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\AuditLog.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AuditLog.cshtml",
+              "RelativeToolTip": "Views\\Reports\\AuditLog.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T10:14:49.732Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ComputerReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\ComputerReport.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
+              "RelativeToolTip": "Views\\Reports\\ComputerReport.cshtml",
+              "ViewState": "AgIAACMAAAAAAAAAAAAIwDIAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T09:14:01.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "LicenseReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\LicenseReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\LicenseReport.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\LicenseReport.cshtml",
+              "RelativeToolTip": "Views\\Reports\\LicenseReport.cshtml",
+              "ViewState": "AgIAABYAAAAAAAAAAAAkwC0AAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T09:37:00.14Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ApplicationReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ApplicationReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\ApplicationReport.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ApplicationReport.cshtml",
+              "RelativeToolTip": "Views\\Reports\\ApplicationReport.cshtml",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAkwCAAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T10:15:02.461Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ComputersController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ComputersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ComputersController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ComputersController.cs",
+              "RelativeToolTip": "Controllers\\ComputersController.cs",
+              "ViewState": "AgIAALYAAAAAAAAAAAAAAM0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:43:34.236Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AssetSummary.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\AssetSummary.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
+              "RelativeToolTip": "Views\\Reports\\AssetSummary.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T09:13:19.015Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Delete.cshtml",
+              "RelativeToolTip": "Views\\Assets\\Delete.cshtml",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAABkAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:35:10.368Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\Create.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Create.cshtml",
+              "RelativeToolTip": "Views\\Assets\\Create.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGgBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-12T17:58:08.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\Index.cshtml",
+              "RelativeToolTip": "Views\\Reports\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T09:10:45.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ManageApplications.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\ManageApplications.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\ManageApplications.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\ManageApplications.cshtml",
+              "RelativeToolTip": "Views\\Assets\\ManageApplications.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF4AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:40:43.428Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ComputerReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\ComputerReport.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
+              "RelativeToolTip": "Views\\Reports\\ComputerReport.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:39:53.11Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AssetSummary.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
+              "RelativeDocumentMoniker": "Views\\Reports\\AssetSummary.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
+              "RelativeToolTip": "Views\\Reports\\AssetSummary.cshtml",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:39:03.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Users\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Users\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Users\\Index.cshtml",
+              "RelativeToolTip": "Views\\Users\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:38:29.62Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Edit.cshtml",
+              "RelativeToolTip": "Views\\Assets\\Edit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:36:01.308Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-13T08:19:19.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Assets\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Index.cshtml",
+              "RelativeToolTip": "Views\\Assets\\Index.cshtml",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAFsAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-12T01:51:07.303Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "AssetServerApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AssetServerApplication.cs",
+              "RelativeDocumentMoniker": "Models\\AssetServerApplication.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AssetServerApplication.cs",
+              "RelativeToolTip": "Models\\AssetServerApplication.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T01:41:55.166Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:44:34.391Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Computers\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
+              "RelativeToolTip": "Views\\Computers\\Details.cshtml",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAIwGIAAABtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:45:20.844Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAACAAAAAAAAAAAwwBwCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-12-12T01:32:28.14Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "ApplicationsController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ApplicationsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ApplicationsController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ApplicationsController.cs",
+              "RelativeToolTip": "Controllers\\ApplicationsController.cs",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAAAM8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:41:56.003Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAIwDQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:37:10.537Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "DashboardViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\DashboardViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ViewModels\\DashboardViewModel.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\DashboardViewModel.cs",
+              "RelativeToolTip": "Models\\ViewModels\\DashboardViewModel.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T00:43:56.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "RegisterViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\RegisterViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ViewModels\\RegisterViewModel.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\RegisterViewModel.cs",
+              "RelativeToolTip": "Models\\ViewModels\\RegisterViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T00:43:11.038Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "AuditLog.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AuditLog.cs",
+              "RelativeDocumentMoniker": "Models\\AuditLog.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AuditLog.cs",
+              "RelativeToolTip": "Models\\AuditLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T00:41:35.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "Application.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Application.cs",
+              "RelativeDocumentMoniker": "Models\\Application.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Application.cs",
+              "RelativeToolTip": "Models\\Application.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:40:35.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "ServerApplication.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ServerApplication.cs",
+              "RelativeDocumentMoniker": "Models\\ServerApplication.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ServerApplication.cs",
+              "RelativeToolTip": "Models\\ServerApplication.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:36:17.507Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T15:33:04.188Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:28:47.259Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-12T00:35:50.791Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\Error.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\Error.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\Error.cshtml",
+              "RelativeToolTip": "Views\\Shared\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:33:16.245Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "IT_Asset_Management_System.csproj",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\IT_Asset_Management_System.csproj",
+              "RelativeDocumentMoniker": "IT_Asset_Management_System.csproj",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\IT_Asset_Management_System.csproj",
+              "RelativeToolTip": "IT_Asset_Management_System.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-11T15:23:51.046Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

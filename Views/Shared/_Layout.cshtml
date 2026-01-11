@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IT_Asset_Management_System.Models.ApplicationUser> SignInManager
+@inject UserManager<IT_Asset_Management_System.Models.ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ITASMS</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="sidebar-layout">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>ITASMS</h3>
+                    <small>Asset Management</small>
+                </div>
+
+                <ul class="sidebar-menu list-unstyled">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                    {
+                        <li>
+                            <a asp-controller="Users" asp-action="Index">
+                                <i class="fas fa-users"></i> Users
+                            </a>
+                        </li>
+                    }
+
+                    <li>
+                        <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'assetsMenu')">
+                            <i class="fas fa-box"></i> Assets
+                        </a>
+                        <ul class="sidebar-submenu list-unstyled" id="assetsMenu">
+                            <li><a asp-controller="Assets" asp-action="Index">All Assets</a></li>
+                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Computer">Computers</a></li>
+                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Server">Servers</a></li>
+                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Application">Applications</a></li>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                            {
+                                <li><a asp-controller="Assets" asp-action="Create">Add New Asset</a></li>
+                            }
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'reportsMenu')">
+                        <i class="fas fa-chart-bar"></i> Reports
+                    </a>
+                    <ul class="sidebar-submenu list-unstyled" id="reportsMenu">
+                        <li><a asp-controller="Reports" asp-action="AssetSummary">Asset Summary</a></li>
+                        <li><a asp-controller="Reports" asp-action="ComputerReport">Computer Report</a></li>
+                        <li><a asp-controller="Reports" asp-action="ServerReport">Server Report</a></li>
+                        <li><a asp-controller="Reports" asp-action="ApplicationReport">Application Report</a></li>
+                        <li><a asp-controller="Reports" asp-action="LicenseReport">License Report</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a asp-controller="Reports" asp-action="AuditLog">
+                        <i class="fas fa-history"></i> Logs
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer mt-auto p-3">
+                <div class="user-info d-flex align-items-center">
+                    <div class="user-avatar rounded-circle me-2">
+                        @(
+                                                !string.IsNullOrEmpty(User.Identity?.Name)
+                                                ? User.Identity.Name.Substring(0, 1).ToUpper()
+                                                : "?"
+                                                )
+                    </div>
+                        <div>
+                            <strong>@(User.Identity?.Name ?? "Guest")</strong>
+                            <div>
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-link p-0 text-white">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="main-content">
+                <div class="top-navbar p-3 border-bottom">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+
+                <div class="content-area p-4">
+                    @RenderBody()
+                </div>
+
+                <div class="footer text-center py-3">
+                    &copy; 2024 - IT Asset Management System
+                </div>
+            </div>
+        </div>
+        }
+    else
+    {
+        @RenderBody()
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSubmenu(event, menuId) {
+            event.preventDefault();
+            var submenu = document.getElementById(menuId);
+            if (!submenu) return;
+            submenu.classList.toggle('show');
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

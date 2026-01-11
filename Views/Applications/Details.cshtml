@@ -1,0 +1,154 @@
+﻿@model IT_Asset_Management_System.Models.Application
+@{
+    ViewData["Title"] = "Application Details";
+}
+
+<h1>Application Details</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h4>@Model.AssetName</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Version</dt>
+                    <dd class="col-sm-8">@Model.Version</dd>
+
+                    <dt class="col-sm-4">Vendor</dt>
+                    <dd class="col-sm-8">@Model.Vendor</dd>
+
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">@Model.Category</dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4">Purchase Date</dt>
+                    <dd class="col-sm-8">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Purchase Price</dt>
+                    <dd class="col-sm-8">R @Model.PurchasePrice.ToString("N2")</dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Status == "Active")
+                        {
+                            <span class="badge bg-success">@Model.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">@Model.Status</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <h5>License Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-5">Requires License</dt>
+                    <dd class="col-sm-7">@(Model.RequiresLicense ? "Yes" : "No")</dd>
+
+                    @if (Model.RequiresLicense)
+                    {
+                        <dt class="col-sm-5">License Type</dt>
+                        <dd class="col-sm-7">@Model.LicenseType</dd>
+
+                        <dt class="col-sm-5">License Key</dt>
+                        <dd class="col-sm-7">@Model.LicenseKey</dd>
+
+                        <dt class="col-sm-5">Total Licenses</dt>
+                        <dd class="col-sm-7">@Model.TotalLicenses</dd>
+
+                        <dt class="col-sm-5">Used Licenses</dt>
+                        <dd class="col-sm-7">@Model.UsedLicenses</dd>
+
+                        <dt class="col-sm-5">Available Licenses</dt>
+                        <dd class="col-sm-7">@((Model.TotalLicenses ?? 0) - (Model.UsedLicenses ?? 0))</dd>
+
+                        <dt class="col-sm-5">License Expiry</dt>
+                        <dd class="col-sm-7">
+                            @if (Model.LicenseExpiryDate.HasValue)
+                            {
+                                var daysUntilExpiry = (Model.LicenseExpiryDate.Value - DateTime.Now).Days;
+                                if (daysUntilExpiry < 0)
+                                {
+                                    <span class="text-danger">@Model.LicenseExpiryDate.Value.ToString("yyyy-MM-dd") (Expired)</span>
+                                }
+                                else if (daysUntilExpiry < 30)
+                                {
+                                    <span class="text-warning">@Model.LicenseExpiryDate.Value.ToString("yyyy-MM-dd") (@daysUntilExpiry days left)</span>
+                                }
+                                else
+                                {
+                                    @Model.LicenseExpiryDate.Value.ToString("yyyy-MM-dd")
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">N/A</span>
+                            }
+                        </dd>
+                    }
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <hr />
+            <h5>Notes</h5>
+            <p>@Model.Notes</p>
+        }
+
+        <hr />
+        <h5>Installed On Servers</h5>
+        @if (Model.ServerApplications.Any())
+        {
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Server Name</th>
+                        <th>Installed Version</th>
+                        <th>Installation Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sa in Model.ServerApplications)
+                    {
+                        <tr>
+                            <td>@sa.Server?.AssetName</td>
+                            <td>@sa.InstalledVersion</td>
+                            <td>@sa.InstallationDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                @if (sa.Status == "Running")
+                                {
+                                    <span class="badge bg-success">@sa.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">@sa.Status</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Not installed on any server</p>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    }
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

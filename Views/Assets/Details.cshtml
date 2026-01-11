@@ -1,0 +1,326 @@
+﻿@model IT_Asset_Management_System.Models.BaseAsset
+
+@{
+    var m = Model;
+    var isNull = m == null;
+    ViewData["Title"] = isNull ? "Asset Details" : (m.AssetType + " Details");
+    var serverApps = ViewBag.ServerApplications as List<IT_Asset_Management_System.Models.AssetServerApplication>;
+}
+
+<div class="page-header">
+    <h1>@(isNull ? "—" : m.AssetName)</h1>
+    <p class="text-muted">@((isNull ? "Asset" : m.AssetType)) - @(isNull ? "—" : m.AssetTag)</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Asset Tag</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : m.AssetTag))</dd>
+
+                    <dt class="col-sm-4">Asset Name</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : m.AssetName))</dd>
+
+                    <dt class="col-sm-4">Brand</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m.Brand ?? "—")))</dd>
+
+                    <dt class="col-sm-4">Model</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m.Model ?? "—")))</dd>
+
+                    @if (isNull || !string.Equals(m.AssetType, "Application", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        <dt class="col-sm-4">Serial Number</dt>
+                        <dd class="col-sm-8">@((isNull ? "—" : (m.SerialNumber ?? "—")))</dd>
+                    }
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-success">@((isNull ? "—" : (m.Status ?? "—")))</span>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <h5><i class="fas fa-rand-sign"></i> Purchase Information</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">Purchase Date</dt>
+                    <dd class="col-sm-8">@(isNull ? "N/A" : m.PurchaseDate.ToString("yyyy-MM-dd"))</dd>
+
+                    <dt class="col-sm-4">Purchase Price</dt>
+                    <dd class="col-sm-8">@(isNull ? "N/A" : string.Format("R {0:N2}", m.PurchasePrice))</dd>
+
+                    <dt class="col-sm-4">Vendor</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m.Vendor ?? "—")))</dd>
+
+                    <dt class="col-sm-4">Warranty Expiry</dt>
+                    <dd class="col-sm-8">@((isNull || m.WarrantyExpiryDate == null) ? "N/A" : ((DateTime)m.WarrantyExpiryDate).ToString("yyyy-MM-dd"))</dd>
+
+                    <dt class="col-sm-4">Location</dt>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m.Location ?? "—")))</dd>
+                </dl>
+            </div>
+        </div>
+
+        @* Computer details *@
+        @if (!isNull && string.Equals(m.AssetType, "Computer", System.StringComparison.OrdinalIgnoreCase))
+        {
+            var computer = m as IT_Asset_Management_System.Models.Computer;
+            <hr />
+            <h5><i class="fas fa-desktop"></i> Computer Specifications</h5>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Processor</dt>
+                        <dd class="col-sm-8">@((computer?.Processor ?? "—"))</dd>
+
+                        <dt class="col-sm-4">RAM</dt>
+                        <dd class="col-sm-8">@((computer != null && computer.RAM > 0 ? computer.RAM.ToString() : "—")) GB</dd>
+
+                        <dt class="col-sm-4">Storage</dt>
+                        <dd class="col-sm-8">@((computer != null && computer.Storage > 0 ? computer.Storage.ToString() : "—")) GB</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Operating System</dt>
+                        <dd class="col-sm-8">@((computer?.OperatingSystem ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Assigned To</dt>
+                        <dd class="col-sm-8">@((computer?.AssignedTo ?? "—"))</dd>
+                    </dl>
+                </div>
+            </div>
+        }
+
+        @* Server details *@
+        @if (!isNull && string.Equals(m.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+        {
+            var server = m as IT_Asset_Management_System.Models.Server;
+            <hr />
+            <h5><i class="fas fa-server"></i> Server Specifications</h5>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">IP Address</dt>
+                        <dd class="col-sm-8">@((server?.IPAddress ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Server Type</dt>
+                        <dd class="col-sm-8">@((server?.ServerType ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Processor</dt>
+                        <dd class="col-sm-8">@((server?.Processor ?? "—"))</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">RAM</dt>
+                        <dd class="col-sm-8">@((server?.RAM > 0 ? server.RAM.ToString() : "—")) GB</dd>
+
+                        <dt class="col-sm-4">Storage</dt>
+                        <dd class="col-sm-8">@((server?.Storage > 0 ? server.Storage.ToString() : "—")) GB</dd>
+
+                        <dt class="col-sm-4">Operating System</dt>
+                        <dd class="col-sm-8">@((server?.OperatingSystem ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Backup Required</dt>
+                        <dd class="col-sm-8">@((server?.BackupRequired == true ? "Yes" : "No"))</dd>
+                    </dl>
+                </div>
+            </div>
+
+            @if (server != null && (!string.IsNullOrEmpty(server.BackupComments) || !string.IsNullOrEmpty(server.ProjectManagerName)))
+            {
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(server.BackupComments))
+                        {
+                            <h6>Backup Comments</h6>
+                            <p>@server.BackupComments</p>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(server.ProjectManagerName))
+                        {
+                            <dl class="row">
+                                <dt class="col-sm-5">Project Manager</dt>
+                                <dd class="col-sm-7">@server.ProjectManagerName</dd>
+                            </dl>
+                        }
+                    </div>
+                </div>
+            }
+
+            @* Show installed applications for server *@
+            @if (serverApps != null && serverApps.Any())
+            {
+                <hr />
+                <h5><i class="fas fa-cube"></i> Installed Applications</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Application Name</th>
+                                <th>Version</th>
+                                <th>Installed By</th>
+                                <th>Installation Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var app in serverApps)
+                            {
+                                <tr>
+                                    <td>@(app?.Application?.AssetName ?? "—")</td>
+                                    <td>@(app?.InstalledVersion ?? "—")</td>
+                                    <td>
+                                        @if (app != null && !string.IsNullOrEmpty(app.CreatedBy))
+                                        {
+                                            <span class="badge bg-primary">@app.CreatedBy</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>@(app != null ? app.InstallationDate.ToString("yyyy-MM-dd HH:mm") : "—")</td>
+                                    <td>
+                                        @if (app != null)
+                                        {
+                                            @if (app.Status == "Running")
+                                            {
+                                                <span class="badge bg-success">@app.Status</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">@app.Status</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+
+        @* Application details *@
+        @if (!isNull && string.Equals(m.AssetType, "Application", System.StringComparison.OrdinalIgnoreCase))
+        {
+            var application = m as IT_Asset_Management_System.Models.Application;
+            <hr />
+            <h5><i class="fas fa-cube"></i> Application Details</h5>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Version</dt>
+                        <dd class="col-sm-8">@((application?.Version ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Category</dt>
+                        <dd class="col-sm-8">@((application?.Category ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Business Unit</dt>
+                        <dd class="col-sm-8">@((application?.BusinessUnit ?? "—"))</dd>
+
+                        <dt class="col-sm-4">Application Owner</dt>
+                        <dd class="col-sm-8">@((application?.ApplicationOwner ?? "—"))</dd>
+
+                        <dt class="col-sm-4">License Holder</dt>
+                        <dd class="col-sm-8">@((application?.LicenseHolder ?? "—"))</dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <h6><i class="fas fa-key"></i> License Information</h6>
+                    <dl class="row">
+                        <dt class="col-sm-5">Requires License</dt>
+                        <dd class="col-sm-7">@((application?.RequiresLicense == true ? "Yes" : "No"))</dd>
+
+                        @if (application?.RequiresLicense == true)
+                        {
+                            <dt class="col-sm-5">License Key</dt>
+                            <dd class="col-sm-7">@((!string.IsNullOrEmpty(application.LicenseKey) ? application.LicenseKey : "—"))</dd>
+
+                            <dt class="col-sm-5">License Type</dt>
+                            <dd class="col-sm-7">@((application?.LicenseType ?? "—"))</dd>
+
+                            <dt class="col-sm-5">Total Licenses</dt>
+                            <dd class="col-sm-7">@((application?.TotalLicenses.HasValue == true ? application.TotalLicenses.Value.ToString() : "—"))</dd>
+
+                            <dt class="col-sm-5">Used Licenses</dt>
+                            <dd class="col-sm-7">@((application?.UsedLicenses.HasValue == true ? application.UsedLicenses.Value.ToString() : "—"))</dd>
+
+                            <dt class="col-sm-5">License Expiry Date</dt>
+                            <dd class="col-sm-7">@((application?.LicenseExpiryDate.HasValue == true ? application.LicenseExpiryDate.Value.ToString("yyyy-MM-dd") : "—"))</dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(application?.Description))
+            {
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>Description</h6>
+                        <p>@application.Description</p>
+                    </div>
+                </div>
+            }
+        }
+
+        @if (!isNull && !string.IsNullOrWhiteSpace(m.Notes))
+        {
+            <hr />
+            <h5><i class="fas fa-sticky-note"></i> Notes</h5>
+            <p>@m.Notes</p>
+        }
+
+        <hr />
+        <p class="text-muted">
+            <i class="fas fa-user"></i>
+            @($"Created by {(isNull ? "—" : (m.CreatedBy ?? "—"))} on {(isNull ? "N/A" : m.CreatedDate.ToString("yyyy-MM-dd HH:mm"))}")
+            @if (!isNull && m.ModifiedDate != null)
+            {
+                <br />
+                <i class="fas fa-edit"></i>
+                @($"Modified by: {(m.ModifiedBy ?? "—")} on {((DateTime)m.ModifiedDate).ToString("yyyy-MM-dd HH:mm")}")
+            }
+        </p>
+    </div>
+</div>
+
+<div class="mt-3">
+    @if (!isNull && (User.IsInRole("Admin") || User.IsInRole("IT Manager")))
+    {
+        <a asp-action="Edit" asp-route-id="@(m.Id)" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+
+        @if (string.Equals(m.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+        {
+            <a asp-action="ManageApplications" asp-route-id="@(m.Id)" class="btn btn-success">
+                <i class="fas fa-cogs"></i> Manage Applications
+            </a>
+        }
+
+        <a asp-action="Delete" asp-route-id="@(m.Id)" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+    }
+
+    <a asp-action="Index" asp-route-assetType="@(isNull ? "" : m.AssetType)" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+</div>

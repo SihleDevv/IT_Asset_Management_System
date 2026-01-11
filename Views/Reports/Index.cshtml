@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Computer Report</h5>
+                <p class="card-text">View all computers with their specifications and status.</p>
+                <a asp-action="ComputerReport" class="btn btn-primary">View Report</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Server Report</h5>
+                <p class="card-text">View all servers and their installed applications.</p>
+                <a asp-action="ServerReport" class="btn btn-primary">View Report</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Application Report</h5>
+                <p class="card-text">View all applications and their deployment status.</p>
+                <a asp-action="ApplicationReport" class="btn btn-primary">View Report</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">License Report</h5>
+                <p class="card-text">View license information and expiration dates.</p>
+                <a asp-action="LicenseReport" class="btn btn-primary">View Report</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Asset Summary</h5>
+                <p class="card-text">View overall summary of all IT assets.</p>
+                <a asp-action="AssetSummary" class="btn btn-primary">View Report</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Audit Log</h5>
+                <p class="card-text">View system activity and change history.</p>
+                <a asp-action="AuditLog" class="btn btn-primary">View Log</a>
+            </div>
+        </div>
+    </div>
+</div>

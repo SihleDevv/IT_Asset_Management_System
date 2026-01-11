@@ -1,0 +1,153 @@
+﻿@model IEnumerable<IT_Asset_Management_System.Models.BaseAsset>
+
+@{
+    ViewData["Title"] = string.IsNullOrEmpty(ViewBag?.AssetType as string) ? "All Assets" : (ViewBag.AssetType + "s");
+}
+
+<div class="page-header mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>@ViewData["Title"]</h1>
+        @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Asset
+            </a>
+        }
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="assetType" value="@ViewBag.AssetType" />
+            
+            <div class="col-md-8">
+                <label for="searchTerm" class="form-label">Search Assets</label>
+                <div class="input-group">
+                    <input type="text" 
+                           class="form-control" 
+                           id="searchTerm" 
+                           name="searchTerm" 
+                           value="@ViewBag.SearchTerm" 
+                           placeholder="Search by Asset Tag, Name, Brand, Location, or Status..." />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+                    {
+                        <a asp-action="Index" asp-route-assetType="@ViewBag.AssetType" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Clear
+                        </a>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-4 text-end">
+                <a asp-action="ExportToCsv" 
+                   asp-route-assetType="@ViewBag.AssetType" 
+                   asp-route-searchTerm="@ViewBag.SearchTerm" 
+                   class="btn btn-success">
+                    <i class="fas fa-download"></i> Download CSV
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="table table-hover table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Asset Tag</th>
+                <th>Asset Name</th>
+                <th>Type</th>
+                <th>Brand</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th style="width:200px">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                var filteredAssets = Model.Where(a => a != null && !string.IsNullOrWhiteSpace(a.AssetTag) && !string.IsNullOrWhiteSpace(a.AssetName)).ToList();
+                <tr>
+                    <td colspan="7" class="bg-light fw-bold">
+                        <i class="fas fa-info-circle"></i> Showing @filteredAssets.Count() asset(s)
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+                        {
+                            <span class="text-muted">for "@ViewBag.SearchTerm"</span>
+                        }
+                    </td>
+                </tr>
+                foreach (var asset in filteredAssets)
+                {
+                    <tr>
+                        <td><strong>@asset.AssetTag</strong></td>
+                        <td>@asset.AssetName</td>
+                        <td>
+                            @if (string.Equals(asset.AssetType, "Computer", System.StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge bg-primary">@asset.AssetType</span>
+                            }
+                            else if (string.Equals(asset.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge bg-success">@asset.AssetType</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info">@asset.AssetType</span>
+                            }
+                        </td>
+                        <td>@asset.Brand</td>
+                        <td>@asset.Location</td>
+                        <td>
+                            @if (asset.Status == "Active" || asset.Status == "Available")
+                            {
+                                <span class="badge bg-success">@asset.Status</span>
+                            }
+                            else if (asset.Status == "In Use")
+                            {
+                                <span class="badge bg-primary">@asset.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">@asset.Status</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@asset.Id" class="btn btn-sm btn-info" title="Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@asset.Id" class="btn btn-sm btn-warning" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                @if (string.Equals(asset.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <a asp-action="ManageApplications" asp-route-id="@asset.Id" class="btn btn-sm btn-success" title="Manage Applications">
+                                        <i class="fas fa-cogs"></i>
+                                    </a>
+                                }
+
+                                <a asp-action="Delete" asp-route-id="@asset.Id" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center">No assets found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
