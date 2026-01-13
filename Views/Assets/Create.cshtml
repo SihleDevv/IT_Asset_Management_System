@@ -86,32 +86,9 @@
 
                     <div class="col-md-6 mb-2">
                         <label asp-for="Vendor"></label>
-                        <select asp-for="Vendor" class="form-select">
+                        <select asp-for="Vendor" class="form-select" id="vendorSelect">
                             <option value="">-- Select Vendor --</option>
-                            <option value="Dell">Dell</option>
-                            <option value="HP">HP</option>
-                            <option value="Lenovo">Lenovo</option>
-                            <option value="Microsoft">Microsoft</option>
-                            <option value="Oracle">Oracle</option>
-                            <option value="IBM">IBM</option>
-                            <option value="Cisco">Cisco</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label asp-for="VendorType"></label>
-                        <select asp-for="VendorType" class="form-select">
-                            <option value="">-- Select Vendor Type --</option>
-                            <option value="Hardware Vendor">Hardware Vendor</option>
-                            <option value="Software Vendor">Software Vendor</option>
-                            <option value="Cloud Provider">Cloud Provider</option>
-                            <option value="Service Provider">Service Provider</option>
-                            <option value="Reseller">Reseller</option>
-                            <option value="Manufacturer">Manufacturer</option>
-                            <option value="Other">Other</option>
+                            <!-- Options will be populated by JavaScript based on Asset Type -->
                         </select>
                     </div>
                 </div>
@@ -565,6 +542,83 @@
                         text.style.display = 'none';
                     }
                 });
+
+                // Update Vendor options based on Asset Type
+                updateVendorOptions(type);
+            }
+
+            function updateVendorOptions(assetType) {
+                var vendorSelect = document.getElementById('vendorSelect');
+                if (!vendorSelect) {
+                    console.error('Vendor select element not found');
+                    return;
+                }
+
+                // Clear existing options completely
+                var currentValue = vendorSelect.value || '';
+                while (vendorSelect.firstChild) {
+                    vendorSelect.removeChild(vendorSelect.firstChild);
+                }
+
+                // Define vendors for each asset type
+                var vendors = [];
+                if (assetType === 'Computer' || assetType === 'Server') {
+                    // Hardware-related vendors for Computers and Servers
+                    vendors = [
+                        { value: 'Dell', text: 'Dell' },
+                        { value: 'HP', text: 'HP' },
+                        { value: 'Lenovo', text: 'Lenovo' },
+                        { value: 'IBM', text: 'IBM' },
+                        { value: 'Cisco', text: 'Cisco' },
+                        { value: 'Apple', text: 'Apple' },
+                        { value: 'ASUS', text: 'ASUS' },
+                        { value: 'Acer', text: 'Acer' },
+                        { value: 'Microsoft', text: 'Microsoft' },
+                        { value: 'Other', text: 'Other' }
+                    ];
+                } else if (assetType === 'Application') {
+                    // Software-related vendors for Applications
+                    vendors = [
+                        { value: 'Microsoft', text: 'Microsoft' },
+                        { value: 'Oracle', text: 'Oracle' },
+                        { value: 'Adobe', text: 'Adobe' },
+                        { value: 'Salesforce', text: 'Salesforce' },
+                        { value: 'SAP', text: 'SAP' },
+                        { value: 'IBM', text: 'IBM' },
+                        { value: 'Google', text: 'Google' },
+                        { value: 'Amazon', text: 'Amazon' },
+                        { value: 'VMware', text: 'VMware' },
+                        { value: 'Other', text: 'Other' }
+                    ];
+                } else {
+                    // No asset type selected - disable dropdown
+                    vendorSelect.disabled = true;
+                    var option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Please select Asset Type first';
+                    vendorSelect.appendChild(option);
+                    return;
+                }
+
+                // Enable the dropdown
+                vendorSelect.disabled = false;
+
+                // Add default option first
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Select Vendor --';
+                vendorSelect.appendChild(defaultOption);
+
+                // Add options to dropdown
+                vendors.forEach(function (vendor) {
+                    var option = document.createElement('option');
+                    option.value = vendor.value;
+                    option.textContent = vendor.text;
+                    if (vendor.value === currentValue) {
+                        option.selected = true;
+                    }
+                    vendorSelect.appendChild(option);
+                });
             }
 
             function toggleLicenseDetails() {
@@ -596,16 +650,34 @@
                 if (locationInputApp) locationInputApp.disabled = true;
             }
 
+            // Initialize vendor dropdown on page load - clear it first
+            var vendorSelect = document.getElementById('vendorSelect');
+            if (vendorSelect) {
+                // Clear any existing options first
+                vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
+                vendorSelect.disabled = true;
+            }
+
             // wire events
             if (assetTypeSelect) {
                 assetTypeSelect.addEventListener('change', function (e) {
-                    setVisibilityForType(e.target.value);
+                    var selectedType = e.target.value;
+                    setVisibilityForType(selectedType);
+                    updateVendorOptions(selectedType);
+                });
+                
+                // Also trigger on input event for immediate feedback
+                assetTypeSelect.addEventListener('input', function (e) {
+                    var selectedType = e.target.value;
+                    updateVendorOptions(selectedType);
                 });
             }
             
             // Initialize status options if asset type is already selected
             if (assetTypeSelect && assetTypeSelect.value) {
                 updateStatusOptions(assetTypeSelect.value);
+                // Also update vendor if asset type is pre-selected
+                updateVendorOptions(assetTypeSelect.value);
             }
 
             if (requiresLicenseCheckbox) {
@@ -621,22 +693,7 @@
                     assetTypeSelect.value = preSelectedType;
                     // Trigger change event to update form visibility
                     setVisibilityForType(preSelectedType);
-                    toggleLicenseDetails();
-                }
-                </text>
-            }
-            else
-            {
-                <text>
-            // Check if asset type was pre-selected from ViewBag
-            @if (ViewBag.PreSelectedAssetType != null)
-            {
-                <text>
-                var preSelectedType = '@ViewBag.PreSelectedAssetType';
-                if (assetTypeSelect && preSelectedType) {
-                    assetTypeSelect.value = preSelectedType;
-                    // Trigger change event to update form visibility
-                    setVisibilityForType(preSelectedType);
+                    updateVendorOptions(preSelectedType);
                     toggleLicenseDetails();
                 }
                 </text>
@@ -650,11 +707,18 @@
                     // Wait a tick so ASP.NET has already rendered server-side values into inputs
                     setTimeout(function () {
                         setVisibilityForType(initialType);
+                        updateVendorOptions(initialType);
                         toggleLicenseDetails();
                     }, 10);
                 }
-                </text>
-            }
+                else {
+                    // Initialize vendor dropdown even if no type is selected
+                    // Make sure it's disabled and shows the message
+                    if (vendorSelect) {
+                        vendorSelect.innerHTML = '<option value="">Please select Asset Type first</option>';
+                        vendorSelect.disabled = true;
+                    }
+                }
                 </text>
             }
         })();

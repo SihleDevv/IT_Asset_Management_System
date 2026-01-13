@@ -42,10 +42,6 @@ namespace IT_Asset_Management_System.Models
         [StringLength(100)]
         public string Vendor { get; set; } = string.Empty;
 
-        [StringLength(100)]
-        [Display(Name = "Vendor Type")]
-        public string VendorType { get; set; } = string.Empty;
-
         [Display(Name = "Warranty Expiry Date")]
         public DateTime? WarrantyExpiryDate { get; set; }
 

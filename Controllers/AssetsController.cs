@@ -195,7 +195,6 @@ namespace IT_Asset_Management_System.Controllers
                             PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var compPurchaseDate) ? compPurchaseDate : DateTime.Now,
                             PurchasePrice = decimal.TryParse(form["PurchasePrice"], out var compPrice) ? compPrice : null,
                             Vendor = form["Vendor"].ToString(),
-                            VendorType = form["VendorType"].ToString(),
                             WarrantyExpiryDate = DateTime.TryParse(form["WarrantyExpiryDate"], out var compWarranty) ? compWarranty : null,
                             Location = form["Location"].ToString(),
                             Status = form["Status"].ToString(),
@@ -220,7 +219,6 @@ namespace IT_Asset_Management_System.Controllers
                             PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var servPurchaseDate) ? servPurchaseDate : DateTime.Now,
                             PurchasePrice = string.IsNullOrWhiteSpace(form["PurchasePrice"].ToString()) ? null : (decimal.TryParse(form["PurchasePrice"], out var servPrice) ? servPrice : null),
                             Vendor = form["Vendor"].ToString(),
-                            VendorType = form["VendorType"].ToString(),
                             WarrantyExpiryDate = string.IsNullOrWhiteSpace(form["WarrantyExpiryDate"].ToString()) ? null : (DateTime.TryParse(form["WarrantyExpiryDate"], out var servWarranty) ? servWarranty : null),
                             Location = form["Location"].ToString(),
                             Status = form["Status"].ToString(),
@@ -249,7 +247,6 @@ namespace IT_Asset_Management_System.Controllers
                             PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var appPurchaseDate) ? appPurchaseDate : DateTime.Now,
                             PurchasePrice = decimal.TryParse(form["PurchasePrice"], out var appPrice) ? appPrice : null,
                             Vendor = form["Vendor"].ToString(),
-                            VendorType = form["VendorType"].ToString(),
                             WarrantyExpiryDate = DateTime.TryParse(form["WarrantyExpiryDate"], out var appWarranty) ? appWarranty : null,
                             Location = form["Location"].ToString(),
                             Status = form["Status"].ToString(),
@@ -368,7 +365,6 @@ namespace IT_Asset_Management_System.Controllers
                             existingComputer.PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var compPurchaseDate) ? compPurchaseDate : existingComputer.PurchaseDate;
                             existingComputer.PurchasePrice = string.IsNullOrWhiteSpace(form["PurchasePrice"].ToString()) ? null : (decimal.TryParse(form["PurchasePrice"], out var compPrice) ? compPrice : existingComputer.PurchasePrice);
                             existingComputer.Vendor = form["Vendor"].ToString();
-                            existingComputer.VendorType = form["VendorType"].ToString();
                             existingComputer.WarrantyExpiryDate = DateTime.TryParse(form["WarrantyExpiryDate"], out var compWarranty) ? compWarranty : null;
                             existingComputer.Location = form["Location"].ToString();
                             existingComputer.Status = form["Status"].ToString();
@@ -409,7 +405,6 @@ namespace IT_Asset_Management_System.Controllers
                             existingServer.PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var servPurchaseDate) ? servPurchaseDate : existingServer.PurchaseDate;
                             existingServer.PurchasePrice = string.IsNullOrWhiteSpace(form["PurchasePrice"].ToString()) ? null : (decimal.TryParse(form["PurchasePrice"], out var servPrice) ? servPrice : existingServer.PurchasePrice);
                             existingServer.Vendor = form["Vendor"].ToString();
-                            existingServer.VendorType = form["VendorType"].ToString();
                             existingServer.WarrantyExpiryDate = string.IsNullOrWhiteSpace(form["WarrantyExpiryDate"].ToString()) ? null : (DateTime.TryParse(form["WarrantyExpiryDate"], out var servWarranty) ? servWarranty : null);
                             existingServer.Location = form["Location"].ToString();
                             existingServer.Status = form["Status"].ToString();
@@ -454,7 +449,6 @@ namespace IT_Asset_Management_System.Controllers
                             existingApplication.PurchaseDate = DateTime.TryParse(form["PurchaseDate"], out var appPurchaseDate) ? appPurchaseDate : existingApplication.PurchaseDate;
                             existingApplication.PurchasePrice = string.IsNullOrWhiteSpace(form["PurchasePrice"].ToString()) ? null : (decimal.TryParse(form["PurchasePrice"], out var appPrice) ? appPrice : existingApplication.PurchasePrice);
                             existingApplication.Vendor = form["Vendor"].ToString();
-                            existingApplication.VendorType = form["VendorType"].ToString();
                             existingApplication.WarrantyExpiryDate = DateTime.TryParse(form["WarrantyExpiryDate"], out var appWarranty) ? appWarranty : null;
                             existingApplication.Location = form["Location"].ToString();
                             existingApplication.Status = form["Status"].ToString();

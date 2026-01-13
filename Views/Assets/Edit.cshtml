@@ -112,34 +112,9 @@
                     <div class="col-md-6 mb-2">
                         <div class="form-group">
                             <label asp-for="Vendor"></label>
-                            <select asp-for="Vendor" class="form-select">
+                            <select asp-for="Vendor" class="form-select" id="vendorSelect">
                                 <option value="">-- Select Vendor --</option>
-                                <option value="Dell">Dell</option>
-                                <option value="HP">HP</option>
-                                <option value="Lenovo">Lenovo</option>
-                                <option value="Microsoft">Microsoft</option>
-                                <option value="Oracle">Oracle</option>
-                                <option value="IBM">IBM</option>
-                                <option value="Cisco">Cisco</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <div class="form-group">
-                            <label asp-for="VendorType"></label>
-                            <select asp-for="VendorType" class="form-select">
-                                <option value="">-- Select Vendor Type --</option>
-                                <option value="Hardware Vendor">Hardware Vendor</option>
-                                <option value="Software Vendor">Software Vendor</option>
-                                <option value="Cloud Provider">Cloud Provider</option>
-                                <option value="Service Provider">Service Provider</option>
-                                <option value="Reseller">Reseller</option>
-                                <option value="Manufacturer">Manufacturer</option>
-                                <option value="Other">Other</option>
+                                <!-- Options will be populated by JavaScript based on Asset Type -->
                             </select>
                         </div>
                     </div>
@@ -407,4 +382,77 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            // Get current asset type from hidden field
+            var assetTypeInput = document.querySelector('input[name="AssetType"]');
+            var assetType = assetTypeInput ? assetTypeInput.value : '';
+            var vendorSelect = document.getElementById('vendorSelect');
+            // Get current vendor from the model (via the select's initial value or data attribute)
+            var currentVendor = '@(Model?.Vendor ?? "")';
+
+            function updateVendorOptions(assetType) {
+                if (!vendorSelect) return;
+
+                // Clear existing options
+                while (vendorSelect.firstChild) {
+                    vendorSelect.removeChild(vendorSelect.firstChild);
+                }
+
+                // Define vendors for each asset type
+                var vendors = [];
+                if (assetType === 'Computer' || assetType === 'Server') {
+                    // Hardware-related vendors for Computers and Servers
+                    vendors = [
+                        { value: 'Dell', text: 'Dell' },
+                        { value: 'HP', text: 'HP' },
+                        { value: 'Lenovo', text: 'Lenovo' },
+                        { value: 'IBM', text: 'IBM' },
+                        { value: 'Cisco', text: 'Cisco' },
+                        { value: 'Apple', text: 'Apple' },
+                        { value: 'ASUS', text: 'ASUS' },
+                        { value: 'Acer', text: 'Acer' },
+                        { value: 'Microsoft', text: 'Microsoft' },
+                        { value: 'Other', text: 'Other' }
+                    ];
+                } else if (assetType === 'Application') {
+                    // Software-related vendors for Applications
+                    vendors = [
+                        { value: 'Microsoft', text: 'Microsoft' },
+                        { value: 'Oracle', text: 'Oracle' },
+                        { value: 'Adobe', text: 'Adobe' },
+                        { value: 'Salesforce', text: 'Salesforce' },
+                        { value: 'SAP', text: 'SAP' },
+                        { value: 'IBM', text: 'IBM' },
+                        { value: 'Google', text: 'Google' },
+                        { value: 'Amazon', text: 'Amazon' },
+                        { value: 'VMware', text: 'VMware' },
+                        { value: 'Other', text: 'Other' }
+                    ];
+                }
+
+                // Add default option first
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Select Vendor --';
+                vendorSelect.appendChild(defaultOption);
+
+                // Add options to dropdown
+                vendors.forEach(function (vendor) {
+                    var option = document.createElement('option');
+                    option.value = vendor.value;
+                    option.textContent = vendor.text;
+                    if (vendor.value === currentVendor) {
+                        option.selected = true;
+                    }
+                    vendorSelect.appendChild(option);
+                });
+            }
+
+            // Initialize vendor options on page load
+            if (assetType) {
+                updateVendorOptions(assetType);
+            }
+        })();
+    </script>
 }
