@@ -4,7 +4,7 @@
     var m = Model;
     var isNull = m == null;
     ViewData["Title"] = isNull ? "Asset Details" : (m.AssetType + " Details");
-    var serverApps = ViewBag.ServerApplications as List<IT_Asset_Management_System.Models.AssetServerApplication>;
+    var serverApps = ViewBag.ServerApplications as List<IT_Asset_Management_System.Models.ServerApplication>;
 }
 
 <div class="page-header">
@@ -50,7 +50,7 @@
                     <dd class="col-sm-8">@(isNull ? "N/A" : m.PurchaseDate.ToString("yyyy-MM-dd"))</dd>
 
                     <dt class="col-sm-4">Purchase Price</dt>
-                    <dd class="col-sm-8">@(isNull ? "N/A" : string.Format("R {0:N2}", m.PurchasePrice))</dd>
+                    <dd class="col-sm-8">@(isNull ? "N/A" : (m.PurchasePrice.HasValue ? string.Format("R {0:N2}", m.PurchasePrice.Value) : "N/A"))</dd>
 
                     <dt class="col-sm-4">Vendor</dt>
                     <dd class="col-sm-8">@((isNull ? "—" : (m.Vendor ?? "—")))</dd>

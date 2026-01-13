@@ -46,17 +46,19 @@ namespace IT_Asset_Management_System.Controllers
                     .CountAsync(a => a.RequiresLicense && a.LicenseExpiryDate.HasValue
                         && a.LicenseExpiryDate.Value < DateTime.Now
                         && !string.IsNullOrEmpty(a.AssetTag) && !string.IsNullOrEmpty(a.AssetName)),
-                RecentActivities = await _context.AuditLogs
-                    .OrderByDescending(a => a.Timestamp)
-                    .Take(10)
-                    .Select(a => new RecentActivity
-                    {
-                        UserName = a.UserName,
-                        Action = a.Action,
-                        EntityType = a.EntityType,
-                        Timestamp = a.Timestamp
-                    })
-                    .ToListAsync()
+                RecentActivities = (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                    ? await _context.AuditLogs
+                        .OrderByDescending(a => a.Timestamp)
+                        .Take(10)
+                        .Select(a => new RecentActivity
+                        {
+                            UserName = a.UserName,
+                            Action = a.Action,
+                            EntityType = a.EntityType,
+                            Timestamp = a.Timestamp
+                        })
+                        .ToListAsync()
+                    : new List<RecentActivity>()
             };
 
             return View(viewModel);

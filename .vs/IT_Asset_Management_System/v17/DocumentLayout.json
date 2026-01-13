@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\applications\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\applications\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\controllers\\assetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:controllers\\assetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111162752_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20260111162752_InitialCreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -155,10 +163,6 @@
       "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:views\\computers\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|c:\\users\\majolas\\source\\repos\\it_asset_management_system\\it_asset_management_system\\models\\assetserverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{261514D9-86E2-4260-8B9D-502F7F71A92F}|IT_Asset_Management_System.csproj|solutionrelative:models\\assetserverapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -249,12 +253,21 @@
               "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Applications\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Applications\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Applications\\Details.cshtml",
+              "RelativeToolTip": "Views\\Applications\\Details.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAArwB8AAAB7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-13T07:23:40.548Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 53,
+              "DocumentIndex": 54,
               "Title": "20260111190823_ServerAndApplicationBaseDataFields.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
               "RelativeDocumentMoniker": "Migrations\\20260111190823_ServerAndApplicationBaseDataFields.cs",
@@ -266,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 54,
+              "DocumentIndex": 55,
               "Title": "20260111175221_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111175221_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20260111175221_InitialCreate.cs",
@@ -278,7 +291,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "20260111174748_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174748_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20260111174748_InitialCreate.cs",
@@ -290,7 +303,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "20260111174418_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111174418_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20260111174418_InitialCreate.cs",
@@ -303,14 +316,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AssetsController.cs",
-              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AssetsController.cs",
-              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
-              "RelativeToolTip": "Controllers\\AssetsController.cs",
-              "ViewState": "AgIAAIcAAAAAAAAAAAArwJAAAAAsAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAwwGEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-12T01:44:11.218Z",
+              "WhenOpened": "2025-12-11T15:29:14.419Z",
               "EditorCaption": ""
             },
             {
@@ -318,20 +331,38 @@
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAArwAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-11T15:29:14.419Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 2,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\Computers\\Details.cshtml",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
+              "RelativeToolTip": "Views\\Computers\\Details.cshtml",
+              "ViewState": "AgIAACEAAAAAAAAAAAArwC4AAAB7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-11T15:45:20.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AssetsController.cs",
+              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AssetsController.cs",
+              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AssetsController.cs",
+              "RelativeToolTip": "Controllers\\AssetsController.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAArwI8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T01:44:11.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Details.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\Details.cshtml",
@@ -343,7 +374,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Login.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Account\\Login.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
@@ -355,7 +386,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "DbInitializer.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\DbInitializer.cs",
               "RelativeDocumentMoniker": "Data\\DbInitializer.cs",
@@ -367,7 +398,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
@@ -379,7 +410,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "ServersController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ServersController.cs",
               "RelativeDocumentMoniker": "Controllers\\ServersController.cs",
@@ -391,7 +422,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "20260111162752_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Migrations\\20260111162752_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20260111162752_InitialCreate.cs",
@@ -402,7 +433,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
@@ -414,7 +445,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
@@ -426,7 +457,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
@@ -438,7 +469,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ReportsController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ReportsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ReportsController.cs",
@@ -450,7 +481,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "ServerApplicationViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\ServerApplicationViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ViewModels\\ServerApplicationViewModel.cs",
@@ -462,7 +493,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "Details.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Servers\\Details.cshtml",
               "RelativeDocumentMoniker": "Views\\Servers\\Details.cshtml",
@@ -474,7 +505,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "LoginViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\LoginViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ViewModels\\LoginViewModel.cs",
@@ -486,7 +517,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 22,
               "Title": "Server.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Server.cs",
               "RelativeDocumentMoniker": "Models\\Server.cs",
@@ -498,7 +529,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "ServerReport.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ServerReport.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\ServerReport.cshtml",
@@ -510,7 +541,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "BaseAsset.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\BaseAsset.cs",
               "RelativeDocumentMoniker": "Models\\BaseAsset.cs",
@@ -522,7 +553,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "Computer.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Computer.cs",
               "RelativeDocumentMoniker": "Models\\Computer.cs",
@@ -534,7 +565,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "AuditLog.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AuditLog.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\AuditLog.cshtml",
@@ -546,7 +577,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "ComputerReport.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\ComputerReport.cshtml",
@@ -558,7 +589,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "LicenseReport.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\LicenseReport.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\LicenseReport.cshtml",
@@ -570,7 +601,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "ApplicationReport.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ApplicationReport.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\ApplicationReport.cshtml",
@@ -582,7 +613,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "ComputersController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ComputersController.cs",
               "RelativeDocumentMoniker": "Controllers\\ComputersController.cs",
@@ -594,7 +625,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "AssetSummary.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\AssetSummary.cshtml",
@@ -606,7 +637,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "Delete.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Delete.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\Delete.cshtml",
@@ -618,7 +649,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Create.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\Create.cshtml",
@@ -630,7 +661,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 33,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\Index.cshtml",
@@ -642,7 +673,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 34,
               "Title": "ManageApplications.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\ManageApplications.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\ManageApplications.cshtml",
@@ -654,7 +685,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 31,
               "Title": "ComputerReport.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\ComputerReport.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\ComputerReport.cshtml",
@@ -666,7 +697,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 32,
               "Title": "AssetSummary.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Reports\\AssetSummary.cshtml",
               "RelativeDocumentMoniker": "Views\\Reports\\AssetSummary.cshtml",
@@ -678,7 +709,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 35,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Users\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Users\\Index.cshtml",
@@ -690,7 +721,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 37,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Edit.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\Edit.cshtml",
@@ -702,7 +733,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 39,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
@@ -714,7 +745,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 36,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Assets\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Assets\\Index.cshtml",
@@ -726,7 +757,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 40,
               "Title": "AssetServerApplication.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AssetServerApplication.cs",
               "RelativeDocumentMoniker": "Models\\AssetServerApplication.cs",
@@ -738,7 +769,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 38,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
@@ -750,19 +781,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
-              "RelativeDocumentMoniker": "Views\\Computers\\Details.cshtml",
-              "ToolTip": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Computers\\Details.cshtml",
-              "RelativeToolTip": "Views\\Computers\\Details.cshtml",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAIwGIAAABtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-11T15:45:20.844Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 41,
               "Title": "site.css",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
@@ -774,7 +793,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 42,
               "Title": "ApplicationsController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\ApplicationsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ApplicationsController.cs",
@@ -786,7 +805,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 43,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
@@ -798,7 +817,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 44,
               "Title": "DashboardViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\DashboardViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ViewModels\\DashboardViewModel.cs",
@@ -810,7 +829,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 45,
               "Title": "RegisterViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ViewModels\\RegisterViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ViewModels\\RegisterViewModel.cs",
@@ -822,7 +841,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 47,
               "Title": "AuditLog.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\AuditLog.cs",
               "RelativeDocumentMoniker": "Models\\AuditLog.cs",
@@ -834,7 +853,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 49,
               "Title": "Application.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\Application.cs",
               "RelativeDocumentMoniker": "Models\\Application.cs",
@@ -846,7 +865,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 48,
               "Title": "ServerApplication.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ServerApplication.cs",
               "RelativeDocumentMoniker": "Models\\ServerApplication.cs",
@@ -858,7 +877,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 46,
               "Title": "ErrorViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Models\\ErrorViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
@@ -870,7 +889,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 50,
               "Title": "_ViewImports.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewImports.cshtml",
               "RelativeDocumentMoniker": "Views\\_ViewImports.cshtml",
@@ -882,7 +901,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 50,
+              "DocumentIndex": 51,
               "Title": "_ViewStart.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\_ViewStart.cshtml",
               "RelativeDocumentMoniker": "Views\\_ViewStart.cshtml",
@@ -894,7 +913,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 51,
+              "DocumentIndex": 52,
               "Title": "Error.cshtml",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\Views\\Shared\\Error.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\Error.cshtml",
@@ -906,7 +925,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 52,
+              "DocumentIndex": 53,
               "Title": "IT_Asset_Management_System.csproj",
               "DocumentMoniker": "C:\\Users\\Majolas\\source\\repos\\IT_Asset_Management_System\\IT_Asset_Management_System\\IT_Asset_Management_System.csproj",
               "RelativeDocumentMoniker": "IT_Asset_Management_System.csproj",

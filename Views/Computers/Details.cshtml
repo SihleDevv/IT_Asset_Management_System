@@ -44,7 +44,7 @@
                     <dd class="col-sm-8">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
 
                     <dt class="col-sm-4">Purchase Price</dt>
-                    <dd class="col-sm-8">R @Model.PurchasePrice.ToString("N2")</dd>
+                    <dd class="col-sm-8">@(Model.PurchasePrice.HasValue ? $"R {Model.PurchasePrice.Value:N2}" : "N/A")</dd>
 
                     <dt class="col-sm-4">Vendor</dt>
                     <dd class="col-sm-8">@Model.Vendor</dd>

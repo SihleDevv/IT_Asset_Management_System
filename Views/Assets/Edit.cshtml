@@ -126,6 +126,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                            <label asp-for="VendorType"></label>
+                            <select asp-for="VendorType" class="form-select">
+                                <option value="">-- Select Vendor Type --</option>
+                                <option value="Hardware Vendor">Hardware Vendor</option>
+                                <option value="Software Vendor">Software Vendor</option>
+                                <option value="Cloud Provider">Cloud Provider</option>
+                                <option value="Service Provider">Service Provider</option>
+                                <option value="Reseller">Reseller</option>
+                                <option value="Manufacturer">Manufacturer</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Purchase Information -->
@@ -137,14 +155,14 @@
                         <input asp-for="PurchaseDate" class="form-control" type="date" />
                     </div>
                     <div class="col-md-4 mb-2">
-                        <label asp-for="PurchasePrice"></label>
+                        <label asp-for="PurchasePrice">Purchase Price @if (string.Equals(m?.AssetType, "Server", StringComparison.OrdinalIgnoreCase)) { <span class="text-muted">(Optional)</span> }</label>
                         <div class="input-group">
                             <span class="input-group-text">R</span>
                             <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
                         </div>
                     </div>
                     <div class="col-md-4 mb-2">
-                        <label asp-for="WarrantyExpiryDate"></label>
+                        <label asp-for="WarrantyExpiryDate">Warranty Expiry Date @if (string.Equals(m?.AssetType, "Server", StringComparison.OrdinalIgnoreCase)) { <span class="text-muted">(Optional)</span> }</label>
                         <input asp-for="WarrantyExpiryDate" class="form-control" type="date" />
                     </div>
                 </div>

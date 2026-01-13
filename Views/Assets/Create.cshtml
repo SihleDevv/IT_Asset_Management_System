@@ -100,6 +100,22 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="VendorType"></label>
+                        <select asp-for="VendorType" class="form-select">
+                            <option value="">-- Select Vendor Type --</option>
+                            <option value="Hardware Vendor">Hardware Vendor</option>
+                            <option value="Software Vendor">Software Vendor</option>
+                            <option value="Cloud Provider">Cloud Provider</option>
+                            <option value="Service Provider">Service Provider</option>
+                            <option value="Reseller">Reseller</option>
+                            <option value="Manufacturer">Manufacturer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row location-field-application">
                     <div class="col-md-6 mb-2">
                         <label for="LocationApplication">Location</label>
@@ -121,15 +137,15 @@
                         <label asp-for="PurchaseDate"></label>
                         <input asp-for="PurchaseDate" class="form-control" type="date" />
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <label asp-for="PurchasePrice"></label>
+                    <div class="col-md-4 mb-2 purchase-price-field">
+                        <label asp-for="PurchasePrice">Purchase Price <span class="text-muted server-optional">(Optional for Server)</span></label>
                         <div class="input-group">
                             <span class="input-group-text">R</span>
                             <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <label asp-for="WarrantyExpiryDate"></label>
+                    <div class="col-md-4 mb-2 warranty-field">
+                        <label asp-for="WarrantyExpiryDate">Warranty Expiry Date <span class="text-muted server-optional">(Optional for Server)</span></label>
                         <input asp-for="WarrantyExpiryDate" class="form-control" type="date" />
                     </div>
                 </div>
@@ -539,6 +555,16 @@
                         licenseInputs.forEach(function (i) { i.disabled = true; });
                     }
                 }
+
+                // Show/hide "(Optional for Server)" text for Purchase Price and Warranty Expiry Date
+                var serverOptionalTexts = document.querySelectorAll('.server-optional');
+                serverOptionalTexts.forEach(function (text) {
+                    if (type === 'Server') {
+                        text.style.display = 'inline';
+                    } else {
+                        text.style.display = 'none';
+                    }
+                });
             }
 
             function toggleLicenseDetails() {

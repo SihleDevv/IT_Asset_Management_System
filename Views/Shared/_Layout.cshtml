@@ -69,11 +69,14 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a asp-controller="Reports" asp-action="AuditLog">
-                        <i class="fas fa-history"></i> Logs
-                    </a>
-                </li>
+                @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                {
+                    <li>
+                        <a asp-controller="Reports" asp-action="AuditLog">
+                            <i class="fas fa-history"></i> Logs
+                        </a>
+                    </li>
+                }
             </ul>
 
             <div class="sidebar-footer mt-auto p-3">

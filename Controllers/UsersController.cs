@@ -87,7 +87,7 @@ namespace IT_Asset_Management_System.Controllers
             {
                 var role = userRoles.ContainsKey(user.Id) ? userRoles[user.Id] : "No Role";
                 var status = user.IsActive == true ? "Active" : "Inactive";
-                var createdDate = user.CreatedDate == null ? "N/A" : ((DateTime)user.CreatedDate).ToString("yyyy-MM-dd");
+                var createdDate = user.CreatedDate.ToString("yyyy-MM-dd");
                 
                 csv.AppendLine($"{EscapeCsvField(user.FullName)},{EscapeCsvField(user.Email)},{EscapeCsvField(user.Department)},{EscapeCsvField(role)},{EscapeCsvField(status)},{createdDate}");
             }

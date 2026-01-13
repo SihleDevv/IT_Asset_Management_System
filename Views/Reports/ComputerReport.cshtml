@@ -29,10 +29,7 @@
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th>Asset Tag</th>
                         <th>Name</th>
-                        <th>Brand</th>
-                        <th>Model</th>
                         <th>Serial Number</th>
                         <th>Location</th>
                         <th>Vendor</th>
@@ -47,10 +44,7 @@
                     @foreach (var item in list)
                     {
                         <tr>
-                            <td>@(item?.AssetTag ?? "—")</td>
                             <td>@(item != null && !string.IsNullOrEmpty(item.AssetName) ? item.AssetName : "—")</td>
-                            <td>@(item?.Brand ?? "—")</td>
-                            <td>@(item?.Model ?? "—")</td>
                             <td>@(item?.SerialNumber ?? "—")</td>
                             <td>@(item?.Location ?? "—")</td>
                             <td>@(item?.Vendor ?? "—")</td>

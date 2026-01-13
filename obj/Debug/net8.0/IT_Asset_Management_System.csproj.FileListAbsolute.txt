@@ -239,6 +239,7 @@ C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_Sys
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.RazorAssemblyInfo.cache
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.RazorAssemblyInfo.cs
+C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.sourcelink.json
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

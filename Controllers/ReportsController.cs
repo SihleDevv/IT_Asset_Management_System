@@ -99,6 +99,7 @@ namespace IT_Asset_Management_System.Controllers
         }
 
         // Recent audit logs
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> AuditLog()
         {
             var logs = await _context.AuditLogs
