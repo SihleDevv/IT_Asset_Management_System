@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IT_Asset_Management_System.Data;
@@ -10,10 +11,12 @@ namespace IT_Asset_Management_System.Controllers
     public class ComputersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ComputersController(ApplicationDbContext context)
+        public ComputersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -44,8 +47,14 @@ namespace IT_Asset_Management_System.Controllers
         }
 
         [Authorize(Policy = "RequireAdmin")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            // Load users for dropdown
+            var users = await _userManager.Users
+                .Where(u => u.IsActive == true)
+                .OrderBy(u => u.FullName ?? u.UserName ?? u.Email)
+                .ToListAsync();
+            ViewBag.Users = users;
             return View();
         }
 
@@ -91,6 +100,14 @@ namespace IT_Asset_Management_System.Controllers
             {
                 return NotFound();
             }
+
+            // Load users for dropdown
+            var users = await _userManager.Users
+                .Where(u => u.IsActive == true)
+                .OrderBy(u => u.FullName ?? u.UserName ?? u.Email)
+                .ToListAsync();
+            ViewBag.Users = users;
+
             return View(computer);
         }
 

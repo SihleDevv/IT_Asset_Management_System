@@ -249,7 +249,31 @@ namespace IT_Asset_Management_System.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var currentRole = roles.FirstOrDefault() ?? "No Role";
 
+            // Check if user is linked to any assets
+            var userFullName = user.FullName ?? user.UserName ?? user.Email;
+            var userEmail = user.Email;
+            
+            // Check Computers
+            var computersCount = await _context.Computers
+                .Where(c => c.AssignedTo == userFullName || c.AssignedTo == userEmail)
+                .CountAsync();
+            
+            // Check Servers (ProjectManagerName)
+            var serversCount = await _context.Servers
+                .Where(s => s.ProjectManagerName == userFullName || s.ProjectManagerName == userEmail)
+                .CountAsync();
+            
+            // Check Applications (ApplicationOwner)
+            var applicationsCount = await _context.Applications
+                .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
+                .CountAsync();
+
             ViewBag.UserRole = currentRole;
+            ViewBag.ComputersCount = computersCount;
+            ViewBag.ServersCount = serversCount;
+            ViewBag.ApplicationsCount = applicationsCount;
+            ViewBag.HasDependencies = computersCount > 0 || serversCount > 0 || applicationsCount > 0;
+
             return View(user);
         }
 
@@ -274,6 +298,36 @@ namespace IT_Asset_Management_System.Controllers
             {
                 TempData["ErrorMessage"] = "You cannot delete your own account.";
                 return RedirectToAction(nameof(Index));
+            }
+
+            // Check if user is linked to any assets
+            var userFullName = user.FullName ?? user.UserName ?? user.Email;
+            var userEmail = user.Email;
+            
+            // Check Computers
+            var computersCount = await _context.Computers
+                .Where(c => c.AssignedTo == userFullName || c.AssignedTo == userEmail)
+                .CountAsync();
+            
+            // Check Servers (ProjectManagerName)
+            var serversCount = await _context.Servers
+                .Where(s => s.ProjectManagerName == userFullName || s.ProjectManagerName == userEmail)
+                .CountAsync();
+            
+            // Check Applications (ApplicationOwner)
+            var applicationsCount = await _context.Applications
+                .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
+                .CountAsync();
+
+            if (computersCount > 0 || serversCount > 0 || applicationsCount > 0)
+            {
+                var dependencies = new List<string>();
+                if (computersCount > 0) dependencies.Add($"{computersCount} computer(s)");
+                if (serversCount > 0) dependencies.Add($"{serversCount} server(s)");
+                if (applicationsCount > 0) dependencies.Add($"{applicationsCount} application(s)");
+                
+                TempData["ErrorMessage"] = $"Cannot delete user '{userFullName}'. User is linked to: {string.Join(", ", dependencies)}. Please reassign or remove these dependencies before deleting the user.";
+                return RedirectToAction(nameof(Delete), new { id });
             }
 
             // Log the deletion before deleting

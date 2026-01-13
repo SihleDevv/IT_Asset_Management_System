@@ -189,12 +189,15 @@
                             <label>Assigned To</label>
                             <select name="AssignedTo" class="form-select">
                                 <option value="">-- Select User --</option>
-                                <option value="John Doe" selected="@(computer?.AssignedTo == "John Doe")">John Doe</option>
-                                <option value="Jane Smith" selected="@(computer?.AssignedTo == "Jane Smith")">Jane Smith</option>
-                                <option value="Mike Johnson" selected="@(computer?.AssignedTo == "Mike Johnson")">Mike Johnson</option>
-                                <option value="Sarah Williams" selected="@(computer?.AssignedTo == "Sarah Williams")">Sarah Williams</option>
-                                <option value="David Brown" selected="@(computer?.AssignedTo == "David Brown")">David Brown</option>
                                 <option value="Unassigned" selected="@(computer?.AssignedTo == "Unassigned")">Unassigned</option>
+                                @{
+                                    var users = ViewBag.Users as List<IT_Asset_Management_System.Models.ApplicationUser> ?? new List<IT_Asset_Management_System.Models.ApplicationUser>();
+                                }
+                                @foreach (var user in users.Where(u => u.IsActive == true).OrderBy(u => u.FullName ?? u.UserName ?? u.Email))
+                                {
+                                    var displayName = user.FullName ?? user.UserName ?? user.Email;
+                                    <option value="@displayName" selected="@(computer?.AssignedTo == displayName)">@displayName</option>
+                                }
                             </select>
                         </div>
                     </div>

@@ -59,7 +59,7 @@ namespace IT_Asset_Management_System.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireAdmin")]
-        public async Task<IActionResult> Create([Bind("AssetTag,AssetName,AssetType,IPAddress,Brand,Model,SerialNumber,Processor,RAM,Storage,OperatingSystem,ServerType,Purpose,PurchaseDate,PurchasePrice,Vendor,WarrantyExpiryDate,Location,Status,Notes")] Server server)
+        public async Task<IActionResult> Create([Bind("AssetTag,AssetName,AssetType,IPAddress,Brand,Model,SerialNumber,Processor,RAM,Storage,OperatingSystem,ServerType,PurchaseDate,PurchasePrice,Vendor,WarrantyExpiryDate,Location,Status,Notes")] Server server)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace IT_Asset_Management_System.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AssetTag,AssetName,AssetType,IPAddress,Brand,Model,SerialNumber,Processor,RAM,Storage,OperatingSystem,ServerType,Purpose,PurchaseDate,PurchasePrice,Vendor,WarrantyExpiryDate,Location,Status,Notes")] Server server)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AssetTag,AssetName,AssetType,IPAddress,Brand,Model,SerialNumber,Processor,RAM,Storage,OperatingSystem,ServerType,PurchaseDate,PurchasePrice,Vendor,WarrantyExpiryDate,Location,Status,Notes")] Server server)
         {
             if (id != server.Id)
             {
@@ -130,7 +130,6 @@ namespace IT_Asset_Management_System.Controllers
                         existingServer.Storage = server.Storage;
                         existingServer.OperatingSystem = server.OperatingSystem;
                         existingServer.ServerType = server.ServerType;
-                        existingServer.Purpose = server.Purpose;
                         existingServer.PurchaseDate = server.PurchaseDate;
                         existingServer.PurchasePrice = server.PurchasePrice;
                         existingServer.Vendor = server.Vendor;
@@ -179,11 +178,18 @@ namespace IT_Asset_Management_System.Controllers
                 return NotFound();
             }
 
-            var server = await _context.Servers.FirstOrDefaultAsync(m => m.Id == id);
+            var server = await _context.Servers
+                .Include(s => s.ServerApplications)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (server == null)
             {
                 return NotFound();
             }
+
+            // Check if server has installed applications
+            var installedAppCount = server.ServerApplications?.Count ?? 0;
+            ViewBag.HasInstalledApplications = installedAppCount > 0;
+            ViewBag.InstalledApplicationCount = installedAppCount;
 
             return View(server);
         }
@@ -193,23 +199,36 @@ namespace IT_Asset_Management_System.Controllers
         [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var server = await _context.Servers.FindAsync(id);
-            if (server != null)
+            var server = await _context.Servers
+                .Include(s => s.ServerApplications)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            
+            if (server == null)
             {
-                _context.Servers.Remove(server);
-                await _context.SaveChangesAsync();
-
-                _context.AuditLogs.Add(new AuditLog
-                {
-                    UserName = User.Identity?.Name ?? "",
-                    Action = "Delete",
-                    EntityType = "Server",
-                    EntityId = id,
-                    Details = $"Deleted server: {server.AssetName}",
-                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
-                });
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            // Check if server has installed applications
+            var installedAppCount = server.ServerApplications?.Count ?? 0;
+            if (installedAppCount > 0)
+            {
+                TempData["ErrorMessage"] = $"Cannot delete server '{server.AssetName}'. It has {installedAppCount} installed application(s). Please remove all applications before deleting the server.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+            _context.Servers.Remove(server);
+            await _context.SaveChangesAsync();
+
+            _context.AuditLogs.Add(new AuditLog
+            {
+                UserName = User.Identity?.Name ?? "",
+                Action = "Delete",
+                EntityType = "Server",
+                EntityId = id,
+                Details = $"Deleted server: {server.AssetName}",
+                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
+            });
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

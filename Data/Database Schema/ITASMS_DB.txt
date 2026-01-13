@@ -1,0 +1,257 @@
+/* =========================================================
+   IT ASSET MANAGEMENT SYSTEM – CLEAN SCHEMA (NO IDENTITY)
+   ========================================================= */
+
+CREATE DATABASE IT_Asset_Management_System_DB2;
+GO
+
+USE IT_Asset_Management_System_DB2;
+GO
+
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+GO
+
+/* =========================================================
+   CORE ASSETS
+   ========================================================= */
+
+CREATE TABLE Assets (
+    Id INT NOT NULL,
+    AssetTag NVARCHAR(100) NOT NULL,
+    AssetName NVARCHAR(200) NOT NULL,
+    AssetType NVARCHAR(50) NOT NULL,
+    Brand NVARCHAR(100) NOT NULL,
+    Model NVARCHAR(100) NOT NULL,
+    SerialNumber NVARCHAR(100) NOT NULL,
+    PurchaseDate DATETIME2 NOT NULL,
+    PurchasePrice DECIMAL(18,2) NOT NULL,
+    Vendor NVARCHAR(100) NOT NULL,
+    WarrantyExpiryDate DATETIME2 NULL,
+    Location NVARCHAR(200) NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Notes NVARCHAR(500) NULL,
+    CreatedDate DATETIME2 NOT NULL,
+    CreatedBy NVARCHAR(200) NULL,
+    ModifiedDate DATETIME2 NULL,
+    ModifiedBy NVARCHAR(200) NULL,
+
+    CONSTRAINT PK_Assets PRIMARY KEY (Id)
+);
+GO
+
+/* =========================================================
+   COMPUTERS (1–1 WITH ASSETS)
+   ========================================================= */
+
+CREATE TABLE Computers (
+    Id INT NOT NULL,
+    Processor NVARCHAR(50) NOT NULL,
+    RAM INT NOT NULL,
+    Storage INT NOT NULL,
+    OperatingSystem NVARCHAR(50) NOT NULL,
+    AssignedTo NVARCHAR(200) NULL,
+
+    CONSTRAINT PK_Computers PRIMARY KEY (Id),
+    CONSTRAINT FK_Computers_Assets
+        FOREIGN KEY (Id) REFERENCES Assets(Id)
+        ON DELETE CASCADE
+);
+GO
+
+/* =========================================================
+   SERVERS (1–1 WITH ASSETS)
+   ========================================================= */
+
+CREATE TABLE Servers (
+    Id INT NOT NULL,
+    IPAddress NVARCHAR(100) NOT NULL,
+    ServerType NVARCHAR(50) NOT NULL,
+    Purpose NVARCHAR(100) NOT NULL,
+    Processor NVARCHAR(50) NOT NULL,
+    RAM INT NOT NULL,
+    Storage INT NOT NULL,
+    OperatingSystem NVARCHAR(50) NOT NULL,
+    BackupComments NVARCHAR(500) NULL,
+    BackupRequired BIT NOT NULL DEFAULT 0,
+    ProjectManagerName NVARCHAR(200) NULL,
+
+    CONSTRAINT PK_Servers PRIMARY KEY (Id),
+    CONSTRAINT FK_Servers_Assets
+        FOREIGN KEY (Id) REFERENCES Assets(Id)
+        ON DELETE CASCADE
+);
+GO
+
+/* =========================================================
+   APPLICATIONS (1–1 WITH ASSETS)
+   ========================================================= */
+
+CREATE TABLE Applications (
+    Id INT NOT NULL,
+    Version NVARCHAR(100) NOT NULL,
+    Category NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(500) NULL,
+    RequiresLicense BIT NOT NULL,
+    LicenseKey NVARCHAR(200) NULL,
+    LicenseType NVARCHAR(50) NULL,
+    TotalLicenses INT NULL,
+    UsedLicenses INT NULL,
+    LicenseExpiryDate DATETIME2 NULL,
+    ApplicationOwner NVARCHAR(200) NOT NULL,
+    BusinessUnit NVARCHAR(100) NOT NULL,
+    LicenseHolder NVARCHAR(50) NOT NULL,
+
+    CONSTRAINT PK_Applications PRIMARY KEY (Id),
+    CONSTRAINT FK_Applications_Assets
+        FOREIGN KEY (Id) REFERENCES Assets(Id)
+        ON DELETE CASCADE
+);
+GO
+
+/* =========================================================
+   APPLICATION INSTALLATIONS
+   ========================================================= */
+
+CREATE TABLE ServerApplications (
+    Id INT NOT NULL,
+    ServerId INT NOT NULL,
+    ApplicationId INT NOT NULL,
+    InstallationDate DATETIME2 NOT NULL,
+    InstalledVersion NVARCHAR(100) NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Notes NVARCHAR(500) NULL,
+    CreatedDate DATETIME2 NOT NULL,
+    CreatedBy NVARCHAR(200) NULL,
+
+    CONSTRAINT PK_ServerApplications PRIMARY KEY (Id),
+    CONSTRAINT FK_ServerApplications_Servers
+        FOREIGN KEY (ServerId) REFERENCES Servers(Id),
+    CONSTRAINT FK_ServerApplications_Applications
+        FOREIGN KEY (ApplicationId) REFERENCES Applications(Id)
+);
+GO
+
+CREATE TABLE AssetServerApplications (
+    Id INT NOT NULL,
+    ServerId INT NOT NULL,
+    ApplicationId INT NOT NULL,
+    InstallationDate DATETIME2 NOT NULL,
+    InstalledVersion NVARCHAR(100) NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    Notes NVARCHAR(500) NULL,
+    CreatedDate DATETIME2 NOT NULL,
+    CreatedBy NVARCHAR(200) NULL,
+
+    CONSTRAINT PK_AssetServerApplications PRIMARY KEY (Id),
+    CONSTRAINT FK_ASA_Servers
+        FOREIGN KEY (ServerId) REFERENCES Servers(Id),
+    CONSTRAINT FK_ASA_Applications
+        FOREIGN KEY (ApplicationId) REFERENCES Applications(Id)
+);
+GO
+
+/* =========================================================
+   AUDIT LOGS
+   ========================================================= */
+
+CREATE TABLE AuditLogs (
+    Id INT NOT NULL,
+    UserName NVARCHAR(100) NOT NULL,
+    Action NVARCHAR(100) NOT NULL,
+    EntityType NVARCHAR(100) NOT NULL,
+    EntityId INT NULL,
+    Details NVARCHAR(1000) NULL,
+    Timestamp DATETIME2 NOT NULL,
+    IPAddress NVARCHAR(50) NULL,
+
+    CONSTRAINT PK_AuditLogs PRIMARY KEY (Id)
+);
+GO
+
+/* =========================================================
+   ASP.NET IDENTITY (NO IDENTITY)
+   ========================================================= */
+
+CREATE TABLE AspNetUsers (
+    Id NVARCHAR(450) NOT NULL,
+    FullName NVARCHAR(200) NULL,
+    Department NVARCHAR(200) NULL,
+    CreatedDate DATETIME2 NOT NULL,
+    IsActive BIT NOT NULL,
+    UserName NVARCHAR(256) NULL,
+    NormalizedUserName NVARCHAR(256) NULL,
+    Email NVARCHAR(256) NULL,
+    NormalizedEmail NVARCHAR(256) NULL,
+    EmailConfirmed BIT NOT NULL,
+    PasswordHash NVARCHAR(MAX) NULL,
+    SecurityStamp NVARCHAR(MAX) NULL,
+    ConcurrencyStamp NVARCHAR(MAX) NULL,
+    PhoneNumber NVARCHAR(50) NULL,
+    PhoneNumberConfirmed BIT NOT NULL,
+    TwoFactorEnabled BIT NOT NULL,
+    LockoutEnd DATETIMEOFFSET NULL,
+    LockoutEnabled BIT NOT NULL,
+    AccessFailedCount INT NOT NULL,
+
+    CONSTRAINT PK_AspNetUsers PRIMARY KEY (Id)
+);
+GO
+
+CREATE TABLE AspNetRoles (
+    Id NVARCHAR(450) NOT NULL,
+    Name NVARCHAR(256) NULL,
+    NormalizedName NVARCHAR(256) NULL,
+    ConcurrencyStamp NVARCHAR(MAX) NULL,
+
+    CONSTRAINT PK_AspNetRoles PRIMARY KEY (Id)
+);
+GO
+
+CREATE TABLE AspNetUserRoles (
+    UserId NVARCHAR(450) NOT NULL,
+    RoleId NVARCHAR(450) NOT NULL,
+
+    CONSTRAINT PK_AspNetUserRoles PRIMARY KEY (UserId, RoleId),
+    CONSTRAINT FK_UserRoles_Users
+        FOREIGN KEY (UserId) REFERENCES AspNetUsers(Id)
+        ON DELETE CASCADE,
+    CONSTRAINT FK_UserRoles_Roles
+        FOREIGN KEY (RoleId) REFERENCES AspNetRoles(Id)
+        ON DELETE CASCADE
+);
+GO
+
+/* =========================================================
+   INDEXES
+   ========================================================= */
+
+CREATE UNIQUE INDEX IX_AspNetUsers_NormalizedUserName
+    ON AspNetUsers (NormalizedUserName)
+    WHERE NormalizedUserName IS NOT NULL;
+GO
+
+CREATE UNIQUE INDEX IX_AspNetRoles_NormalizedName
+    ON AspNetRoles (NormalizedName)
+    WHERE NormalizedName IS NOT NULL;
+GO
+
+CREATE INDEX IX_ServerApplications_ServerId
+    ON ServerApplications (ServerId);
+GO
+
+CREATE INDEX IX_ServerApplications_ApplicationId
+    ON ServerApplications (ApplicationId);
+GO
+
+CREATE INDEX IX_AssetServerApplications_ServerId
+    ON AssetServerApplications (ServerId);
+GO
+
+CREATE INDEX IX_AssetServerApplications_ApplicationId
+    ON AssetServerApplications (ApplicationId);
+GO
+
+/* =========================================================
+   END OF FILE
+   ========================================================= */

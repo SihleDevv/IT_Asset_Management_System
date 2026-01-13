@@ -9,6 +9,31 @@
     <h1>Delete Asset</h1>
 </div>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h4><i class="fas fa-exclamation-triangle"></i> Warning!</h4>
+        <p>@TempData["ErrorMessage"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.HasInstalledApplications == true)
+{
+    <div class="alert alert-warning">
+        <h4><i class="fas fa-exclamation-triangle"></i> Warning: Server has installed applications</h4>
+        <p>This server has <strong>@ViewBag.InstalledApplicationCount</strong> installed application(s). You must remove all applications before deleting this server.</p>
+    </div>
+}
+
+@if (ViewBag.IsInstalledOnServers == true)
+{
+    <div class="alert alert-warning">
+        <h4><i class="fas fa-exclamation-triangle"></i> Warning: Application is installed on servers</h4>
+        <p>This application is installed on <strong>@ViewBag.ServerCount</strong> server(s). You must remove it from all servers before deleting this application.</p>
+    </div>
+}
+
 <div class="alert alert-danger">
     <h4><i class="fas fa-exclamation-triangle"></i> Are you sure you want to delete this asset?</h4>
     <p>This action cannot be undone.</p>
@@ -34,9 +59,18 @@
 
 <form asp-action="Delete" method="post" class="mt-3">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">
-        <i class="fas fa-trash"></i> Confirm Delete
-    </button>
+    @if (ViewBag.HasInstalledApplications == true || ViewBag.IsInstalledOnServers == true)
+    {
+        <button type="submit" class="btn btn-danger" disabled>
+            <i class="fas fa-trash"></i> Cannot Delete - Dependencies Exist
+        </button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Confirm Delete
+        </button>
+    }
     <a asp-action="Index" asp-route-assetType="@m?.AssetType" class="btn btn-secondary">
         <i class="fas fa-times"></i> Cancel
     </a>

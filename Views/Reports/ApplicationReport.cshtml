@@ -26,10 +26,7 @@
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th>Asset Tag</th>
                         <th>Application Name</th>
-                        <th>Brand</th>
-                        <th>Model</th>
                         <th>Version</th>
                         <th>Category</th>
                         <th>Business Unit</th>
@@ -48,10 +45,7 @@
                     @foreach (var item in list)
                     {
                         <tr>
-                            <td>@(item?.AssetTag ?? "—")</td>
                             <td>@(item?.AssetName ?? "—")</td>
-                            <td>@(item?.Brand ?? "—")</td>
-                            <td>@(item?.Model ?? "—")</td>
                             <td>@(item?.Version ?? "—")</td>
                             <td>@(item?.Category ?? "—")</td>
                             <td>@(item?.BusinessUnit ?? "—")</td>

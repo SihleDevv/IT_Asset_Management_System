@@ -170,11 +170,18 @@ namespace IT_Asset_Management_System.Controllers
                 return NotFound();
             }
 
-            var application = await _context.Applications.FirstOrDefaultAsync(m => m.Id == id);
+            var application = await _context.Applications
+                .Include(a => a.ServerApplications)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (application == null)
             {
                 return NotFound();
             }
+
+            // Check if application is installed on any servers
+            var serverCount = application.ServerApplications?.Count ?? 0;
+            ViewBag.IsInstalledOnServers = serverCount > 0;
+            ViewBag.ServerCount = serverCount;
 
             return View(application);
         }
@@ -184,23 +191,36 @@ namespace IT_Asset_Management_System.Controllers
         [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var application = await _context.Applications.FindAsync(id);
-            if (application != null)
+            var application = await _context.Applications
+                .Include(a => a.ServerApplications)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            
+            if (application == null)
             {
-                _context.Applications.Remove(application);
-                await _context.SaveChangesAsync();
-
-                _context.AuditLogs.Add(new AuditLog
-                {
-                    UserName = User.Identity?.Name ?? "",
-                    Action = "Delete",
-                    EntityType = "Application",
-                    EntityId = id,
-                    Details = $"Deleted application: {application.AssetName}",
-                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
-                });
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            // Check if application is installed on any servers
+            var serverCount = application.ServerApplications?.Count ?? 0;
+            if (serverCount > 0)
+            {
+                TempData["ErrorMessage"] = $"Cannot delete application '{application.AssetName}'. It is installed on {serverCount} server(s). Please remove it from all servers before deleting the application.";
+                return RedirectToAction(nameof(Delete), new { id });
+            }
+
+            _context.Applications.Remove(application);
+            await _context.SaveChangesAsync();
+
+            _context.AuditLogs.Add(new AuditLog
+            {
+                UserName = User.Identity?.Name ?? "",
+                Action = "Delete",
+                EntityType = "Application",
+                EntityId = id,
+                Details = $"Deleted application: {application.AssetName}",
+                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
+            });
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

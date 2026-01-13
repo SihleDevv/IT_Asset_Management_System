@@ -143,7 +143,7 @@ namespace IT_Asset_Management_System.Controllers
         }
 
         [Authorize(Policy = "RequireAdmin")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string? assetType)
         {
             // Load users for dropdowns
             var users = await _userManager.Users
@@ -151,6 +151,13 @@ namespace IT_Asset_Management_System.Controllers
                 .OrderBy(u => u.FullName)
                 .ToListAsync();
             ViewBag.Users = users;
+            
+            // Pass assetType to view for auto-selection
+            if (!string.IsNullOrEmpty(assetType))
+            {
+                ViewBag.PreSelectedAssetType = assetType;
+            }
+            
             return View();
         }
 
@@ -514,6 +521,32 @@ namespace IT_Asset_Management_System.Controllers
                 return NotFound();
             }
 
+            // Check dependencies based on asset type
+            if (asset.AssetType == "Server")
+            {
+                var server = await _context.Servers
+                    .Include(s => s.ServerApplications)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+                if (server != null)
+                {
+                    var installedAppCount = server.ServerApplications?.Count ?? 0;
+                    ViewBag.HasInstalledApplications = installedAppCount > 0;
+                    ViewBag.InstalledApplicationCount = installedAppCount;
+                }
+            }
+            else if (asset.AssetType == "Application")
+            {
+                var application = await _context.Applications
+                    .Include(a => a.ServerApplications)
+                    .FirstOrDefaultAsync(a => a.Id == id);
+                if (application != null)
+                {
+                    var serverCount = application.ServerApplications?.Count ?? 0;
+                    ViewBag.IsInstalledOnServers = serverCount > 0;
+                    ViewBag.ServerCount = serverCount;
+                }
+            }
+
             return View(asset);
         }
 
@@ -523,27 +556,60 @@ namespace IT_Asset_Management_System.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var asset = await _context.Assets.FindAsync(id);
-            if (asset != null)
+            if (asset == null)
             {
-                var assetType = asset.AssetType;
-                _context.Assets.Remove(asset);
-                await _context.SaveChangesAsync();
-
-                _context.AuditLogs.Add(new AuditLog
-                {
-                    UserName = User.Identity?.Name ?? "",
-                    Action = "Delete",
-                    EntityType = $"Asset ({assetType})",
-                    EntityId = id,
-                    Details = $"Deleted {assetType}: {asset.AssetName}",
-                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
-                });
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index), new { assetType });
+                return NotFound();
             }
 
-            return RedirectToAction(nameof(Index));
+            var assetType = asset.AssetType;
+
+            // Check dependencies before deletion
+            if (assetType == "Server")
+            {
+                var server = await _context.Servers
+                    .Include(s => s.ServerApplications)
+                    .FirstOrDefaultAsync(s => s.Id == id);
+                if (server != null)
+                {
+                    var installedAppCount = server.ServerApplications?.Count ?? 0;
+                    if (installedAppCount > 0)
+                    {
+                        TempData["ErrorMessage"] = $"Cannot delete server '{server.AssetName}'. It has {installedAppCount} installed application(s). Please remove all applications before deleting the server.";
+                        return RedirectToAction(nameof(Delete), new { id });
+                    }
+                }
+            }
+            else if (assetType == "Application")
+            {
+                var application = await _context.Applications
+                    .Include(a => a.ServerApplications)
+                    .FirstOrDefaultAsync(a => a.Id == id);
+                if (application != null)
+                {
+                    var serverCount = application.ServerApplications?.Count ?? 0;
+                    if (serverCount > 0)
+                    {
+                        TempData["ErrorMessage"] = $"Cannot delete application '{application.AssetName}'. It is installed on {serverCount} server(s). Please remove it from all servers before deleting the application.";
+                        return RedirectToAction(nameof(Delete), new { id });
+                    }
+                }
+            }
+
+            _context.Assets.Remove(asset);
+            await _context.SaveChangesAsync();
+
+            _context.AuditLogs.Add(new AuditLog
+            {
+                UserName = User.Identity?.Name ?? "",
+                Action = "Delete",
+                EntityType = $"Asset ({assetType})",
+                EntityId = id,
+                Details = $"Deleted {assetType}: {asset.AssetName}",
+                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
+            });
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index), new { assetType });
         }
 
         [Authorize(Policy = "RequireAdmin")]

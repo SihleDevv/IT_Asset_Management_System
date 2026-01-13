@@ -156,12 +156,15 @@
                         <label asp-for="AssignedTo" class="control-label"></label>
                         <select asp-for="AssignedTo" class="form-control">
                             <option value="">-- Select User --</option>
-                            <option value="John Doe">John Doe</option>
-                            <option value="Jane Smith">Jane Smith</option>
-                            <option value="Mike Johnson">Mike Johnson</option>
-                            <option value="Sarah Williams">Sarah Williams</option>
-                            <option value="David Brown">David Brown</option>
                             <option value="Unassigned">Unassigned</option>
+                            @{
+                                var users = ViewBag.Users as List<IT_Asset_Management_System.Models.ApplicationUser> ?? new List<IT_Asset_Management_System.Models.ApplicationUser>();
+                            }
+                            @foreach (var user in users.Where(u => u.IsActive == true).OrderBy(u => u.FullName ?? u.UserName ?? u.Email))
+                            {
+                                var displayName = user.FullName ?? user.UserName ?? user.Email;
+                                <option value="@displayName" selected="@(Model.AssignedTo == displayName)">@displayName</option>
+                            }
                         </select>
                         <span asp-validation-for="AssignedTo" class="text-danger"></span>
                     </div>
