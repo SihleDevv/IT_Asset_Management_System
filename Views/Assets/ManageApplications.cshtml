@@ -60,14 +60,19 @@
                                     </td>
                                     <td>@(app?.CreatedBy ?? "—")</td>
                                     <td>
-                                        <form asp-action="UninstallApplication" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to uninstall this application?');">
-                                            <input type="hidden" name="id" value="@(app?.Id)" />
-                                            <input type="hidden" name="serverId" value="@(server?.Id)" />
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Uninstall">
-                                                <i class="fas fa-trash"></i> Uninstall
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal@(app?.Id)" title="Edit Status">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        </form>
+                                            <form asp-action="UninstallApplication" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to uninstall this application?');">
+                                                <input type="hidden" name="id" value="@(app?.Id)" />
+                                                <input type="hidden" name="serverId" value="@(server?.Id)" />
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Uninstall">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -118,7 +123,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-download"></i> Install Application
+                            <i class="fas fa-download"></i> Install
                         </button>
                     </form>
                 }
@@ -130,6 +135,82 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Modals for each installed application -->
+@foreach (var app in installedApps)
+{
+    <div class="modal fade" id="editModal@(app?.Id)" tabindex="-1" aria-labelledby="editModalLabel@(app?.Id)" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel@(app?.Id)">Edit Application Status - @(app?.Application?.AssetName ?? "Application")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="UpdateServerApplication" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@(app?.Id)" />
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label>Status</label>
+                            <select name="status" class="form-select" required>
+                                @if (app?.Status == "Running")
+                                {
+                                    <option value="Running" selected>Running</option>
+                                }
+                                else
+                                {
+                                    <option value="Running">Running</option>
+                                }
+                                @if (app?.Status == "Stopped")
+                                {
+                                    <option value="Stopped" selected>Stopped</option>
+                                }
+                                else
+                                {
+                                    <option value="Stopped">Stopped</option>
+                                }
+                                @if (app?.Status == "Pending")
+                                {
+                                    <option value="Pending" selected>Pending</option>
+                                }
+                                else
+                                {
+                                    <option value="Pending">Pending</option>
+                                }
+                                @if (app?.Status == "Maintenance")
+                                {
+                                    <option value="Maintenance" selected>Maintenance</option>
+                                }
+                                else
+                                {
+                                    <option value="Maintenance">Maintenance</option>
+                                }
+                                @if (app?.Status == "Error")
+                                {
+                                    <option value="Error" selected>Error</option>
+                                }
+                                else
+                                {
+                                    <option value="Error">Error</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Notes (Optional)</label>
+                            <textarea name="notes" class="form-control" rows="3" placeholder="Application notes...">@(app?.Notes ?? "")</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Status
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
 
 <div class="mt-3">
     <a asp-action="Details" asp-route-id="@(server?.Id)" class="btn btn-info">

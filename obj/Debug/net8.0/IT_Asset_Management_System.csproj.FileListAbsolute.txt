@@ -250,10 +250,10 @@ C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_Sys
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset.65C84B4D.Up2Date
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.dll
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\refint\IT_Asset_Management_System.dll
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.pdb
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\IT_Asset_Management_System.genruntimeconfig.cache
 C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\ref\IT_Asset_Management_System.dll
+C:\Users\Majolas\source\repos\IT_Asset_Management_System\IT_Asset_Management_System\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

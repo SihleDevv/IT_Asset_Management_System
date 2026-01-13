@@ -522,7 +522,17 @@ namespace IT_Asset_Management_System.Controllers
             }
 
             // Check dependencies based on asset type
-            if (asset.AssetType == "Server")
+            if (asset.AssetType == "Computer")
+            {
+                var computer = await _context.Computers.FindAsync(id);
+                if (computer != null && !string.IsNullOrWhiteSpace(computer.AssignedTo) && 
+                    !computer.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                {
+                    ViewBag.IsAssignedToUser = true;
+                    ViewBag.AssignedToUser = computer.AssignedTo;
+                }
+            }
+            else if (asset.AssetType == "Server")
             {
                 var server = await _context.Servers
                     .Include(s => s.ServerApplications)
@@ -564,7 +574,17 @@ namespace IT_Asset_Management_System.Controllers
             var assetType = asset.AssetType;
 
             // Check dependencies before deletion
-            if (assetType == "Server")
+            if (assetType == "Computer")
+            {
+                var computer = await _context.Computers.FindAsync(id);
+                if (computer != null && !string.IsNullOrWhiteSpace(computer.AssignedTo) && 
+                    !computer.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                {
+                    TempData["ErrorMessage"] = $"Cannot delete computer '{computer.AssetName}'. It is assigned to user '{computer.AssignedTo}'. Please unassign the computer from the user before deleting it.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
+            }
+            else if (assetType == "Server")
             {
                 var server = await _context.Servers
                     .Include(s => s.ServerApplications)
@@ -695,6 +715,43 @@ namespace IT_Asset_Management_System.Controllers
 
             TempData["SuccessMessage"] = $"Application '{application.AssetName}' has been successfully installed on '{server.AssetName}'.";
             return RedirectToAction(nameof(ManageApplications), new { id = serverId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdmin")]
+        public async Task<IActionResult> UpdateServerApplication(int id, string status, string? notes)
+        {
+            var serverApp = await _context.ServerApplications
+                .Include(sa => sa.Server)
+                .Include(sa => sa.Application)
+                .FirstOrDefaultAsync(sa => sa.Id == id);
+
+            if (serverApp == null)
+            {
+                return NotFound();
+            }
+
+            var oldStatus = serverApp.Status;
+            serverApp.Status = status ?? "Running";
+            serverApp.Notes = notes ?? string.Empty;
+
+            await _context.SaveChangesAsync();
+
+            _context.AuditLogs.Add(new AuditLog
+            {
+                UserName = User.Identity?.Name ?? "",
+                Action = "Update Server Application",
+                EntityType = "ServerApplication",
+                EntityId = id,
+                Details = $"Updated {serverApp.Application?.AssetName} status on {serverApp.Server?.AssetName} from '{oldStatus}' to '{serverApp.Status}'",
+                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                Timestamp = DateTime.Now
+            });
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Application '{serverApp.Application?.AssetName}' status has been updated to '{serverApp.Status}'.";
+            return RedirectToAction(nameof(ManageApplications), new { id = serverApp.ServerId });
         }
 
         [HttpPost]

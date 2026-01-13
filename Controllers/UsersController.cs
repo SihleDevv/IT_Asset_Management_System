@@ -253,9 +253,10 @@ namespace IT_Asset_Management_System.Controllers
             var userFullName = user.FullName ?? user.UserName ?? user.Email;
             var userEmail = user.Email;
             
-            // Check Computers
+            // Check Computers (exclude "Unassigned")
             var computersCount = await _context.Computers
-                .Where(c => c.AssignedTo == userFullName || c.AssignedTo == userEmail)
+                .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
+                    && !c.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
                 .CountAsync();
             
             // Check Servers (ProjectManagerName)
@@ -304,9 +305,10 @@ namespace IT_Asset_Management_System.Controllers
             var userFullName = user.FullName ?? user.UserName ?? user.Email;
             var userEmail = user.Email;
             
-            // Check Computers
+            // Check Computers (exclude "Unassigned")
             var computersCount = await _context.Computers
-                .Where(c => c.AssignedTo == userFullName || c.AssignedTo == userEmail)
+                .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
+                    && !c.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
                 .CountAsync();
             
             // Check Servers (ProjectManagerName)
