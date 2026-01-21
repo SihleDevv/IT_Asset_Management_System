@@ -1,0 +1,101 @@
+@model IT_Asset_Management_System.Models.ITSupportTicket
+@{
+    ViewData["Title"] = "Add Follow Up";
+}
+
+<div class="page-header mb-3">
+    <h1>Add Follow Up - Ticket #@Model.Id</h1>
+    <p class="text-muted">@Model.Subject</p>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0">Ticket Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-3"><strong>Status:</strong></div>
+            <div class="col-md-9">
+                @if (Model.Status == "Pending")
+                {
+                    <span class="badge bg-warning">@Model.Status</span>
+                }
+                else if (Model.Status == "In Progress")
+                {
+                    <span class="badge bg-info">@Model.Status</span>
+                }
+                else if (Model.Status == "Resolved")
+                {
+                    <span class="badge bg-success">@Model.Status</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">@Model.Status</span>
+                }
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-3"><strong>Priority:</strong></div>
+            <div class="col-md-9">
+                @if (Model.Priority == "Critical")
+                {
+                    <span class="badge bg-danger">@Model.Priority</span>
+                }
+                else if (Model.Priority == "High")
+                {
+                    <span class="badge bg-warning">@Model.Priority</span>
+                }
+                else if (Model.Priority == "Medium")
+                {
+                    <span class="badge bg-info">@Model.Priority</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">@Model.Priority</span>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><strong>Description:</strong></div>
+            <div class="col-md-9">@Model.Description</div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="FollowUp" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0">Your Follow Up</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="userFollowUp" class="form-label">Follow Up Message <span class="text-danger">*</span></label>
+                <textarea id="userFollowUp" name="userFollowUp" class="form-control" rows="6" placeholder="Add any additional information, updates, or questions about this ticket..." required>@Model.UserFollowUp</textarea>
+                <span asp-validation-for="UserFollowUp" class="text-danger"></span>
+                <small class="form-text text-muted">This message will be visible to IT Support staff working on your ticket.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-comment"></i> Submit Follow Up
+        </button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,240 @@
+@model IT_Asset_Management_System.Models.ITSupportTicket
+@{
+    ViewData["Title"] = "Edit Support Ticket";
+    var users = ViewBag.Users as dynamic;
+    var isITSupportSupervisor = ViewBag.IsITSupportSupervisor as bool? ?? false;
+    var isITSupport = ViewBag.IsITSupport as bool? ?? false;
+    var currentStatus = ViewBag.CurrentStatus as string ?? Model.Status;
+}
+
+<div class="page-header mb-3">
+    <h1>Edit Support Ticket #@Model.Id</h1>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="AssetType" />
+    <input type="hidden" asp-for="RelatedAssetId" />
+    <input type="hidden" asp-for="ReportedByUserId" />
+
+    @if (isITSupportSupervisor || isITSupport)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Asset Type</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" value="@Model.AssetType" readonly />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Related Asset</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" value="@Model.RelatedAssetName" readonly />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Reported By</label>
+            </div>
+            <div class="col-md-9">
+                <input type="text" class="form-control" value="@(Model.ReportedByUser?.FullName ?? Model.ReportedByUser?.Email ?? "Unknown")" readonly />
+            </div>
+        </div>
+    }
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Subject" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <input asp-for="Subject" class="form-control" />
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Description" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Status" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="Status" class="form-select" id="statusSelect">
+                <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+                <option value="In Progress" selected="@(Model.Status == "In Progress")">In Progress</option>
+                <option value="Resolved" selected="@(Model.Status == "Resolved")">Resolved</option>
+                <option value="Closed" selected="@(Model.Status == "Closed")">Closed</option>
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+            @if (isITSupport && !isITSupportSupervisor && currentStatus == "Pending")
+            {
+                <small class="form-text text-muted">Note: You cannot change status from Pending directly to Resolved. Please change to In Progress first.</small>
+            }
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Priority" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="Priority" class="form-select">
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+    </div>
+
+    @if (isITSupportSupervisor)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label asp-for="AssignedToUserId" class="form-label">Assign To</label>
+            </div>
+            <div class="col-md-9">
+                <select asp-for="AssignedToUserId" class="form-select">
+                    <option value="">Unassigned</option>
+                    @if (users != null)
+                    {
+                        foreach (var user in users)
+                        {
+                            <option value="@user.Id">@(user.FullName ?? user.Email)</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="AssignedToUserId" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @if (isITSupport)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label asp-for="TechnicianNotes" class="form-label">Technician Notes</label>
+            </div>
+            <div class="col-md-9">
+                <textarea asp-for="TechnicianNotes" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="TechnicianNotes" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label asp-for="AdminResponse" class="form-label">Admin Response</label>
+            </div>
+            <div class="col-md-9">
+                <textarea asp-for="AdminResponse" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="AdminResponse" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @if (isITSupport && !isITSupportSupervisor)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label asp-for="ResolutionNotes" class="form-label">Resolution Notes</label>
+            </div>
+            <div class="col-md-9">
+                <textarea asp-for="ResolutionNotes" class="form-control" rows="4" placeholder="Enter resolution details when resolving the ticket..."></textarea>
+                <span asp-validation-for="ResolutionNotes" class="text-danger"></span>
+                <small class="form-text text-muted">Required when status is set to Resolved.</small>
+            </div>
+        </div>
+    }
+
+    @if (isITSupport && Model.AssetType == "Computer")
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Replacement Request</label>
+            </div>
+            <div class="col-md-9">
+                <div class="form-check">
+                    <input asp-for="ReplacementRequested" class="form-check-input" type="checkbox" id="replacementRequested" />
+                    <label class="form-check-label" for="replacementRequested">
+                        Asset is beyond repair - Request replacement from Admin
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3" id="replacementReasonRow" style="display: @(Model.ReplacementRequested ? "block" : "none");">
+            <div class="col-md-3">
+                <label asp-for="ReplacementReason" class="form-label">Replacement Reason</label>
+            </div>
+            <div class="col-md-9">
+                <textarea asp-for="ReplacementReason" class="form-control" rows="3" placeholder="Explain why the asset cannot be repaired..."></textarea>
+                <span asp-validation-for="ReplacementReason" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            <button type="submit" class="btn btn-primary">Update Ticket</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Prevent skipping from Pending to Resolved for technicians
+        @if (isITSupport && !isITSupportSupervisor)
+        {
+            <text>
+            document.getElementById('statusSelect').addEventListener('change', function() {
+                const currentStatus = '@currentStatus';
+                const newStatus = this.value;
+                
+                if (currentStatus === 'Pending' && newStatus === 'Resolved') {
+                    alert('Cannot change status from Pending to Resolved. Please change to In Progress first.');
+                    this.value = currentStatus;
+                }
+            });
+            </text>
+        }
+
+        // Show/hide replacement reason field
+        document.getElementById('replacementRequested')?.addEventListener('change', function() {
+            const reasonRow = document.getElementById('replacementReasonRow');
+            if (reasonRow) {
+                reasonRow.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) {
+                    document.getElementById('ReplacementReason').value = '';
+                }
+            }
+        });
+    </script>
+}

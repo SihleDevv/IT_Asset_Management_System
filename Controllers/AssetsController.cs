@@ -21,6 +21,15 @@ namespace IT_Asset_Management_System.Controllers
 
         public async Task<IActionResult> Index(string? assetType, string? searchTerm)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            var isAdminOrITManager = userRoles.Any(r => r == "Admin" || r == "IT Manager");
+            
             var query = _context.Assets.AsQueryable();
 
             if (!string.IsNullOrEmpty(assetType))
@@ -33,6 +42,58 @@ namespace IT_Asset_Management_System.Controllers
                 && a.AssetName != null 
                 && !string.IsNullOrWhiteSpace(a.AssetTag) 
                 && !string.IsNullOrWhiteSpace(a.AssetName));
+
+            // Filter by user assignment or department based on role
+            if (isAdminOrITManager)
+            {
+                // Admin and IT Manager see all assets in their department
+                if (!string.IsNullOrWhiteSpace(currentUser.Department))
+                {
+                    // For now, show all assets. Can add department filtering later if needed
+                    // query = query.Where(a => a.Department == currentUser.Department);
+                }
+            }
+            else
+            {
+                // Regular users (Read Only, Employee) only see assets assigned to them
+                var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email;
+                var userEmail = currentUser.Email;
+                
+                // Filter computers assigned to user
+                var assignedComputerIds = await _context.Computers
+                    .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
+                        && c.AssignedTo.ToLower() != "unassigned")
+                    .Select(c => c.Id)
+                    .ToListAsync();
+                
+                // Filter servers where user is project manager
+                var managedServerIds = await _context.Servers
+                    .Where(s => s.ProjectManagerName == userFullName || s.ProjectManagerName == userEmail)
+                    .Select(s => s.Id)
+                    .ToListAsync();
+                
+                // Filter applications where user is owner
+                var ownedApplicationIds = await _context.Applications
+                    .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
+                    .Select(a => a.Id)
+                    .ToListAsync();
+                
+                // Combine all assigned asset IDs
+                var assignedAssetIds = assignedComputerIds
+                    .Concat(managedServerIds)
+                    .Concat(ownedApplicationIds)
+                    .ToList();
+                
+                if (assignedAssetIds.Any())
+                {
+                    query = query.Where(a => assignedAssetIds.Contains(a.Id));
+                }
+                else
+                {
+                    // If user has no assigned assets, return empty list
+                    query = query.Where(a => false);
+                }
+            }
 
             // Apply search filter
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -507,7 +568,7 @@ namespace IT_Asset_Management_System.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -526,7 +587,7 @@ namespace IT_Asset_Management_System.Controllers
             {
                 var computer = await _context.Computers.FindAsync(id);
                 if (computer != null && !string.IsNullOrWhiteSpace(computer.AssignedTo) && 
-                    !computer.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                    computer.AssignedTo.ToLower() != "unassigned")
                 {
                     ViewBag.IsAssignedToUser = true;
                     ViewBag.AssignedToUser = computer.AssignedTo;
@@ -562,7 +623,7 @@ namespace IT_Asset_Management_System.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "RequireAdmin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var asset = await _context.Assets.FindAsync(id);
@@ -578,7 +639,7 @@ namespace IT_Asset_Management_System.Controllers
             {
                 var computer = await _context.Computers.FindAsync(id);
                 if (computer != null && !string.IsNullOrWhiteSpace(computer.AssignedTo) && 
-                    !computer.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                    computer.AssignedTo.ToLower() != "unassigned")
                 {
                     TempData["ErrorMessage"] = $"Cannot delete computer '{computer.AssetName}'. It is assigned to user '{computer.AssignedTo}'. Please unassign the computer from the user before deleting it.";
                     return RedirectToAction(nameof(Delete), new { id });

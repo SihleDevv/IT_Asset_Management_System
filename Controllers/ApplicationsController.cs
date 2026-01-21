@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IT_Asset_Management_System.Data;
@@ -10,10 +11,12 @@ namespace IT_Asset_Management_System.Controllers
     public class ApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ApplicationsController(ApplicationDbContext context)
+        public ApplicationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -21,6 +24,28 @@ namespace IT_Asset_Management_System.Controllers
             var applications = await _context.Applications
                 .Where(a => a.AssetName != null && !string.IsNullOrWhiteSpace(a.AssetName))
                 .ToListAsync();
+
+            // Check for licenses expiring in 15 days and notify application owners
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser != null)
+            {
+                var expiringLicenses = applications
+                    .Where(a => a.RequiresLicense && 
+                               a.LicenseExpiryDate.HasValue &&
+                               a.LicenseExpiryDate.Value <= DateTime.Now.AddDays(15) &&
+                               a.LicenseExpiryDate.Value > DateTime.Now &&
+                               !string.IsNullOrEmpty(a.ApplicationOwner) &&
+                               (a.ApplicationOwner.ToLower() == currentUser.FullName!.ToLower() || 
+                                a.ApplicationOwner.ToLower() == currentUser.Email!.ToLower()))
+                    .ToList();
+
+                if (expiringLicenses.Any())
+                {
+                    ViewBag.ExpiringLicenses = expiringLicenses;
+                    TempData["LicenseWarning"] = $"You have {expiringLicenses.Count} application license(s) expiring within 15 days.";
+                }
+            }
+
             return View(applications);
         }
 

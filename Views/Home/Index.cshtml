@@ -33,13 +33,36 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-white bg-warning mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Licenses</h5>
-                <p class="card-text"><span class="display-6">@Model.ExpiringSoonLicenses</span> Expiring Soon</p>
-                <small>Expired: @Model.ExpiredLicenses</small>
+        @if (User.IsInRole("IT Support Supervisor"))
+        {
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Tickets</h5>
+                    <p class="card-text display-4">@(Model.TotalTickets ?? 0)</p>
+                    <small>All Support Tickets</small>
+                </div>
             </div>
-        </div>
+        }
+        else if (User.IsInRole("IT Support") && !User.IsInRole("IT Support Supervisor") && !User.IsInRole("Admin") && !User.IsInRole("IT Manager"))
+        {
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">My Tickets</h5>
+                    <p class="card-text display-4">@(Model.AssignedTickets ?? 0)</p>
+                    <small>Assigned to Me</small>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Licenses</h5>
+                    <p class="card-text"><span class="display-6">@Model.ExpiringSoonLicenses</span> Expiring Soon</p>
+                    <small>Expired: @Model.ExpiredLicenses</small>
+                </div>
+            </div>
+        }
     </div>
 </div>
 

@@ -11,6 +11,8 @@
         public int ComputersAvailable { get; set; }
         public int ExpiringSoonLicenses { get; set; }
         public int ExpiredLicenses { get; set; }
+        public int? TotalTickets { get; set; }
+        public int? AssignedTickets { get; set; }
         public List<RecentActivity> RecentActivities { get; set; } = new List<RecentActivity>();
     }
 

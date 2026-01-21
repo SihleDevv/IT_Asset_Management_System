@@ -20,9 +20,11 @@ namespace IT_Asset_Management_System.ViewModels
         public string Department { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100, MinimumLength = 6)]
+        [StringLength(30, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 30 characters.")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [RegularExpression(@"^(?=.*\d)(?=.*[~!@#$^&*?><]).{8,30}$", 
+            ErrorMessage = "Password must be 8-30 characters, include at least one digit and one special character [~!@#$^&*?><].")]
         public string Password { get; set; } = string.Empty;
 
         [DataType(DataType.Password)]

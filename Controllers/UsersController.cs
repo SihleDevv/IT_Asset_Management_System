@@ -51,6 +51,7 @@ namespace IT_Asset_Management_System.Controllers
 
             ViewBag.UserRoles = userRoles;
             ViewBag.SearchTerm = searchTerm;
+            ViewBag.CurrentUserId = _userManager.GetUserId(User);
             return View(users);
         }
 
@@ -246,6 +247,14 @@ namespace IT_Asset_Management_System.Controllers
                 return NotFound();
             }
 
+            // Prevent deleting yourself
+            var currentUserId = _userManager.GetUserId(User);
+            if (user.Id == currentUserId)
+            {
+                TempData["ErrorMessage"] = "You cannot delete your own account.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var roles = await _userManager.GetRolesAsync(user);
             var currentRole = roles.FirstOrDefault() ?? "No Role";
 
@@ -256,7 +265,7 @@ namespace IT_Asset_Management_System.Controllers
             // Check Computers (exclude "Unassigned")
             var computersCount = await _context.Computers
                 .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
-                    && !c.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                    && c.AssignedTo.ToLower() != "unassigned")
                 .CountAsync();
             
             // Check Servers (ProjectManagerName)
@@ -308,7 +317,7 @@ namespace IT_Asset_Management_System.Controllers
             // Check Computers (exclude "Unassigned")
             var computersCount = await _context.Computers
                 .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
-                    && !c.AssignedTo.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
+                    && c.AssignedTo.ToLower() != "unassigned")
                 .CountAsync();
             
             // Check Servers (ProjectManagerName)
@@ -356,6 +365,135 @@ namespace IT_Asset_Management_System.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "RequireAdmin")]
+        public async Task<IActionResult> PasswordManagement(string? searchTerm)
+        {
+            var query = _userManager.Users.AsQueryable();
+
+            // Apply search filter
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchTerm = searchTerm.Trim();
+                query = query.Where(u => 
+                    (u.Email != null && u.Email.Contains(searchTerm)) ||
+                    (u.FullName != null && u.FullName.Contains(searchTerm)) ||
+                    (u.Department != null && u.Department.Contains(searchTerm)) ||
+                    (u.UserName != null && u.UserName.Contains(searchTerm))
+                );
+            }
+
+            var users = await query.OrderBy(u => u.FullName).ToListAsync();
+            var userRoles = new Dictionary<string, string>();
+            var passwordStatus = new Dictionary<string, string>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles[user.Id] = roles.FirstOrDefault() ?? "No Role";
+                
+                // Check password expiration status
+                if (user.PasswordChangedDate.HasValue)
+                {
+                    var daysSinceChange = (DateTime.Now - user.PasswordChangedDate.Value).TotalDays;
+                    if (daysSinceChange >= 30)
+                    {
+                        passwordStatus[user.Id] = "Expired";
+                    }
+                    else if (daysSinceChange >= 25)
+                    {
+                        passwordStatus[user.Id] = "Expiring Soon";
+                    }
+                    else
+                    {
+                        passwordStatus[user.Id] = "Valid";
+                    }
+                }
+                else
+                {
+                    passwordStatus[user.Id] = "Never Changed";
+                }
+            }
+
+            ViewBag.UserRoles = userRoles;
+            ViewBag.PasswordStatus = passwordStatus;
+            ViewBag.SearchTerm = searchTerm;
+            return View(users);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "RequireAdmin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(string userId, string newPassword)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(newPassword))
+            {
+                TempData["ErrorMessage"] = "User ID and new password are required.";
+                return RedirectToAction(nameof(PasswordManagement));
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction(nameof(PasswordManagement));
+            }
+
+            // Validate password meets requirements
+            if (newPassword.Length < 8 || newPassword.Length > 30)
+            {
+                TempData["ErrorMessage"] = "Password must be between 8 and 30 characters.";
+                return RedirectToAction(nameof(PasswordManagement));
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(newPassword, @"\d"))
+            {
+                TempData["ErrorMessage"] = "Password must include at least one digit.";
+                return RedirectToAction(nameof(PasswordManagement));
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(newPassword, @"[~!@#$^&*?><]"))
+            {
+                TempData["ErrorMessage"] = "Password must include at least one special character [~!@#$^&*?><].";
+                return RedirectToAction(nameof(PasswordManagement));
+            }
+
+            // Reset password
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (result.Succeeded)
+            {
+                // Update password changed date
+                user.PasswordChangedDate = DateTime.Now;
+                user.MustChangePassword = false;
+                await _userManager.UpdateAsync(user);
+
+                // Log the password reset
+                _context.AuditLogs.Add(new AuditLog
+                {
+                    UserName = User.Identity?.Name ?? "",
+                    Action = "Reset User Password",
+                    EntityType = "User",
+                    EntityId = null,
+                    Details = $"Admin reset password for user: {user.Email}",
+                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                    Timestamp = DateTime.Now
+                });
+                await _context.SaveChangesAsync();
+
+                var userFullName = user.FullName ?? user.UserName ?? user.Email ?? "User";
+                TempData["SuccessMessage"] = $"Password has been reset successfully for {userFullName}.";
+            }
+            else
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                TempData["ErrorMessage"] = $"Error resetting password: {errors}";
+            }
+
+            return RedirectToAction(nameof(PasswordManagement));
         }
     }
 }

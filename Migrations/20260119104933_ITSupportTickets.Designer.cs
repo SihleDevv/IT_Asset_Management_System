@@ -4,6 +4,7 @@ using IT_Asset_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IT_Asset_Management_System.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260119104933_ITSupportTickets")]
+    partial class ITSupportTickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -362,36 +365,14 @@ namespace IT_Asset_Management_System.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime?>("TechnicianNotesDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("StatusChangedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StatusChangedByUserId")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FollowUpDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("LastActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserFollowUp")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssignedToUserId");
 
                     b.HasIndex("ReportedByUserId");
-
-                    b.HasIndex("StatusChangedByUserId");
 
                     b.ToTable("ITSupportTickets");
                 });
@@ -745,15 +726,9 @@ namespace IT_Asset_Management_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IT_Asset_Management_System.Models.ApplicationUser", "StatusChangedByUser")
-                        .WithMany()
-                        .HasForeignKey("StatusChangedByUserId");
-
                     b.Navigation("AssignedToUser");
 
                     b.Navigation("ReportedByUser");
-
-                    b.Navigation("StatusChangedByUser");
                 });
 
             modelBuilder.Entity("IT_Asset_Management_System.Models.ServerApplication", b =>

@@ -5,6 +5,14 @@
 
 <h1>Applications</h1>
 
+@if (TempData["LicenseWarning"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle"></i> <strong>License Expiration Warning:</strong> @TempData["LicenseWarning"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
 {
     <p>
@@ -50,7 +58,11 @@
                             var daysUntilExpiry = (item.LicenseExpiryDate.Value - DateTime.Now).Days;
                             if (daysUntilExpiry < 0)
                             {
-                                <span class="text-danger">Expired</span>
+                                <span class="text-danger"><i class="fas fa-exclamation-circle"></i> Expired</span>
+                            }
+                            else if (daysUntilExpiry <= 15)
+                            {
+                                <span class="text-danger"><i class="fas fa-exclamation-triangle"></i> @item.LicenseExpiryDate.Value.ToString("yyyy-MM-dd") (@daysUntilExpiry days)</span>
                             }
                             else if (daysUntilExpiry < 30)
                             {

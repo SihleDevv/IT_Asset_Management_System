@@ -17,6 +17,7 @@ namespace IT_Asset_Management_System.Data
         public DbSet<ServerApplication> ServerApplications { get; set; }
         public DbSet<AssetServerApplication> AssetServerApplications { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<ITSupportTicket> ITSupportTickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

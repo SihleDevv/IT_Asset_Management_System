@@ -314,9 +314,19 @@
                 <i class="fas fa-cogs"></i> Manage Applications
             </a>
         }
+    }
 
+    @if (!isNull && User.IsInRole("Admin"))
+    {
         <a asp-action="Delete" asp-route-id="@(m.Id)" class="btn btn-danger">
             <i class="fas fa-trash"></i> Delete
+        </a>
+    }
+
+    @if (!isNull)
+    {
+        <a asp-controller="ITSupport" asp-action="Create" asp-route-assetType="@m.AssetType" asp-route-assetId="@m.Id" class="btn btn-info">
+            <i class="fas fa-headset"></i> Report Issue
         </a>
     }
 

@@ -13,7 +13,7 @@ namespace IT_Asset_Management_System.Data
         {
             await context.Database.MigrateAsync();
 
-            string[] roleNames = { "IT Manager", "Admin", "Read Only", "Employee" };
+            string[] roleNames = { "IT Manager", "Admin", "Read Only", "Employee", "IT Support Supervisor", "IT Support" };
 
             foreach (var roleName in roleNames)
             {

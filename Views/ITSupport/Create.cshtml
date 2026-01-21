@@ -1,0 +1,244 @@
+@model IT_Asset_Management_System.Models.ITSupportTicket
+@{
+    ViewData["Title"] = "Create Support Ticket";
+    var userComputers = ViewBag.UserComputers as IEnumerable<dynamic>;
+    var userServers = ViewBag.UserServers as IEnumerable<dynamic>;
+    var userApplications = ViewBag.UserApplications as IEnumerable<dynamic>;
+    var isAdminOrITManager = User.IsInRole("Admin") || User.IsInRole("IT Manager");
+}
+
+<div class="page-header mb-3">
+    <h1>Create Support Ticket</h1>
+    <p class="text-muted">Report an issue with your asset</p>
+</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form asp-action="Create" method="post" id="ticketForm">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+    }
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Subject" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <input asp-for="Subject" class="form-control" />
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Description" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Priority" class="form-label"></label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="Priority" class="form-select">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="AssetType" class="form-label">Related Asset Type <span class="text-danger">*</span></label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="AssetType" class="form-select" id="assetType" required>
+                <option value="" selected="@(string.IsNullOrEmpty(Model.AssetType))">-- Select Asset Type --</option>
+                <option value="Computer" selected="@(Model.AssetType == "Computer")">Computer</option>
+                <option value="Server" selected="@(Model.AssetType == "Server")">Server</option>
+                <option value="Application" selected="@(Model.AssetType == "Application")">Application</option>
+            </select>
+            <span asp-validation-for="AssetType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="assetIdRow" style="display: none;">
+        <div class="col-md-3">
+            <label asp-for="RelatedAssetId" class="form-label">Related Asset <span class="text-danger">*</span></label>
+        </div>
+        <div class="col-md-9">
+            <select asp-for="RelatedAssetId" class="form-select" id="relatedAssetId" required>
+                <option value="0">-- Select Asset --</option>
+            </select>
+            <input type="hidden" asp-for="RelatedAssetName" id="relatedAssetName" />
+            <span asp-validation-for="RelatedAssetId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            <button type="submit" class="btn btn-primary">Submit Ticket</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Asset data from server
+        @{
+            var computerList = new List<object>();
+            if (userComputers != null)
+            {
+                foreach (var c in userComputers)
+                {
+                    computerList.Add(new { id = c.Id, name = c.AssetName });
+                }
+            }
+            
+            var serverList = new List<object>();
+            if (userServers != null)
+            {
+                foreach (var s in userServers)
+                {
+                    serverList.Add(new { id = s.Id, name = s.AssetName });
+                }
+            }
+            
+            var applicationList = new List<object>();
+            if (userApplications != null)
+            {
+                foreach (var a in userApplications)
+                {
+                    applicationList.Add(new { id = a.Id, name = a.AssetName });
+                }
+            }
+        }
+        const assetData = {
+            Computer: @Html.Raw(Json.Serialize(computerList)),
+            Server: @Html.Raw(Json.Serialize(serverList)),
+            Application: @Html.Raw(Json.Serialize(applicationList))
+        };
+
+        document.getElementById('assetType').addEventListener('change', function() {
+            const assetType = this.value;
+            const assetIdRow = document.getElementById('assetIdRow');
+            const relatedAssetId = document.getElementById('relatedAssetId');
+            const relatedAssetName = document.getElementById('relatedAssetName');
+            
+            if (assetType && assetData[assetType] && assetData[assetType].length > 0) {
+                assetIdRow.style.display = 'block';
+                relatedAssetId.innerHTML = '<option value="0">-- Select Asset --</option>';
+                
+                assetData[assetType].forEach(function(asset) {
+                    const option = document.createElement('option');
+                    option.value = asset.id;
+                    option.textContent = asset.name;
+                    relatedAssetId.appendChild(option);
+                });
+                relatedAssetId.required = true;
+                relatedAssetId.removeAttribute('disabled');
+            } else {
+                assetIdRow.style.display = 'none';
+                relatedAssetId.value = '0';
+                relatedAssetId.required = false;
+                relatedAssetName.value = '';
+            }
+        });
+
+        // Update asset name when selection changes
+        document.getElementById('relatedAssetId').addEventListener('change', function() {
+            const assetType = document.getElementById('assetType').value;
+            const selectedId = parseInt(this.value);
+            const relatedAssetName = document.getElementById('relatedAssetName');
+            
+            if (assetType && assetData[assetType] && selectedId && selectedId > 0) {
+                const selectedAsset = assetData[assetType].find(a => a.id === selectedId);
+                if (selectedAsset) {
+                    relatedAssetName.value = selectedAsset.name;
+                }
+            } else {
+                relatedAssetName.value = '';
+            }
+        });
+
+        // Initialize if asset type is pre-selected
+        @if (!string.IsNullOrEmpty(Model.AssetType))
+        {
+            <text>
+            document.getElementById('assetType').dispatchEvent(new Event('change'));
+            @if (Model.RelatedAssetId > 0)
+            {
+                <text>
+                setTimeout(function() {
+                    document.getElementById('relatedAssetId').value = '@Model.RelatedAssetId';
+                    document.getElementById('relatedAssetId').dispatchEvent(new Event('change'));
+                }, 100);
+                </text>
+            }
+            </text>
+        }
+
+        // Form validation - ensure asset is selected before submit
+        const ticketForm = document.getElementById('ticketForm');
+        if (ticketForm) {
+            ticketForm.addEventListener('submit', function(e) {
+                const assetTypeEl = document.getElementById('assetType');
+                const relatedAssetIdEl = document.getElementById('relatedAssetId');
+                const assetIdRow = document.getElementById('assetIdRow');
+                
+                const assetType = assetTypeEl ? assetTypeEl.value : '';
+                const relatedAssetId = relatedAssetIdEl ? relatedAssetIdEl.value : '';
+                
+                // Validate Asset Type
+                if (!assetType || assetType.trim() === '') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    alert('Please select an Asset Type before submitting the ticket.');
+                    if (assetTypeEl) assetTypeEl.focus();
+                    return false;
+                }
+                
+                // Validate Related Asset
+                if (!relatedAssetId || relatedAssetId === '' || relatedAssetId === '0') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    alert('Please select a Related Asset before submitting the ticket.');
+                    if (assetIdRow && assetIdRow.style.display !== 'none' && relatedAssetIdEl) {
+                        relatedAssetIdEl.focus();
+                    } else if (assetTypeEl) {
+                        assetTypeEl.focus();
+                    }
+                    return false;
+                }
+                
+                // Ensure RelatedAssetName is set before submit
+                const relatedAssetName = document.getElementById('relatedAssetName');
+                if (relatedAssetName && !relatedAssetName.value && relatedAssetIdEl) {
+                    const selectedOption = relatedAssetIdEl.selectedOptions[0];
+                    if (selectedOption && selectedOption.value !== '0' && selectedOption.value !== '') {
+                        relatedAssetName.value = selectedOption.textContent;
+                    }
+                }
+                
+                // Allow form to submit if validation passes
+                return true;
+            });
+        }
+    </script>
+}

@@ -1,0 +1,124 @@
+@model IT_Asset_Management_System.ViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IT_Asset_Management_System.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Edit Profile";
+    var isProfile = ViewBag.IsProfile as bool? ?? false;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userRoles = currentUser != null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
+    var isReadOnlyOrEmployee = userRoles.Any(r => r == "Read Only" || r == "Employee");
+    var isAdminOrITManager = userRoles.Any(r => r == "Admin" || r == "IT Manager");
+}
+
+<div class="page-header mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <p class="text-muted">Update your personal information</p>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="EditProfile" method="post">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="Email" class="form-label"></label>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="FullName" class="form-label"></label>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="Department" class="form-label"></label>
+                        </div>
+                        <div class="col-md-9">
+                            @if (isReadOnlyOrEmployee)
+                            {
+                                <input type="text" class="form-control" value="@Model.Department" disabled />
+                                <small class="form-text text-muted">You cannot change your department. Contact an administrator if you need a department change.</small>
+                            }
+                            else
+                            {
+                                <select asp-for="Department" class="form-control">
+                                    <option value="">-- Select Department --</option>
+                                    <option value="HR">HR</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="IT">IT</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Operations">Operations</option>
+                                    <option value="Sales">Sales</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="Department" class="text-danger"></span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="Role" class="form-label">Role</label>
+                        </div>
+                        <div class="col-md-9">
+                            @if (isAdminOrITManager)
+                            {
+                                <select asp-for="Role" class="form-control">
+                                    <option value="">-- Select Role --</option>
+                                    <option value="IT Manager">IT Manager</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Employee">Employee</option>
+                                    <option value="Read Only">Read Only</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" value="@Model.Role" disabled />
+                                <small class="form-text text-muted">You cannot change your role. Contact an administrator if you need a role change.</small>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <a asp-action="Profile" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

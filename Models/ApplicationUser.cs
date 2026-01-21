@@ -8,5 +8,9 @@ namespace IT_Asset_Management_System.Models
         public string? Department { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
+        
+        // Password Expiration
+        public DateTime? PasswordChangedDate { get; set; }
+        public bool MustChangePassword { get; set; } = false;
     }
 }

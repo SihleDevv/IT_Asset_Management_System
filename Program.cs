@@ -28,8 +28,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
@@ -56,7 +57,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireITManager", policy => policy.RequireRole("IT Manager"));
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Admin", "IT Manager"));
+    options.AddPolicy("RequireAdminOnly", policy => policy.RequireRole("Admin"));
     options.AddPolicy("RequireEmployee", policy => policy.RequireRole("Employee", "Admin", "IT Manager", "Read Only"));
+    options.AddPolicy("RequireITSupport", policy => policy.RequireRole("IT Support", "IT Support Supervisor", "Admin", "IT Manager"));
+    options.AddPolicy("RequireITSupportSupervisor", policy => policy.RequireRole("IT Support Supervisor", "Admin", "IT Manager"));
 });
 
 var app = builder.Build();
@@ -90,6 +94,9 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Add password expiration middleware (must be after authentication)
+app.UseMiddleware<IT_Asset_Management_System.Middleware.PasswordExpirationMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

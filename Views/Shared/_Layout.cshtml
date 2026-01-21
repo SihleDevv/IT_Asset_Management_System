@@ -30,6 +30,12 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a asp-controller="Account" asp-action="Profile">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                    </li>
+
                     @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
                     {
                         <li>
@@ -39,44 +45,56 @@
                         </li>
                     }
 
+                    @if (!User.IsInRole("IT Support Supervisor") && !User.IsInRole("IT Support"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'assetsMenu')">
+                                <i class="fas fa-box"></i> Assets
+                            </a>
+                            <ul class="sidebar-submenu list-unstyled" id="assetsMenu">
+                                <li><a asp-controller="Assets" asp-action="Index">All Assets</a></li>
+                                <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Computer">Computers</a></li>
+                                <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Server">Servers</a></li>
+                                <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Application">Software Applications</a></li>
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                                {
+                                    <li><a asp-controller="Assets" asp-action="Create">Add New Asset</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'reportsMenu')">
+                                <i class="fas fa-chart-bar"></i> Reports
+                            </a>
+                            <ul class="sidebar-submenu list-unstyled" id="reportsMenu">
+                                <li><a asp-controller="Reports" asp-action="AssetSummary">Asset Summary</a></li>
+                                <li><a asp-controller="Reports" asp-action="ComputerReport">Computer Report</a></li>
+                                <li><a asp-controller="Reports" asp-action="ServerReport">Server Report</a></li>
+                                <li><a asp-controller="Reports" asp-action="ApplicationReport">Application Report</a></li>
+                                <li><a asp-controller="Reports" asp-action="LicenseReport">License Report</a></li>
+                            </ul>
+                        </li>
+                    }
+
                     <li>
-                        <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'assetsMenu')">
-                            <i class="fas fa-box"></i> Assets
-                        </a>
-                        <ul class="sidebar-submenu list-unstyled" id="assetsMenu">
-                            <li><a asp-controller="Assets" asp-action="Index">All Assets</a></li>
-                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Computer">Computers</a></li>
-                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Server">Servers</a></li>
-                            <li><a asp-controller="Assets" asp-action="Index" asp-route-assetType="Application">Applications</a></li>
-
-                            @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
-                            {
-                                <li><a asp-controller="Assets" asp-action="Create">Add New Asset</a></li>
-                            }
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'reportsMenu')">
-                        <i class="fas fa-chart-bar"></i> Reports
-                    </a>
-                    <ul class="sidebar-submenu list-unstyled" id="reportsMenu">
-                        <li><a asp-controller="Reports" asp-action="AssetSummary">Asset Summary</a></li>
-                        <li><a asp-controller="Reports" asp-action="ComputerReport">Computer Report</a></li>
-                        <li><a asp-controller="Reports" asp-action="ServerReport">Server Report</a></li>
-                        <li><a asp-controller="Reports" asp-action="ApplicationReport">Application Report</a></li>
-                        <li><a asp-controller="Reports" asp-action="LicenseReport">License Report</a></li>
-                    </ul>
-                </li>
-
-                @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
-                {
-                    <li>
-                        <a asp-controller="Reports" asp-action="AuditLog">
-                            <i class="fas fa-history"></i> Logs
+                        <a asp-controller="ITSupport" asp-action="Index">
+                            <i class="fas fa-headset"></i> IT Support
                         </a>
                     </li>
-                }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                    {
+                        <li>
+                            <a asp-controller="Reports" asp-action="AuditLog">
+                                <i class="fas fa-history"></i> Logs
+                            </a>
+                        </li>
+                    }
             </ul>
 
             <div class="sidebar-footer mt-auto p-3">

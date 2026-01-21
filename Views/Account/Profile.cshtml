@@ -1,0 +1,72 @@
+@model IT_Asset_Management_System.ViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IT_Asset_Management_System.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "My Profile";
+    var isProfile = ViewBag.IsProfile as bool? ?? false;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var userRoles = currentUser != null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
+    var isReadOnlyOrEmployee = ViewBag.IsReadOnlyOrEmployee as bool? ?? userRoles.Any(r => r == "Read Only" || r == "Employee");
+    var isAdminOrITManager = ViewBag.IsAdminOrITManager as bool? ?? userRoles.Any(r => r == "Admin" || r == "IT Manager");
+    var passwordChangedDate = ViewBag.PasswordChangedDate as DateTime?;
+}
+
+<div class="page-header mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <p class="text-muted">View your profile information</p>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user"></i> Profile Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">@(Model.Email ?? "—")</dd>
+
+                    <dt class="col-sm-3">Full Name:</dt>
+                    <dd class="col-sm-9">@(Model.FullName ?? "—")</dd>
+
+                    <dt class="col-sm-3">Department:</dt>
+                    <dd class="col-sm-9">@(Model.Department ?? "—")</dd>
+
+                    <dt class="col-sm-3">Role:</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-info">@(Model.Role ?? "—")</span>
+                    </dd>
+
+                    @if (passwordChangedDate.HasValue)
+                    {
+                        <dt class="col-sm-3">Password Last Changed:</dt>
+                        <dd class="col-sm-9">@passwordChangedDate.Value.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+                    }
+                    else
+                    {
+                        <dt class="col-sm-3">Password Last Changed:</dt>
+                        <dd class="col-sm-9">Never</dd>
+                    }
+                </dl>
+
+                <div class="mt-4">
+                    <a asp-action="EditProfile" class="btn btn-primary me-2">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                    <a asp-action="ChangePassword" class="btn btn-warning">
+                        <i class="fas fa-key"></i> Change Password
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

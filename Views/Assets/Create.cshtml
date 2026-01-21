@@ -22,7 +22,7 @@
                         <option value="">-- Select Asset Type --</option>
                         <option value="Computer" selected="@(ViewBag.PreSelectedAssetType?.ToString() == "Computer")">Computer</option>
                         <option value="Server" selected="@(ViewBag.PreSelectedAssetType?.ToString() == "Server")">Server</option>
-                        <option value="Application" selected="@(ViewBag.PreSelectedAssetType?.ToString() == "Application")">Application</option>
+                        <option value="Application" selected="@(ViewBag.PreSelectedAssetType?.ToString() == "Application")">Software Application</option>
                     </select>
                     <span asp-validation-for="AssetType" class="text-danger"></span>
                 </div>
