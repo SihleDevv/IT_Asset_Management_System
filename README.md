@@ -73,7 +73,7 @@ A comprehensive web-based IT Asset Management System built with ASP.NET Core MVC
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Siphesiihe/IT_Asset_Management_System.git
+   git clone https://github.com/SihleDevv/IT_Asset_Management_System.git
    cd IT_Asset_Management_System/IT_Asset_Management_System
    ```
 
