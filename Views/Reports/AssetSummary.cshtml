@@ -6,16 +6,56 @@
     var computersByStatus = ViewBag?.ComputersByStatus as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
     var serversByStatus = ViewBag?.ServersByStatus as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
     var applicationsByStatus = ViewBag?.ApplicationsByStatus as IEnumerable<dynamic> ?? Enumerable.Empty<dynamic>();
+    var assetTypeFilter = ViewBag?.AssetTypeFilter as string ?? "";
 }
 
-<div class="page-header">
+<div class="page-header mb-3">
     <h1>Asset Summary Report</h1>
 </div>
 
-<div class="mb-3">
-    <button class="btn btn-success" onclick="window.print()">
-        <i class="fas fa-print"></i> Print Report
-    </button>
+<!-- Filter and Export Section -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form asp-action="AssetSummary" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="assetTypeFilter" class="form-label">Filter by Asset Type</label>
+                <select name="assetTypeFilter" id="assetTypeFilter" class="form-select">
+                    <option value="">All Asset Types</option>
+                    <option value="Computer" selected="@(assetTypeFilter == "Computer")">Computers</option>
+                    <option value="Server" selected="@(assetTypeFilter == "Server")">Servers</option>
+                    <option value="Application" selected="@(assetTypeFilter == "Application")">Applications</option>
+                </select>
+            </div>
+            
+            <div class="col-md-8 d-flex gap-2 align-items-end">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-filter"></i> Apply Filter
+                </button>
+                <a asp-action="AssetSummary" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Clear
+                </a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportAssetSummaryToCsv" 
+                               asp-route-assetTypeFilter="@assetTypeFilter">
+                                <i class="fas fa-file-csv"></i> Export as CSV
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportAssetSummaryToPdf" 
+                               asp-route-assetTypeFilter="@assetTypeFilter">
+                                <i class="fas fa-file-pdf"></i> Export as PDF
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="dashboard-cards d-flex gap-3 mb-4">

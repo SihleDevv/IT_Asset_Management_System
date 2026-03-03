@@ -1,0 +1,6 @@
+Asset Type,Asset Tag,Asset Name,Brand,Model,Serial Number,Location,Status,Assigned To,Operating System,Processor,RAM (GB),Storage (GB),Purchase Date,Purchase Price,Vendor,Warranty Expiry Date,Notes
+Computer,COMP-001,Desktop PC,Dell,OptiPlex 7090,SN123456,Office A,In Use,User1,Windows 11,i7-11700,16,512,1/15/2024,1500,Dell,1/15/2027,Primary workstation
+Computer,COMP-002,Laptop,Dell,Latitude 5520,SN789012,Office B,In Use,User2,Windows 11,i5-11400,8,256,2/1/2024,1200,Dell,2/1/2027,Standard laptop
+Computer,COMP-003,Desktop PC,HP,EliteDesk 800,SN345678,Office C,Available,User3,Windows 10,i5-10400,8,256,12/10/2023,1100,HP,12/10/2026,Spare computer
+Computer,COMP-004,Workstation,Lenovo,ThinkStation P350,SN901234,Lab,In Use,User4,Windows 11,Xeon W-1290,32,1000,3/1/2024,2500,Lenovo,3/1/2027,Development workstation
+Computer,COMP-005,All-in-One,HP,EliteOne 800,SN567890,Reception,In Use,User5,Windows 11,i5-11500,16,512,1/20/2024,1800,HP,1/20/2027,Reception desk computer

@@ -12,11 +12,69 @@
                .ToList();
 }
 
-<h1>Application Report</h1>
+<div class="page-header mb-3">
+    <h1>Application Report</h1>
+</div>
 
-<div class="mb-3">
-    <button class="btn btn-success" onclick="window.print()">Print Report</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to Reports</a>
+<!-- Search and Filter Section -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form asp-action="ApplicationReport" method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="searchTerm" class="form-label">Search</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="searchTerm" 
+                       name="searchTerm" 
+                       value="@ViewBag.SearchTerm" 
+                       placeholder="Search by Asset Tag, Name, Version, Vendor, Category, or Location..." />
+            </div>
+            
+            <div class="col-md-3">
+                <label for="statusFilter" class="form-label">Status</label>
+                <select name="statusFilter" id="statusFilter" class="form-select">
+                    <option value="">All Statuses</option>
+                    @if (ViewBag.Statuses != null)
+                    {
+                        foreach (var status in ViewBag.Statuses)
+                        {
+                            <option value="@status" selected="@(ViewBag.StatusFilter as string == status)">@status</option>
+                        }
+                    }
+                </select>
+            </div>
+            
+            <div class="col-md-4 d-flex gap-2 align-items-end">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+                <a asp-action="ApplicationReport" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Clear
+                </a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportApplicationReportToCsv" 
+                               asp-route-searchTerm="@ViewBag.SearchTerm" 
+                               asp-route-statusFilter="@ViewBag.StatusFilter">
+                                <i class="fas fa-file-csv"></i> Export as CSV
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportApplicationReportToPdf" 
+                               asp-route-searchTerm="@ViewBag.SearchTerm" 
+                               asp-route-statusFilter="@ViewBag.StatusFilter">
+                                <i class="fas fa-file-pdf"></i> Export as PDF
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card">
@@ -26,14 +84,11 @@
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
+                        <th>Asset Tag</th>
                         <th>Application Name</th>
                         <th>Version</th>
                         <th>Category</th>
-                        <th>Business Unit</th>
-                        <th>Application Owner</th>
-                        <th>License Holder</th>
                         <th>Vendor</th>
-                        <th>Location</th>
                         <th>Status</th>
                         <th>Requires License</th>
                         <th>License Type</th>
@@ -45,14 +100,11 @@
                     @foreach (var item in list)
                     {
                         <tr>
+                            <td><strong>@(item?.AssetTag ?? "—")</strong></td>
                             <td>@(item?.AssetName ?? "—")</td>
                             <td>@(item?.Version ?? "—")</td>
                             <td>@(item?.Category ?? "—")</td>
-                            <td>@(item?.BusinessUnit ?? "—")</td>
-                            <td>@(item?.ApplicationOwner ?? "—")</td>
-                            <td>@(item?.LicenseHolder ?? "—")</td>
                             <td>@(item?.Vendor ?? "—")</td>
-                            <td>@(item?.Location ?? "—")</td>
                             <td>
                                 @if (item != null)
                                 {

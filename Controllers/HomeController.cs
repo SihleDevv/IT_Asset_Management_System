@@ -46,23 +46,26 @@ namespace IT_Asset_Management_System.Controllers
                 var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email;
                 var userEmail = currentUser.Email;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference - null checks are performed before dereferencing
                 // Filter computers assigned to user
                 baseComputerQuery = baseComputerQuery
-                    .Where(c => (c.AssignedTo.ToLower() == userFullName.ToLower() || 
-                                c.AssignedTo.ToLower() == userEmail!.ToLower()) &&
-                                c.AssignedTo.ToLower() != "unassigned");
+                    .Where(c => c.AssignedTo != null && c.AssignedTo != "" &&
+                                (c.AssignedTo!.ToLower() == userFullName.ToLower() || 
+                                c.AssignedTo!.ToLower() == userEmail!.ToLower()) &&
+                                c.AssignedTo!.ToLower() != "unassigned");
 
                 // Filter servers where user is project manager
                 baseServerQuery = baseServerQuery
-                    .Where(s => (s.ProjectManagerName != null && 
-                                (s.ProjectManagerName.ToLower() == userFullName.ToLower() || 
-                                 s.ProjectManagerName.ToLower() == userEmail!.ToLower())));
+                    .Where(s => s.ProjectManagerName != null && s.ProjectManagerName != "" && 
+                                (s.ProjectManagerName!.ToLower() == userFullName.ToLower() || 
+                                 s.ProjectManagerName!.ToLower() == userEmail!.ToLower()));
 
                 // Filter applications where user is owner
                 baseApplicationQuery = baseApplicationQuery
-                    .Where(a => (a.ApplicationOwner != null && 
-                                (a.ApplicationOwner.ToLower() == userFullName.ToLower() || 
-                                 a.ApplicationOwner.ToLower() == userEmail!.ToLower())));
+                    .Where(a => a.ApplicationOwner != null && a.ApplicationOwner != "" && 
+                                (a.ApplicationOwner!.ToLower() == userFullName.ToLower() || 
+                                 a.ApplicationOwner!.ToLower() == userEmail!.ToLower()));
+#pragma warning restore CS8602
             }
 
             var viewModel = new DashboardViewModel

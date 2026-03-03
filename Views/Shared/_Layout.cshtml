@@ -48,7 +48,7 @@
                     @if (!User.IsInRole("IT Support Supervisor") && !User.IsInRole("IT Support"))
                     {
                         <li>
-                            <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'assetsMenu')">
+                            <a asp-controller="Assets" asp-action="Index">
                                 <i class="fas fa-box"></i> Assets
                             </a>
                             <ul class="sidebar-submenu list-unstyled" id="assetsMenu">
@@ -68,7 +68,7 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
                     {
                         <li>
-                            <a href="#" class="sidebar-dropdown-toggle" onclick="toggleSubmenu(event, 'reportsMenu')">
+                            <a asp-controller="Reports" asp-action="AssetSummary">
                                 <i class="fas fa-chart-bar"></i> Reports
                             </a>
                             <ul class="sidebar-submenu list-unstyled" id="reportsMenu">
@@ -119,8 +119,30 @@
         </div>
 
             <div class="main-content">
+                @{
+                    var currentUser = await UserManager.GetUserAsync(User);
+                    var userRoles = currentUser != null ? await UserManager.GetRolesAsync(currentUser) : new List<string>();
+                    // Priority order: Admin > IT Manager > IT Support Supervisor > IT Support > Employee > Read Only
+                    var rolePriority = new Dictionary<string, int>
+                    {
+                        { "Admin", 1 },
+                        { "IT Manager", 2 },
+                        { "IT Support Supervisor", 3 },
+                        { "IT Support", 4 },
+                        { "Employee", 5 },
+                        { "Read Only", 6 }
+                    };
+                    var primaryRole = userRoles
+                        .OrderBy(r => rolePriority.ContainsKey(r) ? rolePriority[r] : 99)
+                        .FirstOrDefault() ?? "User";
+                }
                 <div class="top-navbar p-3 border-bottom">
                     <h4 class="mb-0">@ViewData["Title"]</h4>
+                    <div class="user-role-badge">
+                        <span class="badge bg-primary">
+                            <i class="fas fa-user-shield"></i> @primaryRole
+                        </span>
+                    </div>
                 </div>
 
                 <div class="content-area p-4">
@@ -142,7 +164,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function toggleSubmenu(event, menuId) {
-            event.preventDefault();
             var submenu = document.getElementById(menuId);
             if (!submenu) return;
             submenu.classList.toggle('show');

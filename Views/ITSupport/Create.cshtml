@@ -61,33 +61,48 @@
         </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <label asp-for="AssetType" class="form-label">Related Asset Type <span class="text-danger">*</span></label>
+    @if (isAdminOrITManager)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label asp-for="AssetType" class="form-label">Related Asset Type <span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-9">
+                <select asp-for="AssetType" class="form-select" id="assetType" required>
+                    <option value="" selected="@(string.IsNullOrEmpty(Model.AssetType))">-- Select Asset Type --</option>
+                    <option value="Computer" selected="@(Model.AssetType == "Computer")">Computer</option>
+                    <option value="Server" selected="@(Model.AssetType == "Server")">Server</option>
+                    <option value="Application" selected="@(Model.AssetType == "Application")">Application</option>
+                </select>
+                <span asp-validation-for="AssetType" class="text-danger"></span>
+            </div>
         </div>
-        <div class="col-md-9">
-            <select asp-for="AssetType" class="form-select" id="assetType" required>
-                <option value="" selected="@(string.IsNullOrEmpty(Model.AssetType))">-- Select Asset Type --</option>
-                <option value="Computer" selected="@(Model.AssetType == "Computer")">Computer</option>
-                <option value="Server" selected="@(Model.AssetType == "Server")">Server</option>
-                <option value="Application" selected="@(Model.AssetType == "Application")">Application</option>
-            </select>
-            <span asp-validation-for="AssetType" class="text-danger"></span>
-        </div>
-    </div>
+    }
+    else
+    {
+        <input type="hidden" asp-for="AssetType" id="assetType" value="" />
+    }
 
-    <div class="row mb-3" id="assetIdRow" style="display: none;">
-        <div class="col-md-3">
-            <label asp-for="RelatedAssetId" class="form-label">Related Asset <span class="text-danger">*</span></label>
+    @if (isAdminOrITManager)
+    {
+        <div class="row mb-3" id="assetIdRow" style="display: none;">
+            <div class="col-md-3">
+                <label asp-for="RelatedAssetId" class="form-label">Related Asset <span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-9">
+                <select asp-for="RelatedAssetId" class="form-select" id="relatedAssetId" required>
+                    <option value="0">-- Select Asset --</option>
+                </select>
+                <input type="hidden" asp-for="RelatedAssetName" id="relatedAssetName" />
+                <span asp-validation-for="RelatedAssetId" class="text-danger"></span>
+            </div>
         </div>
-        <div class="col-md-9">
-            <select asp-for="RelatedAssetId" class="form-select" id="relatedAssetId" required>
-                <option value="0">-- Select Asset --</option>
-            </select>
-            <input type="hidden" asp-for="RelatedAssetName" id="relatedAssetName" />
-            <span asp-validation-for="RelatedAssetId" class="text-danger"></span>
-        </div>
-    </div>
+    }
+    else
+    {
+        <input type="hidden" asp-for="RelatedAssetId" id="relatedAssetId" value="0" />
+        <input type="hidden" asp-for="RelatedAssetName" id="relatedAssetName" value="" />
+    }
 
     <div class="row">
         <div class="col-md-9 offset-md-3">
@@ -135,110 +150,120 @@
             Application: @Html.Raw(Json.Serialize(applicationList))
         };
 
-        document.getElementById('assetType').addEventListener('change', function() {
-            const assetType = this.value;
-            const assetIdRow = document.getElementById('assetIdRow');
-            const relatedAssetId = document.getElementById('relatedAssetId');
-            const relatedAssetName = document.getElementById('relatedAssetName');
-            
-            if (assetType && assetData[assetType] && assetData[assetType].length > 0) {
-                assetIdRow.style.display = 'block';
-                relatedAssetId.innerHTML = '<option value="0">-- Select Asset --</option>';
-                
-                assetData[assetType].forEach(function(asset) {
-                    const option = document.createElement('option');
-                    option.value = asset.id;
-                    option.textContent = asset.name;
-                    relatedAssetId.appendChild(option);
-                });
-                relatedAssetId.required = true;
-                relatedAssetId.removeAttribute('disabled');
-            } else {
-                assetIdRow.style.display = 'none';
-                relatedAssetId.value = '0';
-                relatedAssetId.required = false;
-                relatedAssetName.value = '';
-            }
-        });
-
-        // Update asset name when selection changes
-        document.getElementById('relatedAssetId').addEventListener('change', function() {
-            const assetType = document.getElementById('assetType').value;
-            const selectedId = parseInt(this.value);
-            const relatedAssetName = document.getElementById('relatedAssetName');
-            
-            if (assetType && assetData[assetType] && selectedId && selectedId > 0) {
-                const selectedAsset = assetData[assetType].find(a => a.id === selectedId);
-                if (selectedAsset) {
-                    relatedAssetName.value = selectedAsset.name;
-                }
-            } else {
-                relatedAssetName.value = '';
-            }
-        });
-
-        // Initialize if asset type is pre-selected
-        @if (!string.IsNullOrEmpty(Model.AssetType))
+        @if (isAdminOrITManager)
         {
             <text>
-            document.getElementById('assetType').dispatchEvent(new Event('change'));
-            @if (Model.RelatedAssetId > 0)
-            {
-                <text>
-                setTimeout(function() {
-                    document.getElementById('relatedAssetId').value = '@Model.RelatedAssetId';
-                    document.getElementById('relatedAssetId').dispatchEvent(new Event('change'));
-                }, 100);
-                </text>
-            }
+            document.getElementById('assetType').addEventListener('change', function() {
+                const assetType = this.value;
+                const assetIdRow = document.getElementById('assetIdRow');
+                const relatedAssetId = document.getElementById('relatedAssetId');
+                const relatedAssetName = document.getElementById('relatedAssetName');
+                
+                if (assetType && assetData[assetType] && assetData[assetType].length > 0) {
+                    assetIdRow.style.display = 'block';
+                    relatedAssetId.innerHTML = '<option value="0">-- Select Asset --</option>';
+                    
+                    assetData[assetType].forEach(function(asset) {
+                        const option = document.createElement('option');
+                        option.value = asset.id;
+                        option.textContent = asset.name;
+                        relatedAssetId.appendChild(option);
+                    });
+                    relatedAssetId.required = true;
+                    relatedAssetId.removeAttribute('disabled');
+                } else {
+                    assetIdRow.style.display = 'none';
+                    relatedAssetId.value = '0';
+                    relatedAssetId.required = false;
+                    relatedAssetName.value = '';
+                }
+            });
             </text>
         }
 
-        // Form validation - ensure asset is selected before submit
-        const ticketForm = document.getElementById('ticketForm');
-        if (ticketForm) {
-            ticketForm.addEventListener('submit', function(e) {
-                const assetTypeEl = document.getElementById('assetType');
-                const relatedAssetIdEl = document.getElementById('relatedAssetId');
-                const assetIdRow = document.getElementById('assetIdRow');
-                
-                const assetType = assetTypeEl ? assetTypeEl.value : '';
-                const relatedAssetId = relatedAssetIdEl ? relatedAssetIdEl.value : '';
-                
-                // Validate Asset Type
-                if (!assetType || assetType.trim() === '') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    alert('Please select an Asset Type before submitting the ticket.');
-                    if (assetTypeEl) assetTypeEl.focus();
-                    return false;
-                }
-                
-                // Validate Related Asset
-                if (!relatedAssetId || relatedAssetId === '' || relatedAssetId === '0') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    alert('Please select a Related Asset before submitting the ticket.');
-                    if (assetIdRow && assetIdRow.style.display !== 'none' && relatedAssetIdEl) {
-                        relatedAssetIdEl.focus();
-                    } else if (assetTypeEl) {
-                        assetTypeEl.focus();
-                    }
-                    return false;
-                }
-                
-                // Ensure RelatedAssetName is set before submit
+        @if (isAdminOrITManager)
+        {
+            <text>
+            // Update asset name when selection changes
+            document.getElementById('relatedAssetId').addEventListener('change', function() {
+                const assetType = document.getElementById('assetType').value;
+                const selectedId = parseInt(this.value);
                 const relatedAssetName = document.getElementById('relatedAssetName');
-                if (relatedAssetName && !relatedAssetName.value && relatedAssetIdEl) {
-                    const selectedOption = relatedAssetIdEl.selectedOptions[0];
-                    if (selectedOption && selectedOption.value !== '0' && selectedOption.value !== '') {
-                        relatedAssetName.value = selectedOption.textContent;
-                    }
-                }
                 
-                // Allow form to submit if validation passes
-                return true;
+                if (assetType && assetData[assetType] && selectedId && selectedId > 0) {
+                    const selectedAsset = assetData[assetType].find(a => a.id === selectedId);
+                    if (selectedAsset) {
+                        relatedAssetName.value = selectedAsset.name;
+                    }
+                } else {
+                    relatedAssetName.value = '';
+                }
             });
+
+            // Initialize if asset type is pre-selected
+            @if (!string.IsNullOrEmpty(Model.AssetType))
+            {
+                <text>
+                document.getElementById('assetType').dispatchEvent(new Event('change'));
+                @if (Model.RelatedAssetId > 0)
+                {
+                    <text>
+                    setTimeout(function() {
+                        document.getElementById('relatedAssetId').value = '@Model.RelatedAssetId';
+                        document.getElementById('relatedAssetId').dispatchEvent(new Event('change'));
+                    }, 100);
+                    </text>
+                }
+                </text>
+            }
+
+            // Form validation - ensure asset is selected before submit
+            const ticketForm = document.getElementById('ticketForm');
+            if (ticketForm) {
+                ticketForm.addEventListener('submit', function(e) {
+                    const assetTypeEl = document.getElementById('assetType');
+                    const relatedAssetIdEl = document.getElementById('relatedAssetId');
+                    const assetIdRow = document.getElementById('assetIdRow');
+                    
+                    const assetType = assetTypeEl ? assetTypeEl.value : '';
+                    const relatedAssetId = relatedAssetIdEl ? relatedAssetIdEl.value : '';
+                    
+                    // Validate Asset Type
+                    if (!assetType || assetType.trim() === '') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Please select an Asset Type before submitting the ticket.');
+                        if (assetTypeEl) assetTypeEl.focus();
+                        return false;
+                    }
+                    
+                    // Validate Related Asset
+                    if (!relatedAssetId || relatedAssetId === '' || relatedAssetId === '0') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Please select a Related Asset before submitting the ticket.');
+                        if (assetIdRow && assetIdRow.style.display !== 'none' && relatedAssetIdEl) {
+                            relatedAssetIdEl.focus();
+                        } else if (assetTypeEl) {
+                            assetTypeEl.focus();
+                        }
+                        return false;
+                    }
+                    
+                    // Ensure RelatedAssetName is set before submit
+                    const relatedAssetName = document.getElementById('relatedAssetName');
+                    if (relatedAssetName && !relatedAssetName.value && relatedAssetIdEl) {
+                        const selectedOption = relatedAssetIdEl.selectedOptions[0];
+                        if (selectedOption && selectedOption.value !== '0' && selectedOption.value !== '') {
+                            relatedAssetName.value = selectedOption.textContent;
+                        }
+                    }
+                    
+                    // Allow form to submit if validation passes
+                    return true;
+                });
+            }
+            </text>
         }
     </script>
 }

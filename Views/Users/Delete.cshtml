@@ -22,6 +22,7 @@
     var computersCount = ViewBag.ComputersCount as int? ?? 0;
     var serversCount = ViewBag.ServersCount as int? ?? 0;
     var applicationsCount = ViewBag.ApplicationsCount as int? ?? 0;
+    var itSupportTicketsCount = ViewBag.ITSupportTicketsCount as int? ?? 0;
     var hasDependencies = ViewBag.HasDependencies as bool? ?? false;
 }
 
@@ -42,6 +43,10 @@
             @if (applicationsCount > 0)
             {
                 <li><strong>@applicationsCount</strong> application(s) as Application Owner</li>
+            }
+            @if (itSupportTicketsCount > 0)
+            {
+                <li><strong>@itSupportTicketsCount</strong> IT Support ticket(s) (as customer, technician, or supervisor)</li>
             }
         </ul>
         <p class="mb-0"><strong>You must reassign or remove these dependencies before deleting this user.</strong></p>

@@ -3,7 +3,7 @@
     ViewData["Title"] = "Manage Server Applications";
 }
 
-<h1>Manage Applications - @Model.Server?.ServerName</h1>
+<h1>Applications - @Model.Server?.ServerName</h1>
 
 <div class="row">
     <div class="col-md-6">

@@ -3,6 +3,7 @@
     ViewData["Title"] = "Edit User";
     var userId = ViewBag.UserId as string ?? "";
     var isEdit = ViewBag.IsEdit as bool? ?? false;
+    var disablePasswordFields = ViewBag.DisablePasswordFields as bool? ?? false;
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -55,18 +56,36 @@
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Password">Password (leave blank to keep current password)</label>
-                <input asp-for="Password" class="form-control" type="password" />
-                <small class="form-text text-muted">Only enter a password if you want to change it.</small>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+            @if (disablePasswordFields)
+            {
+                <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input class="form-control" type="password" value="********" disabled />
+                    <small class="form-text text-muted">
+                        Password cannot be changed here. Use <strong>Password Management</strong> (for admins) or
+                        <strong>My Profile &gt; Change Password</strong> to update the password.
+                    </small>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Confirm Password</label>
+                    <input class="form-control" type="password" value="********" disabled />
+                </div>
+            }
+            else
+            {
+                <div class="form-group mb-3">
+                    <label asp-for="Password">Password (leave blank to keep current password)</label>
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <small class="form-text text-muted">Only enter a password if you want to change it.</small>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="ConfirmPassword">Confirm Password</label>
-                <input asp-for="ConfirmPassword" class="form-control" type="password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            }
 
             <button type="submit" class="btn btn-primary">Update User</button>
             <a asp-action="Index" class="btn btn-secondary">Cancel</a>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IT_Asset_Management_System.Migrations
 {
     /// <inheritdoc />
-    public partial class AddLastActionDateToTickets : Migration
+    public partial class AddLastActionDateToTickets : Migration 
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

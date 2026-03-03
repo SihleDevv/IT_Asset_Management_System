@@ -3,13 +3,13 @@
 @{
     var m = Model;
     var isNull = m == null;
-    ViewData["Title"] = isNull ? "Asset Details" : (m.AssetType + " Details");
+    ViewData["Title"] = isNull ? "Asset Details" : ((m?.AssetType ?? "") + " Details");
     var serverApps = ViewBag.ServerApplications as List<IT_Asset_Management_System.Models.ServerApplication>;
 }
 
 <div class="page-header">
-    <h1>@(isNull ? "—" : m.AssetName)</h1>
-    <p class="text-muted">@((isNull ? "Asset" : m.AssetType)) - @(isNull ? "—" : m.AssetTag)</p>
+    <h1>@(isNull ? "—" : (m?.AssetName ?? "—"))</h1>
+    <p class="text-muted">@((isNull ? "Asset" : (m?.AssetType ?? "—"))) - @(isNull ? "—" : (m?.AssetTag ?? "—"))</p>
 </div>
 
 <div class="card">
@@ -19,26 +19,26 @@
                 <h5><i class="fas fa-info-circle"></i> Basic Information</h5>
                 <dl class="row">
                     <dt class="col-sm-4">Asset Tag</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : m.AssetTag))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.AssetTag ?? "—")))</dd>
 
                     <dt class="col-sm-4">Asset Name</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : m.AssetName))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.AssetName ?? "—")))</dd>
 
                     <dt class="col-sm-4">Brand</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : (m.Brand ?? "—")))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.Brand ?? "—")))</dd>
 
                     <dt class="col-sm-4">Model</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : (m.Model ?? "—")))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.Model ?? "—")))</dd>
 
-                    @if (isNull || !string.Equals(m.AssetType, "Application", System.StringComparison.OrdinalIgnoreCase))
+                    @if (isNull || !string.Equals(m?.AssetType ?? "", "Application", System.StringComparison.OrdinalIgnoreCase))
                     {
                         <dt class="col-sm-4">Serial Number</dt>
-                        <dd class="col-sm-8">@((isNull ? "—" : (m.SerialNumber ?? "—")))</dd>
+                        <dd class="col-sm-8">@((isNull ? "—" : (m?.SerialNumber ?? "—")))</dd>
                     }
 
                     <dt class="col-sm-4">Status</dt>
                     <dd class="col-sm-8">
-                        <span class="badge bg-success">@((isNull ? "—" : (m.Status ?? "—")))</span>
+                        <span class="badge bg-success">@((isNull ? "—" : (m?.Status ?? "—")))</span>
                     </dd>
                 </dl>
             </div>
@@ -47,25 +47,25 @@
                 <h5><i class="fas fa-rand-sign"></i> Purchase Information</h5>
                 <dl class="row">
                     <dt class="col-sm-4">Purchase Date</dt>
-                    <dd class="col-sm-8">@(isNull ? "N/A" : m.PurchaseDate.ToString("yyyy-MM-dd"))</dd>
+                    <dd class="col-sm-8">@(isNull ? "N/A" : (m?.PurchaseDate.ToString("yyyy-MM-dd") ?? "N/A"))</dd>
 
                     <dt class="col-sm-4">Purchase Price</dt>
-                    <dd class="col-sm-8">@(isNull ? "N/A" : (m.PurchasePrice.HasValue ? string.Format("R {0:N2}", m.PurchasePrice.Value) : "N/A"))</dd>
+                    <dd class="col-sm-8">@(isNull ? "N/A" : (m?.PurchasePrice.HasValue == true ? string.Format("R {0:N2}", m.PurchasePrice.Value) : "N/A"))</dd>
 
                     <dt class="col-sm-4">Vendor</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : (m.Vendor ?? "—")))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.Vendor ?? "—")))</dd>
 
                     <dt class="col-sm-4">Warranty Expiry</dt>
-                    <dd class="col-sm-8">@((isNull || m.WarrantyExpiryDate == null) ? "N/A" : ((DateTime)m.WarrantyExpiryDate).ToString("yyyy-MM-dd"))</dd>
+                    <dd class="col-sm-8">@((isNull || m?.WarrantyExpiryDate == null) ? "N/A" : ((DateTime)m.WarrantyExpiryDate).ToString("yyyy-MM-dd"))</dd>
 
                     <dt class="col-sm-4">Location</dt>
-                    <dd class="col-sm-8">@((isNull ? "—" : (m.Location ?? "—")))</dd>
+                    <dd class="col-sm-8">@((isNull ? "—" : (m?.Location ?? "—")))</dd>
                 </dl>
             </div>
         </div>
 
         @* Computer details *@
-        @if (!isNull && string.Equals(m.AssetType, "Computer", System.StringComparison.OrdinalIgnoreCase))
+        @if (!isNull && string.Equals(m?.AssetType ?? "", "Computer", System.StringComparison.OrdinalIgnoreCase))
         {
             var computer = m as IT_Asset_Management_System.Models.Computer;
             <hr />
@@ -98,7 +98,7 @@
         }
 
         @* Server details *@
-        @if (!isNull && string.Equals(m.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+        @if (!isNull && string.Equals(m?.AssetType ?? "", "Server", System.StringComparison.OrdinalIgnoreCase))
         {
             var server = m as IT_Asset_Management_System.Models.Server;
             <hr />
@@ -216,7 +216,7 @@
         }
 
         @* Application details *@
-        @if (!isNull && string.Equals(m.AssetType, "Application", System.StringComparison.OrdinalIgnoreCase))
+        @if (!isNull && string.Equals(m?.AssetType ?? "", "Application", System.StringComparison.OrdinalIgnoreCase))
         {
             var application = m as IT_Asset_Management_System.Models.Application;
             <hr />
@@ -280,18 +280,18 @@
             }
         }
 
-        @if (!isNull && !string.IsNullOrWhiteSpace(m.Notes))
+        @if (!isNull && !string.IsNullOrWhiteSpace(m?.Notes))
         {
             <hr />
             <h5><i class="fas fa-sticky-note"></i> Notes</h5>
-            <p>@m.Notes</p>
+            <p>@(m?.Notes ?? "")</p>
         }
 
         <hr />
         <p class="text-muted">
             <i class="fas fa-user"></i>
-            @($"Created by {(isNull ? "—" : (m.CreatedBy ?? "—"))} on {(isNull ? "N/A" : m.CreatedDate.ToString("yyyy-MM-dd HH:mm"))}")
-            @if (!isNull && m.ModifiedDate != null)
+            @($"Created by {(isNull ? "—" : (m?.CreatedBy ?? "—"))} on {(isNull ? "N/A" : (m?.CreatedDate.ToString("yyyy-MM-dd HH:mm") ?? "N/A"))}")
+            @if (!isNull && m?.ModifiedDate != null)
             {
                 <br />
                 <i class="fas fa-edit"></i>
@@ -304,13 +304,13 @@
 <div class="mt-3">
     @if (!isNull && (User.IsInRole("Admin") || User.IsInRole("IT Manager")))
     {
-        <a asp-action="Edit" asp-route-id="@(m.Id)" class="btn btn-warning">
+        <a asp-action="Edit" asp-route-id="@(m?.Id ?? 0)" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
         </a>
 
-        @if (string.Equals(m.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+        @if (string.Equals(m?.AssetType ?? "", "Server", System.StringComparison.OrdinalIgnoreCase))
         {
-            <a asp-action="ManageApplications" asp-route-id="@(m.Id)" class="btn btn-success">
+            <a asp-action="ManageApplications" asp-route-id="@(m?.Id ?? 0)" class="btn btn-success">
                 <i class="fas fa-cogs"></i> Manage Applications
             </a>
         }
@@ -318,19 +318,19 @@
 
     @if (!isNull && User.IsInRole("Admin"))
     {
-        <a asp-action="Delete" asp-route-id="@(m.Id)" class="btn btn-danger">
+        <a asp-action="Delete" asp-route-id="@(m?.Id ?? 0)" class="btn btn-danger">
             <i class="fas fa-trash"></i> Delete
         </a>
     }
 
     @if (!isNull)
     {
-        <a asp-controller="ITSupport" asp-action="Create" asp-route-assetType="@m.AssetType" asp-route-assetId="@m.Id" class="btn btn-info">
+        <a asp-controller="ITSupport" asp-action="Create" asp-route-assetType="@(m?.AssetType ?? "")" asp-route-assetId="@(m?.Id ?? 0)" class="btn btn-info">
             <i class="fas fa-headset"></i> Report Issue
         </a>
     }
 
-    <a asp-action="Index" asp-route-assetType="@(isNull ? "" : m.AssetType)" class="btn btn-secondary">
+    <a asp-action="Index" asp-route-assetType="@(isNull ? "" : (m?.AssetType ?? ""))" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Back to List
     </a>
 </div>

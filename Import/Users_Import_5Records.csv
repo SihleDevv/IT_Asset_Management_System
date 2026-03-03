@@ -1,0 +1,6 @@
+Full Name,Email,Department,Role,IsActive
+User1,User1@dws.com,IT,Employee,TRUE
+User2,User2@dws.com,HR,Employee,TRUE
+User3,User3@dws.com,Finance,IT Manager,TRUE
+User4,User4@dws.com,IT,IT Support,TRUE
+User5,User5@dws.com,Sales,Employee,TRUE

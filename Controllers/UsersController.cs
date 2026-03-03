@@ -138,6 +138,9 @@ namespace IT_Asset_Management_System.Controllers
 
             ViewBag.UserId = user.Id;
             ViewBag.IsEdit = true;
+            // Password fields should be disabled when Admin/Manager edits a user
+            // Password can only be changed through Password Management or My Profile
+            ViewBag.DisablePasswordFields = true;
             return View(viewModel);
         }
 
@@ -156,18 +159,17 @@ namespace IT_Asset_Management_System.Controllers
                 return NotFound();
             }
 
-            // Remove password validation errors if password is not provided (optional during edit)
-            if (string.IsNullOrWhiteSpace(model.Password))
-            {
-                ModelState.Remove(nameof(model.Password));
-                ModelState.Remove(nameof(model.ConfirmPassword));
-            }
+            // Password cannot be changed from this Edit action.
+            // It must be changed via Password Management (admin) or My Profile -> Change Password.
+            ModelState.Remove(nameof(model.Password));
+            ModelState.Remove(nameof(model.ConfirmPassword));
 
             // Validate other fields
             if (!ModelState.IsValid)
             {
                 ViewBag.UserId = id;
                 ViewBag.IsEdit = true;
+                ViewBag.DisablePasswordFields = true;
                 return View(model);
             }
 
@@ -186,6 +188,7 @@ namespace IT_Asset_Management_System.Controllers
                     }
                     ViewBag.UserId = id;
                     ViewBag.IsEdit = true;
+                    ViewBag.DisablePasswordFields = true;
                     return View(model);
                 }
 
@@ -198,23 +201,6 @@ namespace IT_Asset_Management_System.Controllers
                 if (!string.IsNullOrEmpty(model.Role))
                 {
                     await _userManager.AddToRoleAsync(user, model.Role);
-                }
-
-                // Update password if provided
-                if (!string.IsNullOrWhiteSpace(model.Password))
-                {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var passwordResult = await _userManager.ResetPasswordAsync(user, token, model.Password);
-                    if (!passwordResult.Succeeded)
-                    {
-                        foreach (var error in passwordResult.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                        ViewBag.UserId = id;
-                        ViewBag.IsEdit = true;
-                        return View(model);
-                    }
                 }
 
                 // Log the update
@@ -277,12 +263,20 @@ namespace IT_Asset_Management_System.Controllers
             var applicationsCount = await _context.Applications
                 .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
                 .CountAsync();
+            
+            // Check IT Support Tickets (ReportedByUserId, AssignedToUserId, StatusChangedByUserId)
+            var itSupportTicketsCount = await _context.ITSupportTickets
+                .Where(t => t.ReportedByUserId == user.Id || 
+                           t.AssignedToUserId == user.Id || 
+                           t.StatusChangedByUserId == user.Id)
+                .CountAsync();
 
             ViewBag.UserRole = currentRole;
             ViewBag.ComputersCount = computersCount;
             ViewBag.ServersCount = serversCount;
             ViewBag.ApplicationsCount = applicationsCount;
-            ViewBag.HasDependencies = computersCount > 0 || serversCount > 0 || applicationsCount > 0;
+            ViewBag.ITSupportTicketsCount = itSupportTicketsCount;
+            ViewBag.HasDependencies = computersCount > 0 || serversCount > 0 || applicationsCount > 0 || itSupportTicketsCount > 0;
 
             return View(user);
         }
@@ -329,13 +323,21 @@ namespace IT_Asset_Management_System.Controllers
             var applicationsCount = await _context.Applications
                 .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
                 .CountAsync();
+            
+            // Check IT Support Tickets (ReportedByUserId, AssignedToUserId, StatusChangedByUserId)
+            var itSupportTicketsCount = await _context.ITSupportTickets
+                .Where(t => t.ReportedByUserId == user.Id || 
+                           t.AssignedToUserId == user.Id || 
+                           t.StatusChangedByUserId == user.Id)
+                .CountAsync();
 
-            if (computersCount > 0 || serversCount > 0 || applicationsCount > 0)
+            if (computersCount > 0 || serversCount > 0 || applicationsCount > 0 || itSupportTicketsCount > 0)
             {
                 var dependencies = new List<string>();
                 if (computersCount > 0) dependencies.Add($"{computersCount} computer(s)");
                 if (serversCount > 0) dependencies.Add($"{serversCount} server(s)");
                 if (applicationsCount > 0) dependencies.Add($"{applicationsCount} application(s)");
+                if (itSupportTicketsCount > 0) dependencies.Add($"{itSupportTicketsCount} IT Support ticket(s)");
                 
                 TempData["ErrorMessage"] = $"Cannot delete user '{userFullName}'. User is linked to: {string.Join(", ", dependencies)}. Please reassign or remove these dependencies before deleting the user.";
                 return RedirectToAction(nameof(Delete), new { id });
@@ -362,6 +364,112 @@ namespace IT_Asset_Management_System.Controllers
             else
             {
                 TempData["ErrorMessage"] = "Error deleting user: " + string.Join(", ", result.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdmin")]
+        public async Task<IActionResult> BulkDelete(List<string> ids)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No records selected for deletion.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var currentUserId = _userManager.GetUserId(User);
+            var deletedCount = 0;
+            var failedCount = 0;
+            var errors = new List<string>();
+
+            foreach (var id in ids)
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    failedCount++;
+                    errors.Add($"User with ID {id} not found.");
+                    continue;
+                }
+
+                // Prevent deleting yourself
+                if (user.Id == currentUserId)
+                {
+                    failedCount++;
+                    errors.Add("You cannot delete your own account.");
+                    continue;
+                }
+
+                var userFullName = user.FullName ?? user.UserName ?? user.Email;
+                var userEmail = user.Email;
+
+                // Check dependencies
+                var computersCount = await _context.Computers
+                    .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
+                        && c.AssignedTo.ToLower() != "unassigned")
+                    .CountAsync();
+                
+                var serversCount = await _context.Servers
+                    .Where(s => s.ProjectManagerName == userFullName || s.ProjectManagerName == userEmail)
+                    .CountAsync();
+                
+                var applicationsCount = await _context.Applications
+                    .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
+                    .CountAsync();
+                
+                var itSupportTicketsCount = await _context.ITSupportTickets
+                    .Where(t => t.ReportedByUserId == id || t.AssignedToUserId == id || t.StatusChangedByUserId == id)
+                    .CountAsync();
+
+                if (computersCount > 0 || serversCount > 0 || applicationsCount > 0 || itSupportTicketsCount > 0)
+                {
+                    var dependencies = new List<string>();
+                    if (computersCount > 0) dependencies.Add($"{computersCount} computer(s)");
+                    if (serversCount > 0) dependencies.Add($"{serversCount} server(s)");
+                    if (applicationsCount > 0) dependencies.Add($"{applicationsCount} application(s)");
+                    if (itSupportTicketsCount > 0) dependencies.Add($"{itSupportTicketsCount} IT Support ticket(s)");
+                    
+                    failedCount++;
+                    errors.Add($"User '{userFullName}' is linked to: {string.Join(", ", dependencies)}.");
+                    continue;
+                }
+
+                // Log the deletion
+                _context.AuditLogs.Add(new AuditLog
+                {
+                    UserName = User.Identity?.Name ?? "",
+                    Action = "Bulk Delete User",
+                    EntityType = "User",
+                    EntityId = null,
+                    Details = $"Bulk deleted user: {user.Email} (ID: {user.Id})",
+                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                    Timestamp = DateTime.Now
+                });
+
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    deletedCount++;
+                }
+                else
+                {
+                    failedCount++;
+                    errors.Add($"Failed to delete user '{userFullName}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (deletedCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {deletedCount} user(s).";
+            }
+            if (failedCount > 0)
+            {
+                TempData["WarningMessage"] = $"{failedCount} user(s) could not be deleted. " + string.Join(" ", errors.Take(5));
             }
 
             return RedirectToAction(nameof(Index));
@@ -494,6 +602,237 @@ namespace IT_Asset_Management_System.Controllers
             }
 
             return RedirectToAction(nameof(PasswordManagement));
+        }
+
+        [HttpGet]
+        public IActionResult DownloadTemplate()
+        {
+            var csv = new System.Text.StringBuilder();
+            csv.AppendLine("Full Name,Email,Department,Role,IsActive");
+            // Use generic sample data (no real names)
+            csv.AppendLine("Sample User One,sample.user1@example.com,IT,Employee,true");
+            csv.AppendLine("Sample User Two,sample.user2@example.com,HR,Employee,true");
+
+            var fileName = "UserImportTemplate.csv";
+            return File(System.Text.Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", fileName);
+        }
+
+        [HttpGet]
+        public IActionResult Import()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Import(IFormFile csvFile)
+        {
+            var results = new List<string>();
+            var successCount = 0;
+            var errorCount = 0;
+
+            if (csvFile == null || csvFile.Length == 0)
+            {
+                TempData["ErrorMessage"] = "Please select a CSV file to import.";
+                return View();
+            }
+
+            if (!csvFile.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "Please upload a valid CSV file.";
+                return View();
+            }
+
+            // Default password for all imported users
+            const string defaultPassword = "TempPass123!@#";
+
+            try
+            {
+                using (var reader = new System.IO.StreamReader(csvFile.OpenReadStream()))
+                {
+                    var lineNumber = 0;
+                    string? line;
+
+                    // Read header line
+                    line = await reader.ReadLineAsync();
+                    lineNumber++;
+                    if (line == null)
+                    {
+                        TempData["ErrorMessage"] = "CSV file is empty.";
+                        return View();
+                    }
+
+                    // Process data lines
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        lineNumber++;
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+
+                        var fields = ParseCsvLine(line);
+                        if (fields.Count < 2)
+                        {
+                            results.Add($"Line {lineNumber}: Insufficient columns. Expected at least 2 (Full Name, Email).");
+                            errorCount++;
+                            continue;
+                        }
+
+                        var fullName = fields[0]?.Trim() ?? "";
+                        var email = fields.Count > 1 ? fields[1]?.Trim() ?? "" : "";
+                        var department = fields.Count > 2 ? fields[2]?.Trim() ?? "" : "";
+                        var role = fields.Count > 3 ? (fields[3]?.Trim() ?? "Employee") : "Employee";
+                        var isActive = true;
+                        if (fields.Count > 4 && bool.TryParse(fields[4]?.Trim(), out var active))
+                        {
+                            isActive = active;
+                        }
+
+                        // Validate required fields
+                        if (string.IsNullOrWhiteSpace(fullName))
+                        {
+                            results.Add($"Line {lineNumber}: Full Name is required.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+                        {
+                            results.Add($"Line {lineNumber}: Valid Email is required.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Check if user already exists
+                        var existingUser = await _userManager.FindByEmailAsync(email);
+                        if (existingUser != null)
+                        {
+                            results.Add($"Line {lineNumber}: User with email '{email}' already exists. Skipped.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Create user with default password
+                        var user = new ApplicationUser
+                        {
+                            UserName = email,
+                            Email = email,
+                            FullName = fullName,
+                            Department = department,
+                            IsActive = isActive,
+                            CreatedDate = DateTime.Now,
+                            EmailConfirmed = true,
+                            // Force password change on first login
+                            MustChangePassword = true,
+                            PasswordChangedDate = null // Null means password has never been changed
+                        };
+
+                        var createResult = await _userManager.CreateAsync(user, defaultPassword);
+                        if (createResult.Succeeded)
+                        {
+                            // Assign role
+                            if (!string.IsNullOrWhiteSpace(role))
+                            {
+                                var roleExists = await _roleManager.RoleExistsAsync(role);
+                                if (roleExists)
+                                {
+                                    await _userManager.AddToRoleAsync(user, role);
+                                }
+                                else
+                                {
+                                    results.Add($"Line {lineNumber}: Role '{role}' does not exist. User created without role.");
+                                }
+                            }
+
+                            // Log the creation
+                            _context.AuditLogs.Add(new AuditLog
+                            {
+                                UserName = User.Identity?.Name ?? "",
+                                Action = "Import User",
+                                EntityType = "User",
+                                EntityId = null,
+                                Details = $"Imported user: {email} (Default password: {defaultPassword})",
+                                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                                Timestamp = DateTime.Now
+                            });
+
+                            results.Add($"Line {lineNumber}: Successfully imported user '{fullName}' ({email}). Default password: {defaultPassword}");
+                            successCount++;
+                        }
+                        else
+                        {
+                            var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                            results.Add($"Line {lineNumber}: Failed to create user '{email}': {errors}");
+                            errorCount++;
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                ViewBag.Results = results;
+                ViewBag.SuccessCount = successCount;
+                ViewBag.ErrorCount = errorCount;
+                ViewBag.TotalCount = successCount + errorCount;
+                ViewBag.DefaultPassword = defaultPassword;
+
+                if (successCount > 0)
+                {
+                    TempData["SuccessMessage"] = $"Successfully imported {successCount} user(s). All users have default password: {defaultPassword} and must change it on first login.";
+                }
+                if (errorCount > 0)
+                {
+                    TempData["WarningMessage"] = $"{errorCount} user(s) failed to import. Check details below.";
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error processing CSV file: {ex.Message}";
+                return View();
+            }
+        }
+
+        private List<string> ParseCsvLine(string line)
+        {
+            var fields = new List<string>();
+            var currentField = "";
+            var inQuotes = false;
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                var ch = line[i];
+
+                if (ch == '"')
+                {
+                    if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                    {
+                        // Escaped quote
+                        currentField += '"';
+                        i++; // Skip next quote
+                    }
+                    else
+                    {
+                        // Toggle quote state
+                        inQuotes = !inQuotes;
+                    }
+                }
+                else if (ch == ',' && !inQuotes)
+                {
+                    // End of field
+                    fields.Add(currentField);
+                    currentField = "";
+                }
+                else
+                {
+                    currentField += ch;
+                }
+            }
+
+            // Add last field
+            fields.Add(currentField);
+
+            return fields;
         }
     }
 }

@@ -107,9 +107,16 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    display: none;
 }
 
     .sidebar-submenu.show {
+        max-height: 500px;
+        display: block;
+    }
+    
+    .sidebar-menu li:hover .sidebar-submenu {
+        display: block;
         max-height: 500px;
     }
 
@@ -172,6 +179,21 @@ body {
         display: flex;
         align-items: center;
         gap: 15px;
+    }
+
+    .top-navbar .user-role-badge {
+        display: flex;
+        align-items: center;
+    }
+
+    .top-navbar .user-role-badge .badge {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        font-weight: 500;
+    }
+
+    .top-navbar .user-role-badge .badge i {
+        margin-right: 5px;
     }
 
 .content-area {

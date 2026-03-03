@@ -101,20 +101,6 @@
         }
 
         <div class="row mb-3">
-            <div class="col-md-3"><strong>Related Asset:</strong></div>
-            <div class="col-md-9">
-                @if (!string.IsNullOrEmpty(Model.RelatedAssetName))
-                {
-                    <span>@Model.AssetType: @Model.RelatedAssetName</span>
-                }
-                else
-                {
-                    <span class="text-muted">None</span>
-                }
-            </div>
-        </div>
-
-        <div class="row mb-3">
             <div class="col-md-3"><strong>Created Date:</strong></div>
             <div class="col-md-9">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</div>
         </div>

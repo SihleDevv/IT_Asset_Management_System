@@ -1,0 +1,186 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Bulk Edit Assets";
+    var assetIds = ViewBag.AssetIds as string ?? "";
+    var assetCount = ViewBag.AssetCount as int? ?? 0;
+    var assetTypes = ViewBag.AssetTypes as List<string> ?? new List<string>();
+    var assets = Model?.Assets as List<IT_Asset_Management_System.Models.BaseAsset> ?? new List<IT_Asset_Management_System.Models.BaseAsset>();
+}
+
+<div class="page-header mb-3">
+    <h1>Bulk Edit Assets</h1>
+    <p class="text-muted">Update common fields for @assetCount selected asset(s)</p>
+    @if (assetTypes.Any())
+    {
+        <p class="text-info">
+            <i class="fas fa-info-circle"></i> 
+            Asset Types: @string.Join(", ", assetTypes.Distinct())
+        </p>
+    }
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Selected Assets</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>Asset Tag</th>
+                        <th>Asset Name</th>
+                        <th>Type</th>
+                        <th>Brand</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var asset in assets)
+                    {
+                        <tr>
+                            <td><strong>@asset.AssetTag</strong></td>
+                            <td>@asset.AssetName</td>
+                            <td>
+                                @if (asset.AssetType == "Computer")
+                                {
+                                    <span class="badge bg-primary">@asset.AssetType</span>
+                                }
+                                else if (asset.AssetType == "Server")
+                                {
+                                    <span class="badge bg-success">@asset.AssetType</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info">@asset.AssetType</span>
+                                }
+                            </td>
+                            <td>@asset.Brand</td>
+                            <td>@asset.Location</td>
+                            <td>
+                                @if (asset.Status == "Active" || asset.Status == "Available")
+                                {
+                                    <span class="badge bg-success">@asset.Status</span>
+                                }
+                                else if (asset.Status == "In Use")
+                                {
+                                    <span class="badge bg-primary">@asset.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@asset.Status</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h5>Update Common Fields</h5>
+        <p class="text-muted mb-0"><small>Only fill in the fields you want to update. Leave fields empty to keep existing values.</small></p>
+    </div>
+    <div class="card-body">
+        <form asp-action="BulkEdit" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="assetIds" value="@assetIds" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Brand" class="form-label">Brand</label>
+                    <input type="text" class="form-control" id="Brand" name="Brand" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="Model" class="form-label">Model</label>
+                    <input type="text" class="form-control" id="Model" name="Model" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="SerialNumber" class="form-label">Serial Number</label>
+                    <input type="text" class="form-control" id="SerialNumber" name="SerialNumber" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="Location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="Location" name="Location" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Status" class="form-label">Status</label>
+                    <select class="form-select" id="Status" name="Status">
+                        <option value="">-- Keep Existing --</option>
+                        <option value="Active">Active</option>
+                        <option value="In Use">In Use</option>
+                        <option value="Available">Available</option>
+                        <option value="Retired">Retired</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                    <small class="form-text text-muted">Select to update status for all assets</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="Vendor" class="form-label">Vendor</label>
+                    <input type="text" class="form-control" id="Vendor" name="Vendor" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="PurchaseDate" class="form-label">Purchase Date</label>
+                    <input type="date" class="form-control" id="PurchaseDate" name="PurchaseDate" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="PurchasePrice" class="form-label">Purchase Price</label>
+                    <input type="number" step="0.01" class="form-control" id="PurchasePrice" name="PurchasePrice" placeholder="Leave empty to keep existing" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="WarrantyExpiryDate" class="form-label">Warranty Expiry Date</label>
+                    <input type="date" class="form-control" id="WarrantyExpiryDate" name="WarrantyExpiryDate" />
+                    <small class="form-text text-muted">Leave empty to keep existing values</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Notes" class="form-label">Notes</label>
+                <textarea class="form-control" id="Notes" name="Notes" rows="3" placeholder="Leave empty to keep existing"></textarea>
+                <small class="form-text text-muted">Leave empty to keep existing values</small>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Note:</strong> Only the fields you fill in will be updated. Empty fields will keep their existing values for all selected assets.
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update All Selected Assets
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

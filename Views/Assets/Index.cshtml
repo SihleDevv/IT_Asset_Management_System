@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<IT_Asset_Management_System.Models.BaseAsset>
 
 @{
-    ViewData["Title"] = string.IsNullOrEmpty(ViewBag?.AssetType as string) ? "All Assets" : (ViewBag.AssetType + "s");
+    var assetType = ViewBag?.AssetType as string ?? "";
+    var searchTerm = ViewBag?.SearchTerm as string ?? "";
+    ViewData["Title"] = string.IsNullOrEmpty(assetType) ? "All Assets" : (assetType + "s");
 }
+
+@Html.AntiForgeryToken()
 
 <div class="page-header mb-3">
     <div class="d-flex justify-content-between align-items-center">
         <h1>@ViewData["Title"]</h1>
         @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
         {
-            <a asp-action="Create" asp-route-assetType="@ViewBag.AssetType" class="btn btn-primary">
+            <a asp-action="Create" asp-route-assetType="@assetType" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add New Asset
             </a>
         }
@@ -20,7 +24,7 @@
 <div class="card mb-3">
     <div class="card-body">
         <form asp-action="Index" method="get" class="row g-3 align-items-end">
-            <input type="hidden" name="assetType" value="@ViewBag.AssetType" />
+            <input type="hidden" name="assetType" value="@assetType" />
             
             <div class="col-md-8">
                 <label for="searchTerm" class="form-label">Search Assets</label>
@@ -29,14 +33,14 @@
                            class="form-control" 
                            id="searchTerm" 
                            name="searchTerm" 
-                           value="@ViewBag.SearchTerm" 
+                           value="@searchTerm" 
                            placeholder="Search by Asset Tag, Name, Brand, Location, or Status..." />
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-search"></i> Search
                     </button>
-                    @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+                    @if (!string.IsNullOrWhiteSpace(searchTerm))
                     {
-                        <a asp-action="Index" asp-route-assetType="@ViewBag.AssetType" class="btn btn-secondary">
+                        <a asp-action="Index" asp-route-assetType="@assetType" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Clear
                         </a>
                     }
@@ -44,14 +48,53 @@
             </div>
             
             <div class="col-md-4 text-end">
-                <a asp-action="ExportToCsv" 
-                   asp-route-assetType="@ViewBag.AssetType" 
-                   asp-route-searchTerm="@ViewBag.SearchTerm" 
-                   class="btn btn-success">
-                    <i class="fas fa-download"></i> Download CSV
-                </a>
+                <div class="btn-group me-2">
+                    <a asp-action="Import" asp-route-assetType="@assetType" class="btn btn-success btn-sm">
+                        <i class="fas fa-file-import"></i> Import
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportToCsv" 
+                               asp-route-assetType="@assetType" 
+                               asp-route-searchTerm="@searchTerm">
+                                <i class="fas fa-file-csv"></i> Export as CSV
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" asp-action="ExportToPdf" 
+                               asp-route-assetType="@assetType" 
+                               asp-route-searchTerm="@searchTerm">
+                                <i class="fas fa-file-pdf"></i> Export as PDF
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Bulk Actions Bar -->
+<div id="bulkActionsBar" class="card mb-3" style="display: none;">
+    <div class="card-body py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">
+                <span id="selectedCount">0</span> record(s) selected
+            </span>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-warning btn-sm" id="bulkEditBtn" onclick="bulkEditAssets()">
+                    <i class="fas fa-edit"></i> Edit Selected
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" id="bulkDeleteBtn" onclick="bulkDeleteAssets()">
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -59,6 +102,9 @@
     <table class="table table-hover table-striped">
         <thead class="table-light">
             <tr>
+                <th style="width:50px">
+                    <input type="checkbox" id="selectAllAssets" title="Select All" />
+                </th>
                 <th>Asset Tag</th>
                 <th>Asset Name</th>
                 <th>Type</th>
@@ -75,15 +121,18 @@
                 <tr>
                     <td colspan="7" class="bg-light fw-bold">
                         <i class="fas fa-info-circle"></i> Showing @filteredAssets.Count() asset(s)
-                        @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+                        @if (!string.IsNullOrWhiteSpace(searchTerm))
                         {
-                            <span class="text-muted">for "@ViewBag.SearchTerm"</span>
+                            <span class="text-muted">for "@searchTerm"</span>
                         }
                     </td>
                 </tr>
                 foreach (var asset in filteredAssets)
                 {
                     <tr>
+                        <td>
+                            <input type="checkbox" class="asset-checkbox" value="@asset.Id" />
+                        </td>
                         <td><strong>@asset.AssetTag</strong></td>
                         <td>@asset.AssetName</td>
                         <td>
@@ -117,30 +166,32 @@
                             }
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@asset.Id" class="btn btn-sm btn-info" title="Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
-
-                            @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@asset.Id" class="btn btn-sm btn-warning" title="Edit">
-                                    <i class="fas fa-edit"></i>
+                            <div class="d-flex gap-2 align-items-center">
+                                <a asp-action="Details" asp-route-id="@asset.Id" title="Details" style="text-decoration: none; color: #0dcaf0; font-size: 1.1rem;">
+                                    <i class="fas fa-eye"></i>
                                 </a>
 
-                                @if (string.Equals(asset.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+                                @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
                                 {
-                                    <a asp-action="ManageApplications" asp-route-id="@asset.Id" class="btn btn-sm btn-success" title="Manage Applications">
+                                    <a asp-action="Edit" asp-route-id="@asset.Id" title="Edit" style="text-decoration: none; color: #ffc107; font-size: 1.1rem;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@asset.Id" title="Delete" style="text-decoration: none; color: #dc3545; font-size: 1.1rem;">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+
+                                @if ((User.IsInRole("Admin") || User.IsInRole("IT Manager")) && string.Equals(asset.AssetType, "Server", System.StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <a asp-action="ManageApplications" asp-route-id="@asset.Id" title="Manage Applications" style="text-decoration: none; color: #198754; font-size: 1.1rem;">
                                         <i class="fas fa-cogs"></i>
                                     </a>
                                 }
-                            }
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a asp-action="Delete" asp-route-id="@asset.Id" class="btn btn-sm btn-danger" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            }
+                            </div>
                         </td>
                     </tr>
                 }
@@ -148,9 +199,104 @@
             else
             {
                 <tr>
-                    <td colspan="7" class="text-center">No assets found.</td>
+                    <td colspan="8" class="text-center">No assets found.</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAllCheckbox = document.getElementById('selectAllAssets');
+        const assetCheckboxes = document.querySelectorAll('.asset-checkbox');
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        
+        function updateBulkActionsBar() {
+            const selectedCount = Array.from(assetCheckboxes).filter(cb => cb.checked).length;
+            if (selectedCount > 0) {
+                bulkActionsBar.style.display = 'block';
+                selectedCountSpan.textContent = selectedCount;
+            } else {
+                bulkActionsBar.style.display = 'none';
+            }
+        }
+        
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                assetCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                updateBulkActionsBar();
+            });
+        }
+        
+        // Update select all checkbox and bulk actions bar when individual checkboxes change
+        assetCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allChecked = Array.from(assetCheckboxes).every(cb => cb.checked);
+                const someChecked = Array.from(assetCheckboxes).some(cb => cb.checked);
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = allChecked;
+                    selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                }
+                updateBulkActionsBar();
+            });
+        });
+    });
+    
+    function bulkEditAssets() {
+        const selectedIds = Array.from(document.querySelectorAll('.asset-checkbox:checked')).map(cb => cb.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one record to edit.');
+            return;
+        }
+        if (selectedIds.length === 1) {
+            // Single record - go to edit page
+            window.location.href = '@Url.Action("Edit", "Assets")?id=' + selectedIds[0];
+        } else {
+            // Multiple records - go to bulk edit page
+            const idsParam = selectedIds.join(',');
+            window.location.href = '@Url.Action("BulkEdit", "Assets")?ids=' + idsParam;
+        }
+    }
+    
+    function bulkDeleteAssets() {
+        const selectedIds = Array.from(document.querySelectorAll('.asset-checkbox:checked')).map(cb => cb.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one record to delete.');
+            return;
+        }
+        
+        const count = selectedIds.length;
+        if (confirm(`Are you sure you want to delete ${count} selected record(s)? This action cannot be undone.`)) {
+            // Create form and submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("BulkDelete", "Assets")';
+            
+            // Add anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add selected IDs
+            selectedIds.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>

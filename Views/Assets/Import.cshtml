@@ -1,0 +1,152 @@
+@{
+    var assetType = ViewBag?.AssetType as string ?? "";
+    ViewData["Title"] = string.IsNullOrEmpty(assetType) ? "Import Assets from CSV" : $"Import {assetType}s from CSV";
+}
+
+<div class="page-header mb-3">
+    <h1>@ViewData["Title"]</h1>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>@TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-times-circle me-2"></i>@TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Upload CSV File</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Import" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="assetType" value="@assetType" />
+                    
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Select CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" name="csvFile" accept=".csv" required />
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Please upload a CSV file matching the template format for @(string.IsNullOrEmpty(assetType) ? "the selected asset type" : assetType + "s")
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload me-2"></i>Import Assets
+                        </button>
+                        <a asp-action="DownloadTemplate" asp-route-assetType="@assetType" class="btn btn-outline-secondary">
+                            <i class="fas fa-download me-2"></i>Download Template
+                        </a>
+                        <a asp-action="Index" asp-route-assetType="@assetType" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Assets
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Import Instructions</h5>
+            </div>
+            <div class="card-body">
+                <h6>Required Fields:</h6>
+                <ul class="small">
+                    <li><strong>Asset Tag:</strong> Required (must be unique)</li>
+                    <li><strong>Asset Name:</strong> Required</li>
+                    @if (string.IsNullOrEmpty(assetType) || assetType == "Computer")
+                    {
+                        <li><strong>Asset Type:</strong> Required if not specified (Computer, Server, or Application)</li>
+                    }
+                </ul>
+                <hr />
+                <h6>Notes:</h6>
+                <ul class="small">
+                    <li>All other fields are optional</li>
+                    <li>Assets with existing Asset Tags will be skipped</li>
+                    <li>Date formats: yyyy-MM-dd (e.g., 2024-01-15)</li>
+                    <li>Numeric fields (RAM, Storage, Prices) should be numbers only</li>
+                    <li>Boolean fields (Backup Required, Requires License) should be "true" or "false"</li>
+                </ul>
+                <hr />
+                <div class="d-grid gap-2">
+                    <a asp-action="DownloadTemplate" asp-route-assetType="Computer" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-download me-1"></i>Computer Template
+                    </a>
+                    <a asp-action="DownloadTemplate" asp-route-assetType="Server" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-download me-1"></i>Server Template
+                    </a>
+                    <a asp-action="DownloadTemplate" asp-route-assetType="Application" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-download me-1"></i>Application Template
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+#pragma warning disable CS8602
+    var importResults = (ViewBag.Results as List<string>) ?? new List<string>();
+#pragma warning restore CS8602
+}
+@if (importResults.Count > 0)
+{
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Import Results
+                @if (ViewBag.SuccessCount != null || ViewBag.ErrorCount != null)
+                {
+                    <span class="badge bg-success ms-2">@ViewBag.SuccessCount Success</span>
+                    <span class="badge bg-danger ms-2">@ViewBag.ErrorCount Errors</span>
+                }
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var result in importResults)
+                        {
+                            var isError = result.Contains("Error") || result.Contains("Failed") || result.Contains("Skipped");
+                            <tr>
+                                <td class="@(isError ? "text-danger" : "text-success")">
+                                    <i class="fas @(isError ? "fa-times-circle" : "fa-check-circle") me-2"></i>@result
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

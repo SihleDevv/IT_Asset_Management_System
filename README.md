@@ -2,12 +2,18 @@
 
 A comprehensive web-based IT Asset Management System built with ASP.NET Core MVC for tracking and managing IT assets, including computers, servers, and applications. The system includes a complete IT Support ticket management workflow with role-based access control.
 
+## 📚 Documentation
+
+For detailed developer documentation, system architecture, and handover information, see:
+- **[DOCUMENTATION.md](../DOCUMENTATION.md)** - Complete developer guide with screenshot placeholders
+- **[SCREENSHOT_CHECKLIST.md](../SCREENSHOT_CHECKLIST.md)** - Checklist of required screenshots for documentation
+
 ## 🚀 Features
 
 ### Asset Management
 - **Multi-Asset Type Support**: Manage Computers, Servers, and Applications
 - **Asset Tracking**: Track asset tags, serial numbers, purchase dates, warranties, and locations
-- **User Assignment**: Assign assets to specific employees
+- **User Assignment**: Assign assets to specific employees (CSV-imported assets start as `Unassigned` and are linked to users manually via dropdowns)
 - **Status Management**: Track asset status (Active, Inactive, Retired, etc.)
 - **Asset Search & Filtering**: Filter assets by type, status, and search by name/tag
 - **Asset Details**: Comprehensive asset information with full history
@@ -43,7 +49,7 @@ A comprehensive web-based IT Asset Management System built with ASP.NET Core MVC
 ### User Management
 - **Role-Based Access Control (RBAC)**: Six distinct user roles with granular permissions
 - **User Profiles**: Manage user information, departments, and assignments
-- **Password Management**: Password expiration and forced password changes
+- **Password Management**: Password expiration, forced password changes, admin-only resets via Password Management, and self-service Change Password via My Profile
 - **Active/Inactive Status**: Enable or disable user accounts
 
 ### Security & Audit

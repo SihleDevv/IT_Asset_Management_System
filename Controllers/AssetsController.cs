@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IT_Asset_Management_System.Data;
 using IT_Asset_Management_System.Models;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using System.Linq;
 
 namespace IT_Asset_Management_System.Controllers
 {
@@ -56,41 +60,55 @@ namespace IT_Asset_Management_System.Controllers
             else
             {
                 // Regular users (Read Only, Employee) only see assets assigned to them
-                var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email;
-                var userEmail = currentUser.Email;
+                var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email ?? "";
+                var userEmail = currentUser.Email ?? "";
                 
-                // Filter computers assigned to user
-                var assignedComputerIds = await _context.Computers
-                    .Where(c => (c.AssignedTo == userFullName || c.AssignedTo == userEmail) 
-                        && c.AssignedTo.ToLower() != "unassigned")
-                    .Select(c => c.Id)
-                    .ToListAsync();
-                
-                // Filter servers where user is project manager
-                var managedServerIds = await _context.Servers
-                    .Where(s => s.ProjectManagerName == userFullName || s.ProjectManagerName == userEmail)
-                    .Select(s => s.Id)
-                    .ToListAsync();
-                
-                // Filter applications where user is owner
-                var ownedApplicationIds = await _context.Applications
-                    .Where(a => a.ApplicationOwner == userFullName || a.ApplicationOwner == userEmail)
-                    .Select(a => a.Id)
-                    .ToListAsync();
-                
-                // Combine all assigned asset IDs
-                var assignedAssetIds = assignedComputerIds
-                    .Concat(managedServerIds)
-                    .Concat(ownedApplicationIds)
-                    .ToList();
-                
-                if (assignedAssetIds.Any())
+                if (!string.IsNullOrWhiteSpace(userFullName) && !string.IsNullOrWhiteSpace(userEmail))
                 {
-                    query = query.Where(a => assignedAssetIds.Contains(a.Id));
+                    // Filter computers assigned to user (case-insensitive)
+                    var assignedComputerIds = await _context.Computers
+                        .Where(c => c.AssignedTo != null &&
+                            c.AssignedTo.ToLower() != "unassigned" &&
+                            (c.AssignedTo.ToLower() == userFullName.ToLower() || 
+                             c.AssignedTo.ToLower() == userEmail.ToLower()))
+                        .Select(c => c.Id)
+                        .ToListAsync();
+                    
+                    // Filter servers where user is project manager (case-insensitive)
+                    var managedServerIds = await _context.Servers
+                        .Where(s => s.ProjectManagerName != null &&
+                            (s.ProjectManagerName.ToLower() == userFullName.ToLower() || 
+                             s.ProjectManagerName.ToLower() == userEmail.ToLower()))
+                        .Select(s => s.Id)
+                        .ToListAsync();
+                    
+                    // Filter applications where user is owner (case-insensitive)
+                    var ownedApplicationIds = await _context.Applications
+                        .Where(a => a.ApplicationOwner != null &&
+                            (a.ApplicationOwner.ToLower() == userFullName.ToLower() || 
+                             a.ApplicationOwner.ToLower() == userEmail.ToLower()))
+                        .Select(a => a.Id)
+                        .ToListAsync();
+                    
+                    // Combine all assigned asset IDs
+                    var assignedAssetIds = assignedComputerIds
+                        .Concat(managedServerIds)
+                        .Concat(ownedApplicationIds)
+                        .ToList();
+                    
+                    if (assignedAssetIds.Any())
+                    {
+                        query = query.Where(a => assignedAssetIds.Contains(a.Id));
+                    }
+                    else
+                    {
+                        // If user has no assigned assets, return empty list
+                        query = query.Where(a => false);
+                    }
                 }
                 else
                 {
-                    // If user has no assigned assets, return empty list
+                    // If user has no name/email, return empty list
                     query = query.Where(a => false);
                 }
             }
@@ -110,12 +128,21 @@ namespace IT_Asset_Management_System.Controllers
 
             ViewBag.AssetType = assetType;
             ViewBag.SearchTerm = searchTerm;
-            var assets = await query.OrderBy(a => a.AssetName).ToListAsync();
+            var assets = await query.OrderBy(a => a.AssetTag).ToListAsync();
             return View(assets);
         }
 
         public async Task<IActionResult> ExportToCsv(string? assetType, string? searchTerm)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            var isAdminOrITManager = userRoles.Any(r => r == "Admin" || r == "IT Manager");
+            
             var query = _context.Assets.AsQueryable();
 
             if (!string.IsNullOrEmpty(assetType))
@@ -128,6 +155,63 @@ namespace IT_Asset_Management_System.Controllers
                 && a.AssetName != null 
                 && !string.IsNullOrWhiteSpace(a.AssetTag) 
                 && !string.IsNullOrWhiteSpace(a.AssetName));
+
+            // Apply same permission filtering as Index
+            if (!isAdminOrITManager)
+            {
+                // Regular users (Read Only, Employee) only see assets assigned to them
+                var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email ?? "";
+                var userEmail = currentUser.Email ?? "";
+                
+                if (!string.IsNullOrWhiteSpace(userFullName) && !string.IsNullOrWhiteSpace(userEmail))
+                {
+                    // Filter computers assigned to user (case-insensitive)
+                    var assignedComputerIds = await _context.Computers
+                        .Where(c => c.AssignedTo != null &&
+                            c.AssignedTo.ToLower() != "unassigned" &&
+                            (c.AssignedTo.ToLower() == userFullName.ToLower() || 
+                             c.AssignedTo.ToLower() == userEmail.ToLower()))
+                        .Select(c => c.Id)
+                        .ToListAsync();
+                    
+                    // Filter servers where user is project manager (case-insensitive)
+                    var managedServerIds = await _context.Servers
+                        .Where(s => s.ProjectManagerName != null &&
+                            (s.ProjectManagerName.ToLower() == userFullName.ToLower() || 
+                             s.ProjectManagerName.ToLower() == userEmail.ToLower()))
+                        .Select(s => s.Id)
+                        .ToListAsync();
+                    
+                    // Filter applications where user is owner (case-insensitive)
+                    var ownedApplicationIds = await _context.Applications
+                        .Where(a => a.ApplicationOwner != null &&
+                            (a.ApplicationOwner.ToLower() == userFullName.ToLower() || 
+                             a.ApplicationOwner.ToLower() == userEmail.ToLower()))
+                        .Select(a => a.Id)
+                        .ToListAsync();
+                    
+                    // Combine all assigned asset IDs
+                    var assignedAssetIds = assignedComputerIds
+                        .Concat(managedServerIds)
+                        .Concat(ownedApplicationIds)
+                        .ToList();
+                    
+                    if (assignedAssetIds.Any())
+                    {
+                        query = query.Where(a => assignedAssetIds.Contains(a.Id));
+                    }
+                    else
+                    {
+                        // If user has no assigned assets, return empty list
+                        query = query.Where(a => false);
+                    }
+                }
+                else
+                {
+                    // If user has no name/email, return empty list
+                    query = query.Where(a => false);
+                }
+            }
 
             // Apply search filter if provided
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -142,7 +226,7 @@ namespace IT_Asset_Management_System.Controllers
                 );
             }
 
-            var assets = await query.OrderBy(a => a.AssetName).ToListAsync();
+            var assets = await query.OrderBy(a => a.AssetTag).ToListAsync();
 
             // Generate CSV content
             var csv = new System.Text.StringBuilder();
@@ -157,6 +241,191 @@ namespace IT_Asset_Management_System.Controllers
             fileName += $"_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
 
             return File(System.Text.Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", fileName);
+        }
+
+        public async Task<IActionResult> ExportToPdf(string? assetType, string? searchTerm)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            var isAdminOrITManager = userRoles.Any(r => r == "Admin" || r == "IT Manager");
+            
+            var query = _context.Assets.AsQueryable();
+
+            if (!string.IsNullOrEmpty(assetType))
+            {
+                query = query.Where(a => a.AssetType == assetType);
+            }
+
+            // Filter out null records
+            query = query.Where(a => a.AssetTag != null 
+                && a.AssetName != null 
+                && !string.IsNullOrWhiteSpace(a.AssetTag) 
+                && !string.IsNullOrWhiteSpace(a.AssetName));
+
+            // Apply same permission filtering as Index
+            if (!isAdminOrITManager)
+            {
+                // Regular users (Read Only, Employee) only see assets assigned to them
+                var userFullName = currentUser.FullName ?? currentUser.UserName ?? currentUser.Email ?? "";
+                var userEmail = currentUser.Email ?? "";
+                
+                if (!string.IsNullOrWhiteSpace(userFullName) && !string.IsNullOrWhiteSpace(userEmail))
+                {
+                    // Filter computers assigned to user (case-insensitive)
+                    var assignedComputerIds = await _context.Computers
+                        .Where(c => c.AssignedTo != null &&
+                            c.AssignedTo.ToLower() != "unassigned" &&
+                            (c.AssignedTo.ToLower() == userFullName.ToLower() || 
+                             c.AssignedTo.ToLower() == userEmail.ToLower()))
+                        .Select(c => c.Id)
+                        .ToListAsync();
+                    
+                    // Filter servers where user is project manager (case-insensitive)
+                    var managedServerIds = await _context.Servers
+                        .Where(s => s.ProjectManagerName != null &&
+                            (s.ProjectManagerName.ToLower() == userFullName.ToLower() || 
+                             s.ProjectManagerName.ToLower() == userEmail.ToLower()))
+                        .Select(s => s.Id)
+                        .ToListAsync();
+                    
+                    // Filter applications where user is owner (case-insensitive)
+                    var ownedApplicationIds = await _context.Applications
+                        .Where(a => a.ApplicationOwner != null &&
+                            (a.ApplicationOwner.ToLower() == userFullName.ToLower() || 
+                             a.ApplicationOwner.ToLower() == userEmail.ToLower()))
+                        .Select(a => a.Id)
+                        .ToListAsync();
+                    
+                    // Combine all assigned asset IDs
+                    var assignedAssetIds = assignedComputerIds
+                        .Concat(managedServerIds)
+                        .Concat(ownedApplicationIds)
+                        .ToList();
+                    
+                    if (assignedAssetIds.Any())
+                    {
+                        query = query.Where(a => assignedAssetIds.Contains(a.Id));
+                    }
+                    else
+                    {
+                        // If user has no assigned assets, return empty list
+                        query = query.Where(a => false);
+                    }
+                }
+                else
+                {
+                    // If user has no name/email, return empty list
+                    query = query.Where(a => false);
+                }
+            }
+
+            // Apply search filter if provided
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchTerm = searchTerm.Trim();
+                query = query.Where(a => 
+                    a.AssetTag.Contains(searchTerm) ||
+                    a.AssetName.Contains(searchTerm) ||
+                    (a.Brand != null && a.Brand.Contains(searchTerm)) ||
+                    (a.Location != null && a.Location.Contains(searchTerm)) ||
+                    (a.Status != null && a.Status.Contains(searchTerm))
+                );
+            }
+
+            var assets = await query.OrderBy(a => a.AssetTag).ToListAsync();
+
+            QuestPDF.Settings.License = LicenseType.Community;
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(9));
+
+                    var reportTitle = string.IsNullOrEmpty(assetType) ? "All Assets Report" : $"{assetType}s Report";
+                    page.Header()
+                        .Text(reportTitle)
+                        .SemiBold().FontSize(20).FontColor(Colors.Blue.Medium);
+
+                    page.Content()
+                        .PaddingVertical(1, Unit.Centimetre)
+                        .Column(column =>
+                        {
+                            column.Spacing(10);
+                            column.Item().Text($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            column.Item().Text($"Total Records: {assets.Count}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            
+                            if (!string.IsNullOrWhiteSpace(searchTerm))
+                                column.Item().Text($"Search Term: {searchTerm}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            if (!string.IsNullOrWhiteSpace(assetType))
+                                column.Item().Text($"Asset Type: {assetType}").FontSize(8).FontColor(Colors.Grey.Medium);
+
+                            column.Item().Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(1.5f);
+                                    columns.RelativeColumn(2.5f);
+                                    columns.RelativeColumn(1.5f);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(1.5f);
+                                });
+
+                                table.Header(header =>
+                                {
+                                    header.Cell().Element(CellStyle).Text("Asset Tag");
+                                    header.Cell().Element(CellStyle).Text("Asset Name");
+                                    header.Cell().Element(CellStyle).Text("Type");
+                                    header.Cell().Element(CellStyle).Text("Brand");
+                                    header.Cell().Element(CellStyle).Text("Location");
+                                    header.Cell().Element(CellStyle).Text("Status");
+                                });
+
+                                foreach (var asset in assets)
+                                {
+                                    table.Cell().Element(CellStyle).Text(asset.AssetTag ?? "—");
+                                    table.Cell().Element(CellStyle).Text(asset.AssetName ?? "—");
+                                    table.Cell().Element(CellStyle).Text(asset.AssetType ?? "—");
+                                    table.Cell().Element(CellStyle).Text(asset.Brand ?? "—");
+                                    table.Cell().Element(CellStyle).Text(asset.Location ?? "—");
+                                    table.Cell().Element(CellStyle).Text(asset.Status ?? "—");
+                                }
+                            });
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(x =>
+                        {
+                            x.Span("Page ");
+                            x.CurrentPageNumber();
+                            x.Span(" of ");
+                            x.TotalPages();
+                        });
+                });
+            });
+
+            var pdfBytes = document.GeneratePdf();
+            var fileName = string.IsNullOrEmpty(assetType) ? "AllAssets" : $"{assetType}s";
+            fileName += $"_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+
+        private static IContainer CellStyle(IContainer container)
+        {
+            return container
+                .BorderBottom(1)
+                .BorderColor(Colors.Grey.Lighten2)
+                .PaddingVertical(5)
+                .PaddingHorizontal(5);
         }
 
         private string EscapeCsvField(string? field)
@@ -568,6 +837,224 @@ namespace IT_Asset_Management_System.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BulkEdit(string ids)
+        {
+            if (string.IsNullOrWhiteSpace(ids))
+            {
+                TempData["ErrorMessage"] = "No assets selected for bulk edit.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var idList = ids.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(idStr => int.TryParse(idStr, out var id) ? id : 0)
+                .Where(id => id > 0)
+                .ToList();
+
+            if (idList.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Invalid asset IDs provided.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var assets = await _context.Assets
+                .Where(a => idList.Contains(a.Id))
+                .OrderBy(a => a.AssetName)
+                .ToListAsync();
+
+            if (assets.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No assets found with the provided IDs.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.AssetIds = string.Join(",", idList);
+            ViewBag.AssetCount = assets.Count;
+            ViewBag.AssetTypes = assets.Select(a => a.AssetType).Distinct().ToList();
+
+            // Create a view model with common fields only
+            var model = new
+            {
+                AssetIds = string.Join(",", idList),
+                Assets = assets,
+                // Common fields - leave empty for bulk edit (user fills them)
+                Brand = "",
+                Model = "",
+                SerialNumber = "",
+                Location = "",
+                Status = "",
+                PurchaseDate = (DateTime?)null,
+                PurchasePrice = (decimal?)null,
+                Vendor = "",
+                WarrantyExpiryDate = (DateTime?)null,
+                Notes = ""
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BulkEdit(string assetIds, IFormCollection form)
+        {
+            if (string.IsNullOrWhiteSpace(assetIds))
+            {
+                TempData["ErrorMessage"] = "No assets selected for bulk edit.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var idList = assetIds.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(idStr => int.TryParse(idStr, out var id) ? id : 0)
+                .Where(id => id > 0)
+                .ToList();
+
+            if (idList.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Invalid asset IDs provided.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var assets = await _context.Assets
+                .Where(a => idList.Contains(a.Id))
+                .ToListAsync();
+
+            if (assets.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No assets found with the provided IDs.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var currentUserName = User.Identity?.Name ?? "System";
+            var updatedCount = 0;
+            var assetType = "";
+
+            // Get form values - only update fields that are provided (not empty)
+            var brand = form["Brand"].ToString().Trim();
+            var model = form["Model"].ToString().Trim();
+            var serialNumber = form["SerialNumber"].ToString().Trim();
+            var location = form["Location"].ToString().Trim();
+            var status = form["Status"].ToString().Trim();
+            var purchaseDateStr = form["PurchaseDate"].ToString().Trim();
+            var purchasePriceStr = form["PurchasePrice"].ToString().Trim();
+            var vendor = form["Vendor"].ToString().Trim();
+            var warrantyExpiryDateStr = form["WarrantyExpiryDate"].ToString().Trim();
+            var notes = form["Notes"].ToString().Trim();
+
+            DateTime? purchaseDate = null;
+            if (!string.IsNullOrWhiteSpace(purchaseDateStr) && DateTime.TryParse(purchaseDateStr, out var pd))
+            {
+                purchaseDate = pd;
+            }
+
+            decimal? purchasePrice = null;
+            if (!string.IsNullOrWhiteSpace(purchasePriceStr) && decimal.TryParse(purchasePriceStr, out var pp))
+            {
+                purchasePrice = pp;
+            }
+
+            DateTime? warrantyExpiryDate = null;
+            if (!string.IsNullOrWhiteSpace(warrantyExpiryDateStr) && DateTime.TryParse(warrantyExpiryDateStr, out var wed))
+            {
+                warrantyExpiryDate = wed;
+            }
+
+            foreach (var asset in assets)
+            {
+                var hasChanges = false;
+
+                // Update only if value is provided
+                if (!string.IsNullOrWhiteSpace(brand))
+                {
+                    asset.Brand = brand;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(model))
+                {
+                    asset.Model = model;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(serialNumber))
+                {
+                    asset.SerialNumber = serialNumber;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(location))
+                {
+                    asset.Location = location;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    asset.Status = status;
+                    hasChanges = true;
+                }
+                if (purchaseDate.HasValue)
+                {
+                    asset.PurchaseDate = purchaseDate.Value;
+                    hasChanges = true;
+                }
+                if (purchasePrice.HasValue)
+                {
+                    asset.PurchasePrice = purchasePrice;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(vendor))
+                {
+                    asset.Vendor = vendor;
+                    hasChanges = true;
+                }
+                if (warrantyExpiryDate.HasValue)
+                {
+                    asset.WarrantyExpiryDate = warrantyExpiryDate;
+                    hasChanges = true;
+                }
+                if (!string.IsNullOrWhiteSpace(notes))
+                {
+                    asset.Notes = notes;
+                    hasChanges = true;
+                }
+
+                if (hasChanges)
+                {
+                    asset.ModifiedBy = currentUserName;
+                    asset.ModifiedDate = DateTime.Now;
+                    updatedCount++;
+
+                    // Log the update
+                    _context.AuditLogs.Add(new AuditLog
+                    {
+                        UserName = currentUserName,
+                        Action = "Bulk Update",
+                        EntityType = asset.AssetType ?? "Asset",
+                        EntityId = asset.Id,
+                        Details = $"Bulk updated asset: {asset.AssetName} (Tag: {asset.AssetTag})",
+                        IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                        Timestamp = DateTime.Now
+                    });
+
+                    if (string.IsNullOrEmpty(assetType))
+                    {
+                        assetType = asset.AssetType ?? "";
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (updatedCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully updated {updatedCount} asset(s).";
+            }
+            else
+            {
+                TempData["InfoMessage"] = "No changes were made. Please fill in at least one field to update.";
+            }
+
+            return RedirectToAction(nameof(Index), new { assetType });
+        }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -689,6 +1176,119 @@ namespace IT_Asset_Management_System.Controllers
                 IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? ""
             });
             await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index), new { assetType });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BulkDelete(List<int> ids, string? assetType)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No records selected for deletion.";
+                return RedirectToAction(nameof(Index), new { assetType });
+            }
+
+            var currentUserName = User.Identity?.Name ?? "System";
+            var deletedCount = 0;
+            var failedCount = 0;
+            var errors = new List<string>();
+
+            foreach (var id in ids)
+            {
+                var asset = await _context.Assets.FindAsync(id);
+                if (asset == null)
+                {
+                    failedCount++;
+                    errors.Add($"Asset with ID {id} not found.");
+                    continue;
+                }
+
+                var assetTypeName = asset.AssetType;
+                bool canDelete = true;
+                string? errorMessage = null;
+
+                // Check dependencies before deletion
+                if (assetTypeName == "Computer")
+                {
+                    var computer = await _context.Computers.FindAsync(id);
+                    if (computer != null && !string.IsNullOrWhiteSpace(computer.AssignedTo) && 
+                        computer.AssignedTo.ToLower() != "unassigned")
+                    {
+                        canDelete = false;
+                        errorMessage = $"Cannot delete computer '{computer.AssetName}'. It is assigned to user '{computer.AssignedTo}'.";
+                    }
+                }
+                else if (assetTypeName == "Server")
+                {
+                    var server = await _context.Servers
+                        .Include(s => s.ServerApplications)
+                        .FirstOrDefaultAsync(s => s.Id == id);
+                    if (server != null)
+                    {
+                        var installedAppCount = server.ServerApplications?.Count ?? 0;
+                        if (installedAppCount > 0)
+                        {
+                            canDelete = false;
+                            errorMessage = $"Cannot delete server '{server.AssetName}'. It has {installedAppCount} installed application(s).";
+                        }
+                    }
+                }
+                else if (assetTypeName == "Application")
+                {
+                    var application = await _context.Applications
+                        .Include(a => a.ServerApplications)
+                        .FirstOrDefaultAsync(a => a.Id == id);
+                    if (application != null)
+                    {
+                        var serverCount = application.ServerApplications?.Count ?? 0;
+                        if (serverCount > 0)
+                        {
+                            canDelete = false;
+                            errorMessage = $"Cannot delete application '{application.AssetName}'. It is installed on {serverCount} server(s).";
+                        }
+                    }
+                }
+
+                if (canDelete)
+                {
+                    // Log the deletion
+                    _context.AuditLogs.Add(new AuditLog
+                    {
+                        UserName = currentUserName,
+                        Action = "Bulk Delete",
+                        EntityType = assetTypeName ?? "Asset",
+                        EntityId = id,
+                        Details = $"Bulk deleted asset: {asset.AssetName} (Tag: {asset.AssetTag})",
+                        IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                        Timestamp = DateTime.Now
+                    });
+
+                    _context.Assets.Remove(asset);
+                    deletedCount++;
+                }
+                else
+                {
+                    failedCount++;
+                    if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        errors.Add(errorMessage);
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (deletedCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {deletedCount} asset(s).";
+            }
+            if (failedCount > 0)
+            {
+                TempData["WarningMessage"] = $"{failedCount} asset(s) could not be deleted. " + string.Join(" ", errors.Take(5));
+            }
 
             return RedirectToAction(nameof(Index), new { assetType });
         }
@@ -847,6 +1447,478 @@ namespace IT_Asset_Management_System.Controllers
         private bool AssetExists(int id)
         {
             return _context.Assets.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "RequireAdmin")]
+        public IActionResult DownloadTemplate(string? assetType)
+        {
+            var csv = new System.Text.StringBuilder();
+            
+            if (assetType == "Computer")
+            {
+                csv.AppendLine("Asset Type,Asset Tag,Asset Name,Brand,Model,Serial Number,Location,Status,Assigned To,Operating System,Processor,RAM (GB),Storage (GB),Purchase Date,Purchase Price,Vendor,Warranty Expiry Date,Notes");
+                // Use 'Unassigned' and generic sample data (no real person names)
+                csv.AppendLine("Computer,COMP-001,Desktop PC,Dell,OptiPlex 7090,SN123456,Office A,In Use,Unassigned,Windows 11,i7-11700,16,512,2024-01-15,1500.00,Dell,2027-01-15,Primary workstation");
+            }
+            else if (assetType == "Server")
+            {
+                csv.AppendLine("Asset Type,Asset Tag,Asset Name,Brand,Model,Serial Number,Location,Status,IP Address,Server Type,Purpose,Operating System,Processor,RAM (GB),Storage (GB),Project Manager Name,Backup Required,Backup Comments,Purchase Date,Purchase Price,Vendor,Warranty Expiry Date,Notes");
+                // Use 'Unassigned' for Project Manager Name (no real person names)
+                csv.AppendLine("Server,SRV-001,Web Server,HP,ProLiant DL380,SN789012,Data Center,Active,192.168.1.10,Physical,Web Hosting,Windows Server 2022,Xeon E5-2680,64,2000,Unassigned,true,Weekly backup,2023-06-01,5000.00,HP,2026-06-01,Main web server");
+            }
+            else if (assetType == "Application")
+            {
+                csv.AppendLine("Asset Type,Asset Tag,Asset Name,Brand,Model,Serial Number,Version,Category,Description,Vendor,Location,Status,Business Unit,Application Owner,Requires License,License Key,License Type,Total Licenses,Used Licenses,License Expiry Date,License Holder,Purchase Date,Purchase Price,Warranty Expiry Date,Notes");
+                // Use 'Unassigned' for Application Owner (no real person names)
+                csv.AppendLine("Application,APP-001,Microsoft Office,Microsoft,Office 2021,SN-APP-001,2021,Productivity,Standard office suite,Microsoft,Company-wide,Active,IT,Unassigned,true,XXXXX-XXXXX-XXXXX,Volume,100,75,2025-12-31,Company,2024-01-01,15000.00,2029-01-01,Standard office suite");
+            }
+            else
+            {
+                // Generic template
+                csv.AppendLine("Asset Tag,Asset Name,Asset Type,Brand,Model,Serial Number,Location,Status,Purchase Date,Purchase Price,Vendor,Notes");
+                csv.AppendLine("ASSET-001,Sample Asset,Computer,Dell,Model X,SN123,Office,Active,2024-01-01,1000.00,Dell,Sample");
+            }
+
+            var fileName = $"AssetImportTemplate_{assetType ?? "Generic"}_{DateTime.Now:yyyyMMdd}.csv";
+            return File(System.Text.Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", fileName);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "RequireAdmin")]
+        public IActionResult Import(string? assetType)
+        {
+            ViewBag.AssetType = assetType ?? "";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdmin")]
+        public async Task<IActionResult> Import(IFormFile csvFile, string? assetType)
+        {
+            var results = new List<string>();
+            var successCount = 0;
+            var errorCount = 0;
+
+            // Get assetType from form data if not in route parameter
+            if (string.IsNullOrWhiteSpace(assetType))
+            {
+                assetType = Request.Form["assetType"].ToString();
+            }
+
+            ViewBag.AssetType = assetType ?? "";
+
+            if (csvFile == null || csvFile.Length == 0)
+            {
+                TempData["ErrorMessage"] = "Please select a CSV file to import.";
+                return View();
+            }
+
+            if (!csvFile.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "Please upload a valid CSV file.";
+                return View();
+            }
+
+            try
+            {
+                var currentUser = await _userManager.GetUserAsync(User);
+                var currentUserName = currentUser?.FullName ?? currentUser?.UserName ?? User.Identity?.Name ?? "System";
+
+                using (var reader = new System.IO.StreamReader(csvFile.OpenReadStream()))
+                {
+                    var lineNumber = 0;
+                    string? line;
+
+                    // Read header line
+                    line = await reader.ReadLineAsync();
+                    lineNumber++;
+                    if (line == null)
+                    {
+                        TempData["ErrorMessage"] = "CSV file is empty.";
+                        return View();
+                    }
+
+                    var headers = ParseCsvLine(line);
+                    var assetTypeColumnIndex = headers.FindIndex(h => h.Equals("Asset Type", StringComparison.OrdinalIgnoreCase));
+                    
+                    // Detect asset type from CSV headers if route parameter is not provided
+                    var detectedAssetTypeFromHeaders = "";
+                    if (string.IsNullOrWhiteSpace(assetType))
+                    {
+                        // Check for Server-specific columns
+                        var hasIPAddress = headers.Any(h => h.Equals("IP Address", StringComparison.OrdinalIgnoreCase));
+                        var hasServerType = headers.Any(h => h.Equals("Server Type", StringComparison.OrdinalIgnoreCase));
+                        var hasProjectManager = headers.Any(h => h.Equals("Project Manager Name", StringComparison.OrdinalIgnoreCase));
+                        
+                        // Check for Application-specific columns
+                        var hasVersion = headers.Any(h => h.Equals("Version", StringComparison.OrdinalIgnoreCase));
+                        var hasCategory = headers.Any(h => h.Equals("Category", StringComparison.OrdinalIgnoreCase));
+                        var hasRequiresLicense = headers.Any(h => h.Equals("Requires License", StringComparison.OrdinalIgnoreCase));
+                        
+                        // Check for Computer-specific columns
+                        var hasAssignedTo = headers.Any(h => h.Equals("Assigned To", StringComparison.OrdinalIgnoreCase));
+                        
+                        if (hasIPAddress || hasServerType || hasProjectManager)
+                        {
+                            detectedAssetTypeFromHeaders = "Server";
+                        }
+                        else if (hasVersion || hasCategory || hasRequiresLicense)
+                        {
+                            detectedAssetTypeFromHeaders = "Application";
+                        }
+                        else if (hasAssignedTo)
+                        {
+                            detectedAssetTypeFromHeaders = "Computer";
+                        }
+                    }
+
+                    // Process data lines
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        lineNumber++;
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+
+                        var fields = ParseCsvLine(line);
+                        
+                        // Determine field indices based on whether Asset Type column exists
+                        var assetTagIndex = 0;
+                        var assetNameIndex = 1;
+                        
+                        // If Asset Type column exists and is first, adjust indices
+                        if (assetTypeColumnIndex == 0)
+                        {
+                            assetTagIndex = 1;
+                            assetNameIndex = 2;
+                        }
+                        
+                        if (fields.Count < (assetNameIndex + 1))
+                        {
+                            results.Add($"Line {lineNumber}: Insufficient columns. Expected at least Asset Tag and Asset Name.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Determine asset type - prioritize CSV column (most explicit), then route parameter, then header detection, then default
+                        var detectedAssetType = "";
+                        
+                        // First, check for Asset Type column in CSV (most explicit and reliable)
+                        if (assetTypeColumnIndex >= 0 && assetTypeColumnIndex < fields.Count)
+                        {
+                            detectedAssetType = fields[assetTypeColumnIndex]?.Trim() ?? "";
+                        }
+                        // Second, use the assetType parameter from the route/form
+                        if (string.IsNullOrWhiteSpace(detectedAssetType) && !string.IsNullOrWhiteSpace(assetType))
+                        {
+                            detectedAssetType = assetType.Trim();
+                        }
+                        // Third, use detected type from headers
+                        if (string.IsNullOrWhiteSpace(detectedAssetType) && !string.IsNullOrWhiteSpace(detectedAssetTypeFromHeaders))
+                        {
+                            detectedAssetType = detectedAssetTypeFromHeaders;
+                        }
+                        
+                        // If still empty, default to Computer
+                        if (string.IsNullOrWhiteSpace(detectedAssetType))
+                        {
+                            detectedAssetType = "Computer"; // Default
+                        }
+
+                        // Get asset tag and name using adjusted indices
+                        var assetTag = fields.Count > assetTagIndex ? fields[assetTagIndex]?.Trim() ?? "" : "";
+                        var assetName = fields.Count > assetNameIndex ? fields[assetNameIndex]?.Trim() ?? "" : "";
+
+                        // Validate required fields
+                        if (string.IsNullOrWhiteSpace(assetTag))
+                        {
+                            results.Add($"Line {lineNumber}: Asset Tag is required.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(assetName))
+                        {
+                            results.Add($"Line {lineNumber}: Asset Name is required.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        // Check if asset already exists
+                        var existingAsset = await _context.Assets
+                            .FirstOrDefaultAsync(a => a.AssetTag == assetTag);
+                        if (existingAsset != null)
+                        {
+                            results.Add($"Line {lineNumber}: Asset with tag '{assetTag}' already exists. Skipped.");
+                            errorCount++;
+                            continue;
+                        }
+
+                        try
+                        {
+                            BaseAsset asset;
+
+                            if (detectedAssetType.Equals("Computer", StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Validate user assignment
+                                var assignedToValue = GetFieldValue(fields, headers, "Assigned To");
+                                var assignedTo = "Unassigned";
+                                if (!string.IsNullOrWhiteSpace(assignedToValue))
+                                {
+                                    // Check if user exists by FullName or Email (case-insensitive)
+                                    var assignedToLower = assignedToValue.ToLower();
+                                    var userExists = await _userManager.Users
+                                        .AnyAsync(u => (u.FullName != null && u.FullName.ToLower() == assignedToLower) ||
+                                                       (u.Email != null && u.Email.ToLower() == assignedToLower));
+                                    if (userExists)
+                                    {
+                                        assignedTo = assignedToValue;
+                                    }
+                                    else
+                                    {
+                                        results.Add($"Line {lineNumber}: User '{assignedToValue}' not found. Asset assigned to 'Unassigned'.");
+                                    }
+                                }
+
+                                asset = new Computer
+                                {
+                                    AssetTag = assetTag,
+                                    AssetName = assetName,
+                                    AssetType = "Computer",
+                                    Brand = GetFieldValue(fields, headers, "Brand"),
+                                    Model = GetFieldValue(fields, headers, "Model"),
+                                    SerialNumber = GetFieldValue(fields, headers, "Serial Number"),
+                                    Location = GetFieldValue(fields, headers, "Location"),
+                                    Status = GetFieldValue(fields, headers, "Status", "Active"),
+                                    AssignedTo = assignedTo,
+                                    OperatingSystem = GetFieldValue(fields, headers, "Operating System"),
+                                    Processor = GetFieldValue(fields, headers, "Processor"),
+                                    RAM = int.TryParse(GetFieldValue(fields, headers, "RAM (GB)"), out var ram) ? ram : 0,
+                                    Storage = int.TryParse(GetFieldValue(fields, headers, "Storage (GB)"), out var storage) ? storage : 0,
+                                    PurchaseDate = DateTime.TryParse(GetFieldValue(fields, headers, "Purchase Date"), out var purchaseDate) ? purchaseDate : DateTime.Now,
+                                    PurchasePrice = decimal.TryParse(GetFieldValue(fields, headers, "Purchase Price"), out var price) ? price : null,
+                                    Vendor = GetFieldValue(fields, headers, "Vendor"),
+                                    WarrantyExpiryDate = DateTime.TryParse(GetFieldValue(fields, headers, "Warranty Expiry Date"), out var warranty) ? warranty : null,
+                                    Notes = GetFieldValue(fields, headers, "Notes"),
+                                    CreatedBy = currentUserName,
+                                    CreatedDate = DateTime.Now
+                                };
+                                _context.Computers.Add((Computer)asset);
+                            }
+                            else if (detectedAssetType.Equals("Server", StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Validate project manager assignment
+                                var projectManagerValue = GetFieldValue(fields, headers, "Project Manager Name");
+                                var projectManager = "";
+                                if (!string.IsNullOrWhiteSpace(projectManagerValue))
+                                {
+                                    // Check if user exists by FullName or Email (case-insensitive)
+                                    var projectManagerLower = projectManagerValue.ToLower();
+                                    var userExists = await _userManager.Users
+                                        .AnyAsync(u => (u.FullName != null && u.FullName.ToLower() == projectManagerLower) ||
+                                                       (u.Email != null && u.Email.ToLower() == projectManagerLower));
+                                    if (userExists)
+                                    {
+                                        projectManager = projectManagerValue;
+                                    }
+                                    else
+                                    {
+                                        results.Add($"Line {lineNumber}: Project Manager '{projectManagerValue}' not found. Field left empty.");
+                                    }
+                                }
+
+                                asset = new Server
+                                {
+                                    AssetTag = assetTag,
+                                    AssetName = assetName,
+                                    AssetType = "Server",
+                                    Brand = GetFieldValue(fields, headers, "Brand"),
+                                    Model = GetFieldValue(fields, headers, "Model"),
+                                    SerialNumber = GetFieldValue(fields, headers, "Serial Number"),
+                                    Location = GetFieldValue(fields, headers, "Location"),
+                                    Status = GetFieldValue(fields, headers, "Status", "Active"),
+                                    IPAddress = GetFieldValue(fields, headers, "IP Address"),
+                                    ServerType = GetFieldValue(fields, headers, "Server Type"),
+                                    Purpose = GetFieldValue(fields, headers, "Purpose"),
+                                    OperatingSystem = GetFieldValue(fields, headers, "Operating System"),
+                                    Processor = GetFieldValue(fields, headers, "Processor"),
+                                    RAM = int.TryParse(GetFieldValue(fields, headers, "RAM (GB)"), out var ram) ? ram : 0,
+                                    Storage = int.TryParse(GetFieldValue(fields, headers, "Storage (GB)"), out var storage) ? storage : 0,
+                                    ProjectManagerName = projectManager,
+                                    BackupRequired = bool.TryParse(GetFieldValue(fields, headers, "Backup Required"), out var backup) && backup,
+                                    BackupComments = GetFieldValue(fields, headers, "Backup Comments"),
+                                    PurchaseDate = DateTime.TryParse(GetFieldValue(fields, headers, "Purchase Date"), out var purchaseDate) ? purchaseDate : DateTime.Now,
+                                    PurchasePrice = decimal.TryParse(GetFieldValue(fields, headers, "Purchase Price"), out var price) ? price : null,
+                                    Vendor = GetFieldValue(fields, headers, "Vendor"),
+                                    WarrantyExpiryDate = DateTime.TryParse(GetFieldValue(fields, headers, "Warranty Expiry Date"), out var warranty) ? warranty : null,
+                                    Notes = GetFieldValue(fields, headers, "Notes"),
+                                    CreatedBy = currentUserName,
+                                    CreatedDate = DateTime.Now
+                                };
+                                _context.Servers.Add((Server)asset);
+                            }
+                            else if (detectedAssetType.Equals("Application", StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Validate application owner assignment
+                                var applicationOwnerValue = GetFieldValue(fields, headers, "Application Owner");
+                                var applicationOwner = "";
+                                if (!string.IsNullOrWhiteSpace(applicationOwnerValue))
+                                {
+                                    // Check if user exists by FullName or Email (case-insensitive)
+                                    var applicationOwnerLower = applicationOwnerValue.ToLower();
+                                    var userExists = await _userManager.Users
+                                        .AnyAsync(u => (u.FullName != null && u.FullName.ToLower() == applicationOwnerLower) ||
+                                                       (u.Email != null && u.Email.ToLower() == applicationOwnerLower));
+                                    if (userExists)
+                                    {
+                                        applicationOwner = applicationOwnerValue;
+                                    }
+                                    else
+                                    {
+                                        results.Add($"Line {lineNumber}: Application Owner '{applicationOwnerValue}' not found. Field left empty.");
+                                    }
+                                }
+
+                                asset = new Application
+                                {
+                                    AssetTag = assetTag,
+                                    AssetName = assetName,
+                                    AssetType = "Application",
+                                    Brand = GetFieldValue(fields, headers, "Brand"),
+                                    Model = GetFieldValue(fields, headers, "Model"),
+                                    SerialNumber = GetFieldValue(fields, headers, "Serial Number"),
+                                    Location = GetFieldValue(fields, headers, "Location"),
+                                    Status = GetFieldValue(fields, headers, "Status", "Active"),
+                                    Version = GetFieldValue(fields, headers, "Version"),
+                                    Category = GetFieldValue(fields, headers, "Category"),
+                                    Description = GetFieldValue(fields, headers, "Description"),
+                                    Vendor = GetFieldValue(fields, headers, "Vendor"),
+                                    BusinessUnit = GetFieldValue(fields, headers, "Business Unit"),
+                                    ApplicationOwner = applicationOwner,
+                                    RequiresLicense = bool.TryParse(GetFieldValue(fields, headers, "Requires License"), out var requiresLicense) && requiresLicense,
+                                    LicenseKey = GetFieldValue(fields, headers, "License Key"),
+                                    LicenseType = GetFieldValue(fields, headers, "License Type"),
+                                    TotalLicenses = int.TryParse(GetFieldValue(fields, headers, "Total Licenses"), out var total) ? total : null,
+                                    UsedLicenses = int.TryParse(GetFieldValue(fields, headers, "Used Licenses"), out var used) ? used : null,
+                                    LicenseExpiryDate = DateTime.TryParse(GetFieldValue(fields, headers, "License Expiry Date"), out var expiry) ? expiry : null,
+                                    LicenseHolder = GetFieldValue(fields, headers, "License Holder"),
+                                    PurchaseDate = DateTime.TryParse(GetFieldValue(fields, headers, "Purchase Date"), out var purchaseDate) ? purchaseDate : DateTime.Now,
+                                    PurchasePrice = decimal.TryParse(GetFieldValue(fields, headers, "Purchase Price"), out var price) ? price : null,
+                                    WarrantyExpiryDate = DateTime.TryParse(GetFieldValue(fields, headers, "Warranty Expiry Date"), out var warranty) ? warranty : null,
+                                    Notes = GetFieldValue(fields, headers, "Notes"),
+                                    CreatedBy = currentUserName,
+                                    CreatedDate = DateTime.Now
+                                };
+                                _context.Applications.Add((Application)asset);
+                            }
+                            else
+                            {
+                                results.Add($"Line {lineNumber}: Unknown asset type '{detectedAssetType}'. Supported types: Computer, Server, Application.");
+                                errorCount++;
+                                continue;
+                            }
+
+                            await _context.SaveChangesAsync();
+
+                            // Log the creation
+                            _context.AuditLogs.Add(new AuditLog
+                            {
+                                UserName = currentUserName,
+                                Action = "Import Asset",
+                                EntityType = asset.AssetType,
+                                EntityId = asset.Id,
+                                Details = $"Imported {asset.AssetType}: {asset.AssetName} ({asset.AssetTag})",
+                                IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                                Timestamp = DateTime.Now
+                            });
+
+                            results.Add($"Line {lineNumber}: Successfully imported {detectedAssetType} '{assetName}' ({assetTag}).");
+                            successCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            results.Add($"Line {lineNumber}: Error creating {detectedAssetType} '{assetName}': {ex.Message}");
+                            errorCount++;
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                ViewBag.Results = results;
+                ViewBag.SuccessCount = successCount;
+                ViewBag.ErrorCount = errorCount;
+                ViewBag.TotalCount = successCount + errorCount;
+
+                if (successCount > 0)
+                {
+                    TempData["SuccessMessage"] = $"Successfully imported {successCount} asset(s).";
+                }
+                if (errorCount > 0)
+                {
+                    TempData["WarningMessage"] = $"{errorCount} asset(s) failed to import. Check details below.";
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error processing CSV file: {ex.Message}";
+                return View();
+            }
+        }
+
+        private List<string> ParseCsvLine(string line)
+        {
+            var fields = new List<string>();
+            var currentField = "";
+            var inQuotes = false;
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                var ch = line[i];
+
+                if (ch == '"')
+                {
+                    if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                    {
+                        // Escaped quote
+                        currentField += '"';
+                        i++; // Skip next quote
+                    }
+                    else
+                    {
+                        // Toggle quote state
+                        inQuotes = !inQuotes;
+                    }
+                }
+                else if (ch == ',' && !inQuotes)
+                {
+                    // End of field
+                    fields.Add(currentField);
+                    currentField = "";
+                }
+                else
+                {
+                    currentField += ch;
+                }
+            }
+
+            // Add last field
+            fields.Add(currentField);
+
+            return fields;
+        }
+
+        private string GetFieldValue(List<string> fields, List<string> headers, string headerName, string defaultValue = "")
+        {
+            var index = headers.FindIndex(h => h.Equals(headerName, StringComparison.OrdinalIgnoreCase));
+            if (index >= 0 && index < fields.Count)
+            {
+                return fields[index]?.Trim() ?? defaultValue;
+            }
+            return defaultValue;
         }
     }
 }

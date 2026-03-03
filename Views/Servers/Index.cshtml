@@ -55,21 +55,23 @@
                         <span class="badge bg-info">@(item.ServerApplications?.Count ?? 0) installed</span>
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Details">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">
-                                <i class="fas fa-edit"></i>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a asp-action="Details" asp-route-id="@item.Id" title="Details" style="text-decoration: none; color: #0dcaf0; font-size: 1.1rem;">
+                                <i class="fas fa-eye"></i>
                             </a>
-                            <a asp-action="ManageApplications" asp-route-id="@item.Id" class="btn btn-sm btn-success" title="Manage Applications">
-                                <i class="fas fa-cogs"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        }
+                            @if (User.IsInRole("Admin") || User.IsInRole("IT Manager"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" title="Edit" style="text-decoration: none; color: #ffc107; font-size: 1.1rem;">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" style="text-decoration: none; color: #dc3545; font-size: 1.1rem;">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <a asp-action="ManageApplications" asp-route-id="@item.Id" title="Manage Applications" style="text-decoration: none; color: #198754; font-size: 1.1rem;">
+                                    <i class="fas fa-cogs"></i>
+                                </a>
+                            }
+                        </div>
                     </td>
                 </tr>
             }

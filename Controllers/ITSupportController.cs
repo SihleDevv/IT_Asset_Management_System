@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IT_Asset_Management_System.Data;
 using IT_Asset_Management_System.Models;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace IT_Asset_Management_System.Controllers
 {
@@ -140,6 +143,142 @@ namespace IT_Asset_Management_System.Controllers
             return File(System.Text.Encoding.UTF8.GetBytes(csv.ToString()), "text/csv", fileName);
         }
 
+        public async Task<IActionResult> ExportToPdf(string? status, string? priority)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return NotFound();
+
+            IQueryable<ITSupportTicket> tickets = _context.ITSupportTickets
+                .Include(t => t.ReportedByUser)
+                .Include(t => t.AssignedToUser)
+                .OrderByDescending(t => t.CreatedDate);
+
+            // Apply the same role-based filtering as Index
+            if (User.IsInRole("Admin") || User.IsInRole("IT Manager") || 
+                User.IsInRole("IT Support Supervisor") || User.IsInRole("IT Support"))
+            {
+                // Admin, IT Manager, and IT Support roles see all tickets
+                // IT Support see tickets assigned to them or unassigned
+                if (User.IsInRole("IT Support") && !User.IsInRole("IT Support Supervisor") && 
+                    !User.IsInRole("Admin") && !User.IsInRole("IT Manager"))
+                {
+                    tickets = tickets.Where(t => t.AssignedToUserId == currentUser.Id || t.AssignedToUserId == null);
+                }
+            }
+            else
+            {
+                // Regular users only see their own tickets
+                tickets = tickets.Where(t => t.ReportedByUserId == currentUser.Id);
+            }
+
+            // Apply filters (same as Index)
+            if (!string.IsNullOrEmpty(status))
+            {
+                tickets = tickets.Where(t => t.Status == status);
+            }
+
+            if (!string.IsNullOrEmpty(priority))
+            {
+                tickets = tickets.Where(t => t.Priority == priority);
+            }
+
+            var ticketsList = await tickets.ToListAsync();
+
+            QuestPDF.Settings.License = LicenseType.Community;
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(8));
+
+                    page.Header()
+                        .Text("IT Support Tickets Report")
+                        .SemiBold().FontSize(20).FontColor(Colors.Blue.Medium);
+
+                    page.Content()
+                        .PaddingVertical(1, Unit.Centimetre)
+                        .Column(column =>
+                        {
+                            column.Spacing(10);
+                            column.Item().Text($"Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            column.Item().Text($"Total Tickets: {ticketsList.Count}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            
+                            if (!string.IsNullOrWhiteSpace(status))
+                                column.Item().Text($"Status Filter: {status}").FontSize(8).FontColor(Colors.Grey.Medium);
+                            if (!string.IsNullOrWhiteSpace(priority))
+                                column.Item().Text($"Priority Filter: {priority}").FontSize(8).FontColor(Colors.Grey.Medium);
+
+                            column.Item().Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(0.8f);
+                                    columns.RelativeColumn(2.5f);
+                                    columns.RelativeColumn(1.5f);
+                                    columns.RelativeColumn(1.2f);
+                                    columns.RelativeColumn(1.5f);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(1.5f);
+                                });
+
+                                table.Header(header =>
+                                {
+                                    header.Cell().Element(CellStyle).Text("ID");
+                                    header.Cell().Element(CellStyle).Text("Subject");
+                                    header.Cell().Element(CellStyle).Text("Status");
+                                    header.Cell().Element(CellStyle).Text("Priority");
+                                    header.Cell().Element(CellStyle).Text("Reported By");
+                                    header.Cell().Element(CellStyle).Text("Related Asset");
+                                    header.Cell().Element(CellStyle).Text("Created Date");
+                                });
+
+                                foreach (var ticket in ticketsList)
+                                {
+                                    var reportedBy = ticket.ReportedByUser?.FullName ?? ticket.ReportedByUser?.Email ?? "N/A";
+                                    var relatedAsset = !string.IsNullOrEmpty(ticket.RelatedAssetName) 
+                                        ? $"{ticket.AssetType}: {ticket.RelatedAssetName}" 
+                                        : "N/A";
+                                    
+                                    table.Cell().Element(CellStyle).Text($"#{ticket.Id}");
+                                    table.Cell().Element(CellStyle).Text(ticket.Subject ?? "—");
+                                    table.Cell().Element(CellStyle).Text(ticket.Status ?? "—");
+                                    table.Cell().Element(CellStyle).Text(ticket.Priority ?? "—");
+                                    table.Cell().Element(CellStyle).Text(reportedBy);
+                                    table.Cell().Element(CellStyle).Text(relatedAsset);
+                                    table.Cell().Element(CellStyle).Text(ticket.CreatedDate.ToString("yyyy-MM-dd HH:mm"));
+                                }
+                            });
+                        });
+
+                    page.Footer()
+                        .AlignCenter()
+                        .Text(x =>
+                        {
+                            x.Span("Page ");
+                            x.CurrentPageNumber();
+                            x.Span(" of ");
+                            x.TotalPages();
+                        });
+                });
+            });
+
+            var pdfBytes = document.GeneratePdf();
+            var fileName = $"ITSupportTickets_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+
+        private static IContainer CellStyle(IContainer container)
+        {
+            return container
+                .BorderBottom(1)
+                .BorderColor(Colors.Grey.Lighten2)
+                .PaddingVertical(5)
+                .PaddingHorizontal(5);
+        }
+
         private string EscapeCsvField(string? field)
         {
             if (string.IsNullOrEmpty(field))
@@ -152,6 +291,62 @@ namespace IT_Asset_Management_System.Controllers
             }
 
             return field;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,IT Manager")]
+        public async Task<IActionResult> BulkDelete(List<int> ids, string? status, string? priority)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No records selected for deletion.";
+                return RedirectToAction(nameof(Index), new { status, priority });
+            }
+
+            var currentUserName = User.Identity?.Name ?? "System";
+            var deletedCount = 0;
+            var failedCount = 0;
+            var errors = new List<string>();
+
+            foreach (var id in ids)
+            {
+                var ticket = await _context.ITSupportTickets.FindAsync(id);
+                if (ticket == null)
+                {
+                    failedCount++;
+                    errors.Add($"Ticket with ID {id} not found.");
+                    continue;
+                }
+
+                // Log the deletion
+                _context.AuditLogs.Add(new AuditLog
+                {
+                    UserName = currentUserName,
+                    Action = "Bulk Delete",
+                    EntityType = "IT Support Ticket",
+                    EntityId = id,
+                    Details = $"Bulk deleted ticket: {ticket.Subject} (ID: {ticket.Id})",
+                    IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "",
+                    Timestamp = DateTime.Now
+                });
+
+                _context.ITSupportTickets.Remove(ticket);
+                deletedCount++;
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (deletedCount > 0)
+            {
+                TempData["SuccessMessage"] = $"Successfully deleted {deletedCount} ticket(s).";
+            }
+            if (failedCount > 0)
+            {
+                TempData["WarningMessage"] = $"{failedCount} ticket(s) could not be deleted. " + string.Join(" ", errors.Take(5));
+            }
+
+            return RedirectToAction(nameof(Index), new { status, priority });
         }
 
         // GET: ITSupport/Details/5
@@ -239,19 +434,11 @@ namespace IT_Asset_Management_System.Controllers
                 }
             }
 
-            // Get user's assets for dropdown
-            if (!User.IsInRole("Admin") && !User.IsInRole("IT Manager"))
-            {
-                ViewBag.UserComputers = await _context.Computers
-                    .Where(c => (c.AssignedTo.ToLower() == currentUser.FullName!.ToLower() || 
-                                c.AssignedTo.ToLower() == currentUser.Email!.ToLower()) &&
-                                !string.IsNullOrEmpty(c.AssetName))
-                    .Select(c => new { c.Id, c.AssetName })
-                    .ToListAsync();
-                ViewBag.UserServers = new List<object>();
-                ViewBag.UserApplications = new List<object>();
-            }
-            else
+            // Get user's assets for dropdown (only for Admin/IT Manager)
+            var isAdminOrITManager = User.IsInRole("Admin") || User.IsInRole("IT Manager");
+            ViewBag.IsAdminOrITManager = isAdminOrITManager;
+            
+            if (isAdminOrITManager)
             {
                 ViewBag.UserComputers = await _context.Computers
                     .Where(c => !string.IsNullOrEmpty(c.AssetName))
@@ -265,6 +452,13 @@ namespace IT_Asset_Management_System.Controllers
                     .Where(a => !string.IsNullOrEmpty(a.AssetName))
                     .Select(a => new { a.Id, a.AssetName })
                     .ToListAsync();
+            }
+            else
+            {
+                // For non-Admin/IT Manager, don't show asset dropdowns
+                ViewBag.UserComputers = new List<object>();
+                ViewBag.UserServers = new List<object>();
+                ViewBag.UserApplications = new List<object>();
             }
 
             return View(ticket);
@@ -282,19 +476,33 @@ namespace IT_Asset_Management_System.Controllers
             ticket.ReportedByUserId = currentUser.Id;
             ModelState.Remove("ReportedByUserId"); // Remove validation error since we set it programmatically
 
-            // Validate asset selection is required
-            if (string.IsNullOrWhiteSpace(ticket.AssetType))
+            // Validate asset selection is required only for Admin/IT Manager
+            var isAdminOrITManager = User.IsInRole("Admin") || User.IsInRole("IT Manager");
+            if (isAdminOrITManager)
             {
-                ModelState.AddModelError("AssetType", "Please select an asset type for this ticket.");
+                if (string.IsNullOrWhiteSpace(ticket.AssetType))
+                {
+                    ModelState.AddModelError("AssetType", "Please select an asset type for this ticket.");
+                }
+                
+                if (ticket.RelatedAssetId <= 0)
+                {
+                    ModelState.AddModelError("RelatedAssetId", "Please select an asset for this ticket.");
+                }
+            }
+            else
+            {
+                // For non-Admin/IT Manager, set asset fields to empty/default
+                ticket.AssetType = "";
+                ticket.RelatedAssetId = 0;
+                ticket.RelatedAssetName = "";
+                ModelState.Remove("AssetType");
+                ModelState.Remove("RelatedAssetId");
+                ModelState.Remove("RelatedAssetName");
             }
             
-            if (ticket.RelatedAssetId <= 0)
-            {
-                ModelState.AddModelError("RelatedAssetId", "Please select an asset for this ticket.");
-            }
-            
-            // Additional validation: verify the asset exists and get asset name
-            if (!string.IsNullOrWhiteSpace(ticket.AssetType) && ticket.RelatedAssetId > 0)
+            // Additional validation: verify the asset exists and get asset name (only for Admin/IT Manager)
+            if (isAdminOrITManager && !string.IsNullOrWhiteSpace(ticket.AssetType) && ticket.RelatedAssetId > 0)
             {
                 bool assetExists = false;
                 if (ticket.AssetType == "Computer")

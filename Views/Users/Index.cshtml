@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Users Management";
     var userRoles = ViewBag?.UserRoles as IDictionary<string, string> ?? new Dictionary<string, string>();
+    var searchTerm = ViewBag?.SearchTerm as string ?? "";
 }
+
+@Html.AntiForgeryToken()
 
 <div class="page-header mb-3">
     <div class="d-flex justify-content-between align-items-center">
@@ -30,12 +33,12 @@
                            class="form-control" 
                            id="searchTerm" 
                            name="searchTerm" 
-                           value="@ViewBag.SearchTerm" 
+                           value="@searchTerm" 
                            placeholder="Search by Email, Full Name, Department, or Username..." />
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-search"></i> Search
                     </button>
-                    @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+                    @if (!string.IsNullOrWhiteSpace(searchTerm))
                     {
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Clear
@@ -45,21 +48,24 @@
             </div>
             
             <div class="col-md-4 text-end">
+                <a asp-action="Import" class="btn btn-success btn-sm me-2">
+                    <i class="fas fa-file-import"></i> Import CSV
+                </a>
                 <a asp-action="ExportToCsv" 
-                   asp-route-searchTerm="@ViewBag.SearchTerm" 
-                   class="btn btn-success">
-                    <i class="fas fa-download"></i> Download CSV
+                   asp-route-searchTerm="@searchTerm" 
+                   class="btn btn-success btn-sm">
+                    <i class="fas fa-download"></i> Export CSV
                 </a>
             </div>
         </form>
     </div>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm as string))
+@if (!string.IsNullOrWhiteSpace(searchTerm))
 {
     <div class="alert alert-info mb-3">
         <i class="fas fa-info-circle"></i> 
-        Showing results for: <strong>@ViewBag.SearchTerm</strong>
+        Showing results for: <strong>@searchTerm</strong>
         @if (Model != null && Model.Any())
         {
             <span> (@Model.Count() result(s))</span>
@@ -67,10 +73,32 @@
     </div>
 }
 
+<!-- Bulk Actions Bar -->
+<div id="bulkActionsBar" class="card mb-3" style="display: none;">
+    <div class="card-body py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">
+                <span id="selectedCount">0</span> record(s) selected
+            </span>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-warning btn-sm" id="bulkEditBtn" onclick="bulkEditUsers()">
+                    <i class="fas fa-edit"></i> Edit Selected
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" id="bulkDeleteBtn" onclick="bulkDeleteUsers()">
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="table-container">
     <table class="table table-hover table-striped">
         <thead class="table-light">
             <tr>
+                <th style="width:50px">
+                    <input type="checkbox" id="selectAllUsers" title="Select All" />
+                </th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Department</th>
@@ -86,6 +114,9 @@
                 foreach (var user in Model)
                 {
                     <tr>
+                        <td>
+                            <input type="checkbox" class="user-checkbox" value="@user?.Id" />
+                        </td>
                         <td><strong>@(user?.FullName ?? "—")</strong></td>
                         <td>@(user?.Email ?? "—")</td>
                         <td>@(user?.Department ?? "—")</td>
@@ -102,25 +133,27 @@
                         </td>
                         <td>@(user?.CreatedDate == null ? "N/A" : ((DateTime)user.CreatedDate).ToString("yyyy-MM-dd"))</td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@user?.Id" class="btn btn-sm btn-warning" title="Edit">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            @{
-                                var currentUserId = ViewBag.CurrentUserId as string;
-                                var isCurrentUser = user?.Id == currentUserId;
-                            }
-                            @if (!isCurrentUser)
-                            {
-                                <a asp-action="Delete" asp-route-id="@user?.Id" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
-                                    <i class="fas fa-trash"></i> Delete
+                            <div class="d-flex gap-2 align-items-center">
+                                <a asp-action="Edit" asp-route-id="@user?.Id" title="Edit" style="text-decoration: none; color: #ffc107; font-size: 1.1rem;">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                            }
-                            else
-                            {
-                                <button type="button" class="btn btn-sm btn-danger" disabled title="You cannot delete your own account">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            }
+                                @{
+                                    var currentUserId = ViewBag?.CurrentUserId as string ?? "";
+                                    var isCurrentUser = user?.Id == currentUserId;
+                                }
+                                @if (!isCurrentUser)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@user?.Id" title="Delete" style="text-decoration: none; color: #dc3545; font-size: 1.1rem;" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span title="You cannot delete your own account" style="color: #6c757d; font-size: 1.1rem; cursor: not-allowed;">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                }
+                            </div>
                         </td>
                     </tr>
                 }
@@ -128,9 +161,105 @@
             else
             {
                 <tr>
-                    <td colspan="7" class="text-center">No users found.</td>
+                    <td colspan="8" class="text-center">No users found.</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAllCheckbox = document.getElementById('selectAllUsers');
+        const userCheckboxes = document.querySelectorAll('.user-checkbox');
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        
+        function updateBulkActionsBar() {
+            const selectedCount = Array.from(userCheckboxes).filter(cb => cb.checked).length;
+            if (selectedCount > 0) {
+                bulkActionsBar.style.display = 'block';
+                selectedCountSpan.textContent = selectedCount;
+            } else {
+                bulkActionsBar.style.display = 'none';
+            }
+        }
+        
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                userCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                updateBulkActionsBar();
+            });
+        }
+        
+        // Update select all checkbox and bulk actions bar when individual checkboxes change
+        userCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
+                const someChecked = Array.from(userCheckboxes).some(cb => cb.checked);
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = allChecked;
+                    selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                }
+                updateBulkActionsBar();
+            });
+        });
+    });
+    
+    function bulkEditUsers() {
+        const selectedIds = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one record to edit.');
+            return;
+        }
+        if (selectedIds.length === 1) {
+            // Single record - go to edit page
+            window.location.href = '@Url.Action("Edit", "Users")?id=' + selectedIds[0];
+        } else {
+            // Multiple records - edit first one
+            if (confirm(`You have selected ${selectedIds.length} records. Only one record can be edited at a time. Would you like to edit the first selected record?`)) {
+                window.location.href = '@Url.Action("Edit", "Users")?id=' + selectedIds[0];
+            }
+        }
+    }
+    
+    function bulkDeleteUsers() {
+        const selectedIds = Array.from(document.querySelectorAll('.user-checkbox:checked')).map(cb => cb.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one record to delete.');
+            return;
+        }
+        
+        const count = selectedIds.length;
+        if (confirm(`Are you sure you want to delete ${count} selected record(s)? This action cannot be undone.`)) {
+            // Create form and submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("BulkDelete", "Users")';
+            
+            // Add anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = token.value;
+                form.appendChild(tokenInput);
+            }
+            
+            // Add selected IDs
+            selectedIds.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = id;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
